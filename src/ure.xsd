@@ -1,0 +1,55 @@
+<schema targetNamespace="http://medea.mpiwg-berlin.mpg.de/ure/vocab#" 
+        xmlns:ure="http://medea.mpiwg-berlin.mpg.de/ure/vocab#"
+        xmlns="http://www.w3.org/2001/XMLSchema" 
+        elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+<annotation>
+  <documentation> 
+           XML Schema  for Ure Museum metadata 2004-12-08 by Brian Fuchs.
+      http://www.reading.ac.uk/Classics/Ure
+
+  </documentation>
+</annotation>
+
+	
+<element name="uremeta" type="ure:uremeta_type"/>
+
+<complexType name="uremeta_type">
+  <choice minOccurs="0" maxOccurs="unbounded">
+    <element name="Accession_Number"/>
+    <element name="Shape"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Shape_details"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Material"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Fabric"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Fabric_description"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Munsell_color"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Description"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Inscriptions"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Condition"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Technique"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Provenience"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Acquisition"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Period"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Date"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Dating_details"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Artist"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Attribution"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Image"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Comparanda"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Comments"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Bibliography"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Archive_Ref"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Beazley_DB"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Height"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Diameters"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Handle_height"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Other_dims."  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Location"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Edited_by"  minOccurs="0" maxOccurs="unbounded" type="string" />
+    <element name="Date_edited"  minOccurs="0" maxOccurs="unbounded" type="string" />
+
+  </choice>
+</complexType>
+
+</schema>
+

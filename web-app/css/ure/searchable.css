@@ -1,0 +1,138 @@
+* {
+	font-family: Arial, sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-size: 0.9em;
+	padding: .5em;
+}
+
+#header form input {
+	padding: .1em;
+}
+
+#header .hint {
+	color: gray;
+}
+
+#header h1 a {
+	text-decoration: none;
+	font-family: Georgia, serif;
+	color: dimgray;
+}
+
+#header h1 {
+	letter-spacing: -0.1em;
+	float: left;
+}
+
+#header h1 span {
+	font-family: Georgia, serif;
+	color: #424242;
+}
+
+#header form {
+	margin-left: 22em;
+	padding-top: .1em;
+}
+
+.title {
+	margin: 1em 0;
+	padding: .3em .5em;
+	text-align: right;
+	background-color: seashell;
+	border-top: 1px solid lightblue;
+}
+
+.result {
+//	margin-bottom: 1em;
+  min-height: 200px;
+  font-size: 10pt;
+  max-width: 200px;
+	
+}
+.result img {
+	
+	margin:0;
+	
+}
+.result-open {
+	position:absolute;
+	opacity: 0.5;
+	z-index: 444;
+	
+}
+
+.result .displayLink {
+	color: green;
+}
+
+.result .name {
+	font-size: larger;
+	
+	
+}
+
+.result .desc {
+
+	
+}
+.result .result-image {
+	
+	
+}
+
+.paging a.step {
+	padding: 0 .3em;
+}
+
+.paging span.currentStep {
+	font-weight: bold;
+}
+
+ul {
+	margin: 1em 2em;
+}
+
+li,p {
+	margin-bottom: 1em;
+}
+
+.desc {
+	
+	
+}
+.result .image-infobox {
+	
+	
+	
+}
+.disp1-on {
+	
+	color: white;
+	
+	
+}
+.disp1:hover {
+	cursor:pointer;
+	
+}
+.disp1 {
+	
+	text-decoration:underline;
+	
+}
+
+#results .cell {
+	
+	background-size: cover;
+	border: 2px solid gray;
+	background-position: 50% 50%;
+	 background-repeat: no-repeat;
+  color: #000; 
+  text-shadow: 1px 1px 0 #fff;
+  height: 200px;
+	
+}

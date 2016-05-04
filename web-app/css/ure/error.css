@@ -1,0 +1,78 @@
+body{
+        background-color: #F5F1E9;
+        color: #996600;
+        font: 14px Arial, sans-serif;
+        margin: 0px;
+}
+
+
+h1      {
+  background: transparent;
+color: #996600;
+        font: 22px Arial, sans-serif;
+
+
+
+}
+
+
+H2{
+    color: #996600;
+        font: 18px Arial, sans-serif;
+}
+
+
+
+.banner      {
+	 background: #dddddd;
+/*  background: transparent; */
+  color: #006699;
+  font-size: medium;
+	padding-top: 10px;
+	padding: 4px;
+    margin: 4px;
+    margin-top: 10px;	
+}
+
+H3{
+	color: #996600;
+	font: 22 px Arial, sans-serif;
+}
+
+
+.error { 
+
+	font-family: Skia, sans-serif;
+ }	
+.errorbox {
+    background-color: #fff;
+    border: 3px solid #fc9;
+    padding: 8px;
+    margin: 4px;
+    margin-bottom: 10px;
+    -moz-border-radius: 10px;
+  }
+.urlbox {
+    background-color: #fff;
+    border: 3px solid #fc9;
+    padding: 8px;
+    margin: 4px;
+    margin-bottom: 10px;
+    -moz-border-radius: 10px;
+  }
+
+
+.bugzilla { 
+	margin-top: 2em;
+	font-family: Skia, sans-serif;
+ }	
+.errormsg { 
+	font-weight: bold; 
+}
+.resource { color: red;}
+.hitpage {background-color: pink;}
+.hitpar {background-color: pink;}
+.thumbrulertable {width: 100%}
+.thumbrulerall { font-weight: bold;  }
+.thumbrulertablegroupcaption { margin-left: 3px;}
+.thumbrulertablegroup { width: 100%;}
