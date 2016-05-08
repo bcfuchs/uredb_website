@@ -77,10 +77,7 @@
 				<a href="${flash.searchUrl}">back to search</a>
 			</span>
 		</g:if>
-		<div id="switcher" class="hidden">
-			<span id="new" class="newold">new</span>
-			<span id="old" class="newold">old</span>
-		</div>
+		
 		<!--  #switcher -->
 		<h2>
 			${accnum}:

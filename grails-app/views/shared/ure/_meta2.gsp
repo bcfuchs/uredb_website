@@ -23,7 +23,6 @@ $(document).ready(function(){
     }
   var get_prevnext = function(el) {
 	var prev = $(el).prev();
-
 	var next = $(el).next()
 		//thinks tooltip is next sibling, so only count real siblings
 	if (!($(next).is("[data-ure-uri]"))) {
@@ -36,6 +35,7 @@ $(document).ready(function(){
 
 		return [prev,next]
     }
+  
   imageModal("#record-images .cell",get_image,get_caption,get_prevnext)
 });
 
@@ -80,7 +80,6 @@ Dimensions:
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
 <div class="container" id="meta2">
 	<!--  images -->
-
 	<div id="ure-images-container" class="row ure-images">
 		<div id="ure-images">
 		<div class="col-md-12"> 
