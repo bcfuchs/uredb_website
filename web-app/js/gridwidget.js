@@ -1,7 +1,9 @@
 ! function() {
-  var gridWidget = function(gridid,width,height,displayInfobox) {
+  var gridWidget = function(gridid,width,height,displayInfobox,addCellClick) {
     
-    var addCellClick = true;
+    if (addCellClick === undefined) {
+      addCellClick = true;
+    }
     var wall = new Freewall(gridid);
                 wall.reset({
                   selector : '.cell',

@@ -10,7 +10,7 @@
 ! function() {
   $(document).ready(function(){
     // export from js/gridwidget.js
-    	gridWidget("#${gridid}","${width}","${height}",${displayInfobox})
+    	gridWidget("#${gridid}","${width}","${height}",${displayInfobox},false)
   });
 }()
 </script>
