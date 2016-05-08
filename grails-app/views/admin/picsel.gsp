@@ -32,24 +32,36 @@
 #showcomms {
 	
 }
+.instructions {
+margin-left: 0;
+width: 80%;
+}
+.td-left {
+width: 50%;
 
+}
+.td-right {
+	float: left;
+}
 </style>
+
 	<div id="edit_nav_1" style="display: none" class="nav2">
 		<a href="/admin/selpicdir">list</a>
+		
 	</div>
 
 	<table width="100%">
 		<tr>
-		
-			<div class="container">
+		   <td class="td-left">
+			<div class="container instructions">
 					<ul class="list-group">
 						<li class="list-group-item">Click on an image to assign it.</li>
 						<li class="list-group-item">Images  with
 							accession numbers have already been assigned. </li>
-						<li class="list-group-item">To dispay captions, click on the text icon to the
-							right.</li>
+						<li class="list-group-item">Click on the eye icon to toggle comments.
+							</li>
 					</ul>
-				</div>		
+				</div>			
 			</td>
 			<script>
 				$(document).ready(function() {
@@ -62,11 +74,10 @@
 
 				})
 			</script>
-			<td class=toollink align="center" id="showcomms">
+			<td class="toollink td-right" align="center" id="showcomms">
 				<div id="showcomms">
-
-					<img src="http://uredb.reading.ac.uk/ure/icons/text.gif" border="0"
-						alt="show/hide comments">
+					<span class="glyphicon glyphicon-eye-open"></span>
+					
 				</div>
 			</td>
 

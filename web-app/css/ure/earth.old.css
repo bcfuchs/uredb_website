@@ -240,7 +240,43 @@ a:hover          {
           }
 
 
+/** TOPNAV */
+#topnav {
+	margin-bottom: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	min-height: 35px;
+	background: #511;
+	
+	
+}
+#topnav a {
+		color: #FFFFCC !important;
+	  //	 background: black;
+         /* background: #99CCFF; */
+          height: 18px;
+          
+   		 font-size: 10pt;
+    	 font-weight: 400;	
+    	 opacity: 0.8;
+    	 text-decoration: none;
+	
+}	
 
+#topnav a:hover {
+	color: white !important;
+	 opacity: 1;
+	
+	
+}
+
+
+#topnav a.navbar-item-active {
+	color: white !important;
+	 opacity: 1;
+	
+	
+}
 /*BREADCRUMBS BAR */
 
 #breadcrumb-nav {
@@ -1142,3 +1178,6 @@ span.glyphicon.ure-control-btn:hover {
 	
 	
 }
+
+
+
