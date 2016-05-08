@@ -42,7 +42,7 @@
 <body>
 	<g:render template="/shared/ure/topnav" model="[type:'editor']"></g:render>
 	<div id="editor_nav_bar" class="ure-nav"></div>
-	<span id="cms-page">Editor /layouts/ure</span>
+	<span id="cms-page" style="display:none">Editor /layouts/ure</span>
 	<div id="wrapper" class="container">
 		
 		<div id="content" >
