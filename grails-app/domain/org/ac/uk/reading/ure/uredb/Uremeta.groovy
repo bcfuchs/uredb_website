@@ -55,6 +55,7 @@ class Uremeta {
 //        description: spellCheck 'include'
 //    }
     static searchable = true;
+    
    // static searchable = [only: ['comments']]
     
 	static hasMany = [ media : Media ]
