@@ -24,6 +24,7 @@ SPATIAL INDEX(location)
 	String location; // lat lon as string
 	String name;
 	String description;
+    static belongsTo = Uremeta;
     static mapping = {
 	//	location type:"point";
 		
