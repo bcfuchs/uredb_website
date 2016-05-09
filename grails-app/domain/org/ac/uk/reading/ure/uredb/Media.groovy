@@ -11,6 +11,7 @@ class Media {
 	String dir; // 2007.03e
 	String caption;
 	String description;
+    static belongsTo = Uremeta;
     static constraints = {
 		type(inList:['image','video','audio']) // why not use mimetype
 		caption(blank:true,nullable:true);
