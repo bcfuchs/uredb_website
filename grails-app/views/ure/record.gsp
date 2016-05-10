@@ -150,7 +150,13 @@
 			${test4 }
 
 			<div id="europeana-section" style="display:none;">
-				<ure:europeanaWidget keywords="${keywords}" gridid="euwidget" klass="euwidget" displayInfobox="true" height="100px"
+				<ure:europeanaWidget 
+					accnum="${accnum}" 
+					keywords="${keywords}" 
+					gridid="euwidget" 
+					klass="euwidget" 
+					displayInfobox="true" 
+					height="100px"
 					width="100px" />
 			</div>
 		</div>

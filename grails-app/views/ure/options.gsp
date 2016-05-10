@@ -33,7 +33,7 @@ color: black;
 		<div class="panel panel-default">
 		
 			<div class="panel-body">
-				<a href="/manage/related">Manage related items</a>
+				<a href="/manage/related">Manage related items search</a>
 			</div>
 		</div>
 		

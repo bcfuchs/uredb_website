@@ -132,8 +132,8 @@ $(document).on('click','.cb-eu',function(){
 
 ! function() {
 $(document).ready(function(){
-	europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100)	
-	europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote')
+	europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
+	europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
   
 	
 });
