@@ -30,11 +30,12 @@ cursor: pointer;
 
 <div id="words-in-context" class="container">
 	<g:each in="${recs}" var="accnum">
+	<a href="/record/${accnum}">
 		<div class="row fieldlist-row" data-ure-accnum="${accnum}">
 			<div class="col-md-2">
-			<a href="/record/${accnum}">
+			
 				${accnum}
-			</a>
+			
 			</div>
 			<div class="col-md-6 context-col">
 			<g:if test="${context}">
@@ -47,5 +48,6 @@ cursor: pointer;
 		    	<img class="fieldlist-img" style="" src="${thumbnails[accnum]}"></img>
 			</div>
 		</div>
+		</a>
 	</g:each>
 </div>
