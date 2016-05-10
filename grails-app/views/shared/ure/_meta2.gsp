@@ -262,7 +262,7 @@ Dimensions:
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#bibliography">Bibliography</a></li>
 					<li><a data-toggle="tab" href="#curation">Curation</a></li>
-					<li><a data-toggle="tab" href="#inmuseum">In the Museums</a></li>
+					<li><a data-toggle="tab" href="#inmuseum">In the Museum</a></li>
 					<li><a data-toggle="tab" href="#details">Details</a></li>
 				</ul>
 				<div class="tab-content repair">
