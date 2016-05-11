@@ -32,7 +32,7 @@
         var id = $(this).attr('data-ure-image-url');
         var provider = $(this).attr('data-eu-provider');
         // if the id is in the blacklist (=vote), remove it from the grid
-        if (id in vote[accnum]) {
+        if (accnum in vote && id in vote[accnum]) {
           $(this).remove();
         }
 

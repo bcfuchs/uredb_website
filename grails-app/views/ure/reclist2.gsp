@@ -35,7 +35,8 @@
 			<div class="row">
 				<div class="col-md-9">
 					<ure:gridWidgetForAccessionNumbers gridid="tokenlist-grid" klass="testwidget" accs="${rlist}"
-						displayAccessionNumber="true" displayInfobox="false" height="100px" width="100px" searchLimit="96">
+						displayAccessionNumber="true" displayInfobox="false" height="100px" width="100px" searchLimit="96" 
+						addCellClick="true">
 					</ure:gridWidgetForAccessionNumbers>
 				</div>
 				<div class="col-md-3"></div>
