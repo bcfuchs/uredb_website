@@ -36,6 +36,9 @@
                $("#save-comps-as-json").click(function(){
                 save_comparanda_as_json();
               });
+              $("#manage-related").click(function(){
+                window.location.href = "/manage/related"
+              });
               
               $("#load-comps").click(function(){
                 $("#comps-file").toggle();

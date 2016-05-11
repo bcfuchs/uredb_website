@@ -86,7 +86,7 @@ $(document).on('click','.cb-eu',function(){
         %>
         <label class="checkbox-inline provider-checklist" data-eu-provider-list='${it.key}'>
             <input class="cb-eu" type="checkbox" value='${it.key}' checked> ${it.key}</input>
-        </label>
+       </label>
     <%  }   %>
        
     </div>

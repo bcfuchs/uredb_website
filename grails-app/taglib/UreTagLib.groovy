@@ -187,6 +187,7 @@ class UreTagLib {
 
         model['info'] =   info
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
+        model['addCellClick'] = (attrs.addCellClick) ? attrs.addCellClick : true;
 
 
 
@@ -224,6 +225,7 @@ class UreTagLib {
         model['gridid'] = gridid;
         model['width'] = width;
         model['height'] = height;
+        model['addCellClick'] =true;
         //log.warn model
         // in here do all the munging
         //
@@ -406,6 +408,7 @@ class UreTagLib {
  */
     @Cacheable('pages')
     def _getEuropeana(uri) {
+       
         def data = new URL(uri).getText()
         // log.warn data;
         def json =  JSON.parse(data);
