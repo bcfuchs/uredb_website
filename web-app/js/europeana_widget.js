@@ -146,7 +146,7 @@
       /** Vote handler */
 
       voteHandler = function() {
-        var item,provider,v,providerBalcklist, providerBlacklist_store, vote_store;
+        var item,provider,v,providerBlacklist, providerBlacklist_store, vote_store;
         providerBlacklist_store = 'providerBlacklist';
         vote_store = 'vote';
 
@@ -195,18 +195,21 @@
       // END vote
     } // vote = function(divs)
 
-    // link to toggle voting
+    // link to  voting toggle
 
     $(document).on('click', toggleSelector, function() {
+      var startText = "tag as not relevant"
       var sw = $(this).attr('data-relevance-toggle');
       if (sw === 'off') {
         vote(itemSelector);
         $(this).attr('data-relevance-toggle', 'on');
+        $(this).html($(this).data('relevance-finish'))
       } else {
         $(itemSelector).unbind('click', voteHandler)
         $('.voterbtn').remove();
         $(itemSelector).bind('click', window.overlayHandler)
         $(this).attr('data-relevance-toggle', 'off');
+        $(this).html(startText);
 
       }
 

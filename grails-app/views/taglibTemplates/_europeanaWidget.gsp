@@ -65,21 +65,11 @@ items2.each {
 -->
 
 <script>
-/** 
- * Museum filter pane toggle
- */
-$(document).on('click','.cb-eu',function(){
-	console.log(this);
-	console.log($(this).val())
-	var mus = $(this).val();
-	$('[data-eu-provider="'+mus+'"]').toggle();
-	$(window).trigger("resize");
-  
-});
+
 </script>
 
  	<span style="text-decoration: underline; cursor:pointer;" id="filterbymuseum" data-target="#provider-filter"  data-toggle="collapse">Filter by museum</span>
- 	<span style="text-decoration: underline; cursor:pointer;" id="relevance-vote" data-relevance-toggle="off">tag as not relevant</span>
+ 	<span style="text-decoration: underline; cursor:pointer;" id="relevance-vote" data-relevance-finish="finish tagging" data-relevance-toggle="off">tag as not relevant</span>
 	<div id="provider-filter" class="collapse controls span2">
 <!--  TODO move this to js	 -->
 	<% providers.sort().each { 
@@ -136,6 +126,18 @@ $(document).ready(function(){
 	europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
   
 	
+});
+
+/** 
+ * Museum filter pane toggle
+ */
+$(document).on('click','.cb-eu',function(){
+	console.log(this);
+	console.log($(this).val())
+	var mus = $(this).val();
+	$('[data-eu-provider="'+mus+'"]').toggle();
+	$(window).trigger("resize");
+  
 });
    }()
 </script>
