@@ -331,20 +331,23 @@ class UreTagLib {
             query = keywords[0]
         }
         def startrec = 1
-        def uri = search_url + "&query="+query+"&thumbnail=true&rows=100&profile=rich&start="+startrec
+        def uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
 
         model['info'] =   _getEuropeana(uri)
 
         model['more']  = []
         model['uri'] =[]+ uri
+        
         def itemsCount = model['info']['itemsCount'] 
+        log.warn uri
+        log.warn itemsCount
           
             2.times {
                 // only iterate if there's more
-                log.warn "items Count" + itemsCount;
+                log.warn "items Count:" + itemsCount;
                 if (itemsCount > 99) {
                     startrec = 100 * (it + 1)
-                    uri = search_url + "&query="+query+"&thumbnail=true&rows=100&profile=rich&start="+startrec
+                    uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
                     def moreItems = _getEuropeana(uri)
                     if (moreItems['info']) {
                         itemsCount = moreItems['info']['itemsCount'] 
