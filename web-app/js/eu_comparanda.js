@@ -1,6 +1,7 @@
 /** EU COMPARANDA */
 !function() {
   /**
+   * @memberOf eu_comparanda
    * load / save /collect europeana items for $accnum
    */
   var EuComparanda = function(accnum, type) {
@@ -12,9 +13,10 @@
               var storage, eu_items, this_accnum;
               storage = $.localStorage;
               eu_items = 'eu_items'
-              this_accnum = accnum;
+            //  this_accnum = accnum;
 
               /**
+               * 
                * INIT
                * 
                */
@@ -78,7 +80,10 @@
                 $(this).tooltip("show");
                 $("#comparanda").tooltip('show');
               })
-
+              /**
+               * @memberOf eu_comparanda.EuComparanda
+               * @private
+               */
               var moveImage = function(e) {
                 var url = $(this).attr('data-ure-image-url');
                 // var style = "background-image: url('" + url + "')";
@@ -106,6 +111,8 @@
               });
 
               /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda
+               * @private
                * addToComparanda
                * 
                * Add a drop target and action for a related item 
@@ -126,7 +133,7 @@
                   provider : provider,
                   guid : guid
                 }
-                addcomp(eu_item)
+                addcomp(accnum,eu_item)
 
               }
 
@@ -142,6 +149,8 @@
                 }
               });
               /*******
+               * @memberOf eu_comparanda.EuComparanda
+               * 
                *  setRemoveDragComparanda
                *
                *  make an item in comparanda draggable for removal. 
@@ -186,15 +195,18 @@
               
 
               /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda
                * addcomp
+               * @this_accnum  // the accnum
                * @eu_item {} 
                * 
                * add eu item to comparanda div via json object
+               * add item to localstorage and save. 
                * 
                */
 
               // duplicates another function in _iframeOverlay.gsp
-              function addcomp(eu_item) {
+              function addcomp(this_accnum, eu_item) {
 
                 // add the thumb to the thumb strip
 
@@ -214,14 +226,14 @@
 
                 // start an array for this accnum if none
 
-                if (!(accnum in eu_items_ls)) {
-                  eu_items_ls[accnum] = {};
-                  eu_items_ls[accnum]['thumb'] = this_thumb
+                if (!(this_accnum in eu_items_ls)) {
+                  eu_items_ls[this_accnum] = {};
+                  eu_items_ls[this_accnum]['thumb'] = this_thumb
 
                 }
 
                 // add this eu item to the accnum array
-                eu_items_ls[accnum][thumb] = eu_item
+                eu_items_ls[this_accnum][thumb] = eu_item
                 // store it
                 storage.set(eu_items, JSON.stringify(eu_items_ls));
 
@@ -243,7 +255,11 @@
                 }
 
               } // function addcomp
-              
+              /*****
+               * @memberOf eu_comparanda.EuComparanda
+               * removecomp
+               * 
+               */
               function removecomp(thumb) {
                 console.log("removecomp "+ thumb)
                 // add the thumb to the thumb strip
@@ -290,8 +306,10 @@
               } // function removecomp
 
               /**
+               * @memberOf eu_comparanda.EuComparanda
+               * 
                * load_comparanda
-               * @eu {} -- the eu_items hash from localstorage
+               * @param {Object} eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into comp div
                * 
@@ -299,22 +317,50 @@
                */
               function load_comparanda(eu) {
 
-                if (this_accnum in eu) {
-                  for ( var thumb in eu[this_accnum]) {
+                if (accnum in eu) {
+                  for ( var thumb in eu[accnum]) {
                     // skip the record thumb
                     if (thumb === "thumb") {
                       continue;
                     }
                     var eu_item = eu[this_accnum][thumb]
 
-                    addcomp(eu_item);
+                    addcomp(accnum,eu_item);
                   }
                 }
                setRemoveDragComparanda("#comparanda-thumbs img");
               }
+              
+              /**
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               * load_comparanda
+               * @param {Object} eu -- the eu_items hash from localstorage
+               * 
+               * load existing comparanda into comp div
+               * 
+               * 
+               */
+              function load_comparanda_load(eu) {
+
+                if (accnum in eu) {
+                  for ( var thumb in eu[accnum]) {
+                    // skip the record thumb
+                    if (thumb === "thumb") {
+                      continue;
+                    }
+                    var eu_item = eu[this_accnum][thumb]
+
+                    addcomp(accnum,eu_item);
+                  }
+                }
+               setRemoveDragComparanda("#comparanda-thumbs img");
+              }
+              
               /************************
+               *  @memberOf eu_comparanda.EuComparanda
                * load_comparanda_from_json
-               * @e  event from file selector
+               * @param e  event from file selector
                *
                * 
                */
@@ -331,11 +377,12 @@
                   //TODO json fails to parse
                   var json = JSON.parse(f.target.result)
                   console.log("adding to comparanda from file...");
+                  
                   load_comparanda(json);
 
                   $("#comps-file").hide({
                     complete : function() {
-                      "hid comps-file"
+                      console.log("hide comps-file");
                     }
                   });
                   console.log("done loading comparanda from file");
@@ -344,6 +391,7 @@
 
               }
               /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda
                * export comparanda to json
                */
 
@@ -359,7 +407,7 @@
               }
 
               /*****************************************************************
-               * 
+               * @memberOf eu_comparanda.EuComparanda
                * make html from the comparanda
                * 
                * 
@@ -429,6 +477,7 @@
 
               }
               /**
+               * @memberOf eu_comparanda.EuComparanda
                * structure: { t1:{},t2:{}} needed: <div>
                * 
                * </div>
@@ -453,7 +502,7 @@
                 return '<div class="eu-items">' + out.join("") + '</div>';
               }
               /*****************************************************************
-               * 
+               * @memberOf eu_comparanda.EuComparanda
                * return a hash of form
                * 
                * assume for now we have more than one comparand.

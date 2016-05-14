@@ -18,7 +18,10 @@
 			class="ure-control-btn glyphicon glyphicon-file"></span>
 		<span id="manage-related" data-toggle="tooltip" title="manage related items"
 			class="ure-control-btn glyphicon glyphicon-wrench"></span>
+		<div id="comps-file-container">
 		<input style="display: none" type="file" id="comps-file" name="comps-file" />
+		
+		</div>
 	</div>
 </div>
 <!--  #comparanda -->
