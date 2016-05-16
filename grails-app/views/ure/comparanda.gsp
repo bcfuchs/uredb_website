@@ -16,6 +16,7 @@
 	<div id="comparanda-page-wrapper">
 		<div id="comparanda-main">
 			<h2>Comparanda</h2>
+			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="comparanda-list"></div>
 		</div>
 	</div>
