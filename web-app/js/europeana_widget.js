@@ -7,6 +7,9 @@
  * 
  */
 !function() {
+  /**
+   * @memberOf europeana_widget
+   */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
     // START
 
@@ -76,7 +79,9 @@
       });
     }
     $(cellSelector).css("cursor", "pointer");
-
+    /**
+     * @memberOf europeana_widget.makeGrid
+     */
     // click on image pops to overlay
     var overlayHandler = function() {
       var url = $(this).attr("data-eu-link");
@@ -109,6 +114,7 @@
   window.europeanaWidget_makeGrid = makeGrid;
 
   /**
+   * @memberOf europeana_widget
    * relevance voting
    * 
    * voteSetup
@@ -132,7 +138,9 @@
       console.log("setting providerBlacklist...")
       storage.set('providerBlacklist', {})
     }
-  
+    /**
+     * @memberOf europeana_widget.voteSetup
+     */
     var vote = function(divs) {
       var votebutton = '<button class="voterbtn btn btn-sm btn-success">x</button>'
       // overlay a click button
@@ -143,8 +151,12 @@
       // remove the overlay click function
       $(itemSelector).unbind('click', window.overlayHandler)
 
-      /** Vote handler */
-
+      /** 
+       * Vote handler 
+       * 
+       * @memberOf europeana_widget.voteSetup.vote
+       * 
+       */
       voteHandler = function() {
         var item,provider,v,providerBlacklist, providerBlacklist_store, vote_store;
         providerBlacklist_store = 'providerBlacklist';
