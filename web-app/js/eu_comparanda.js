@@ -1,8 +1,8 @@
 /** EU COMPARANDA */
+
 !function() {
   /**
-   * @memberOf eu_comparanda
-   * load / save /collect europeana items for $accnum
+   * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
   var EuComparanda = function(accnum, type) {
 
@@ -12,8 +12,9 @@
 
               var storage, eu_items, this_accnum;
               storage = $.localStorage;
+
               eu_items = 'eu_items'
-            //  this_accnum = accnum;
+              // this_accnum = accnum;
 
               /**
                * 
@@ -81,6 +82,7 @@
                 $("#comparanda").tooltip('show');
               })
               /**
+               * 
                * @memberOf eu_comparanda.EuComparanda
                * @private
                */
@@ -112,10 +114,9 @@
 
               /*****************************************************************
                * @memberOf eu_comparanda.EuComparanda
-               * @private
-               * addToComparanda
+               * @private addToComparanda
                * 
-               * Add a drop target and action for a related item 
+               * Add a drop target and action for a related item
                * 
                * takes droppable event params
                */
@@ -133,7 +134,7 @@
                   provider : provider,
                   guid : guid
                 }
-                addcomp(accnum,eu_item)
+                addcomp(accnum, eu_item)
 
               }
 
@@ -142,66 +143,67 @@
                 scope : "comparanda",
 
                 create : function(event, ui) {
-                  
+
                   if (!storage.isSet(eu_items))
                     storage.set(eu_items, '{}');
 
                 }
               });
-              /*******
+              /*****************************************************************
+               * 
                * @memberOf eu_comparanda.EuComparanda
                * 
-               *  setRemoveDragComparanda
-               *
-               *  make an item in comparanda draggable for removal. 
                * 
-               * call after comparanda load
-               * AND after each new item is added. 
+               * @param {string}
+               *          selector
+               * 
+               * setRemoveDragComparanda
+               * 
+               * make an item in comparanda draggable for removal.
+               * 
+               * call after comparanda load AND after each new item is added.
                */
-             function setRemoveDragComparanda(sel) {
-              var removeImageHelper = function(e) {
-                console.log("removeImage");
-                
-                var url = $(this).attr('src');
-                var style = "background-image: url('" + url + "')";
-                // add a helper class and hide the text.
-                var out = $(this).clone().addClass("image-drag-helper");
-                
-               
-                // out = "<div>hi there</div>"
-                // out = '<img class="image-drag-helper" src="'+url+'"/>"'
-                // console.log(out)
-                return out;
-              } // removeImageHelper
-              
-              $(sel).draggable({
-              
-             
-                cursor : "pointer",
-             //   snapTolerance : 1000,
-                scope : "rm-comparanda",
-                helper : removeImageHelper,
-                // remove the item and the data
-                stop: function(e,ui) {
-                  var url = $(this).attr('src')
-                  $(this).remove();
-                  // TODO prototype this to jquery!
-                  removecomp(url)
-                  
-                  
-                }
-              });
-             } // setRemoveDragComparanda 
-              
+              function setRemoveDragComparanda(sel) {
+                var removeImageHelper = function(e) {
+                  console.log("removeImage");
+
+                  var url = $(this).attr('src');
+                  var style = "background-image: url('" + url + "')";
+                  // add a helper class and hide the text.
+                  var out = $(this).clone().addClass("image-drag-helper");
+
+                  // out = "<div>hi there</div>"
+                  // out = '<img class="image-drag-helper" src="'+url+'"/>"'
+                  // console.log(out)
+                  return out;
+                } // removeImageHelper
+
+                $(sel).draggable({
+
+                  cursor : "pointer",
+                  // snapTolerance : 1000,
+                  scope : "rm-comparanda",
+                  helper : removeImageHelper,
+                  // remove the item and the data
+                  stop : function(e, ui) {
+                    var url = $(this).attr('src')
+                    $(this).remove();
+                    // TODO prototype this to jquery!
+                    removecomp(url)
+
+                  }
+                });
+              } // setRemoveDragComparanda
 
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda
-               * addcomp
-               * @this_accnum  // the accnum
-               * @eu_item {} 
+               * @memberOf eu_comparanda.EuComparanda addcomp
+               * @param {string}
+               *          this_accnum // the accnum
+               * @param {Object}
+               *          eu_item
                * 
-               * add eu item to comparanda div via json object
-               * add item to localstorage and save. 
+               * add eu item to comparanda div via json object add item to
+               * localstorage and save.
                * 
                */
 
@@ -247,44 +249,42 @@
                 console.log(thumb)
                 // add to images if this image isn't already there
                 if (!(thumb in thumbs)) {
-                 
+
                   $("#comparanda-thumbs").append('<img src="' + thumb + '"/>');
                   thumbs[thumb] = "";
                   $("#comparanda-thumbs").data('thumbs', thumbs);
-                  setRemoveDragComparanda("#comparanda-thumbs img[src='"+thumb+"']") 
+                  setRemoveDragComparanda("#comparanda-thumbs img[src='" + thumb + "']")
                 }
 
               } // function addcomp
-              /*****
-               * @memberOf eu_comparanda.EuComparanda
-               * removecomp
+              /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda removecomp
                * 
                */
               function removecomp(thumb) {
-                console.log("removecomp "+ thumb)
+                console.log("removecomp " + thumb)
                 // add the thumb to the thumb strip
 
-              
                 // get the url for the thumb
-               
-//                // save to document
-//                var items = $(document).data('eu-items');
-//                items[thumb] = eu_item;
+
+                // // save to document
+                // var items = $(document).data('eu-items');
+                // items[thumb] = eu_item;
 
                 // remove it from localstorage as well
                 var json = storage.get(eu_items);
                 var eu_items_ls = json;
 
-//                // start an array for this accnum if none
-//
-//                if ((accnum in eu_items_ls)) {
-//                  eu_items_ls[accnum] = {};
-//                  eu_items_ls[accnum]['thumb'] = this_thumb
-//
-//                }
+                // // start an array for this accnum if none
+                //
+                // if ((accnum in eu_items_ls)) {
+                // eu_items_ls[accnum] = {};
+                // eu_items_ls[accnum]['thumb'] = this_thumb
+                //
+                // }
 
                 // add this eu item to the accnum array
-                delete eu_items_ls[accnum][thumb] 
+                delete eu_items_ls[accnum][thumb]
                 // store it
                 storage.set(eu_items, JSON.stringify(eu_items_ls));
 
@@ -295,10 +295,10 @@
                     '---' : 0
                   };
                 }
-              
+
                 // add to images if this image isn't already there
                 if ((thumb in thumbs)) {
-               
+
                   delete thumbs[thumb];
                   $("#comparanda-thumbs").data('thumbs', thumbs);
                 }
@@ -309,14 +309,15 @@
                * @memberOf eu_comparanda.EuComparanda
                * 
                * load_comparanda
-               * @param {Object} eu -- the eu_items hash from localstorage
+               * @param {Object}
+               *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into comp div
                * 
                * 
                */
               function load_comparanda(eu) {
-
+                
                 if (accnum in eu) {
                   for ( var thumb in eu[accnum]) {
                     // skip the record thumb
@@ -325,17 +326,18 @@
                     }
                     var eu_item = eu[this_accnum][thumb]
 
-                    addcomp(accnum,eu_item);
+                    addcomp(accnum, eu_item);
                   }
                 }
-               setRemoveDragComparanda("#comparanda-thumbs img");
+                setRemoveDragComparanda("#comparanda-thumbs img");
               }
-              
+
               /**
                * @memberOf eu_comparanda.EuComparanda
                * 
                * load_comparanda
-               * @param {Object} eu -- the eu_items hash from localstorage
+               * @param {Object}
+               *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into comp div
                * 
@@ -351,17 +353,17 @@
                     }
                     var eu_item = eu[this_accnum][thumb]
 
-                    addcomp(accnum,eu_item);
+                    addcomp(accnum, eu_item);
                   }
                 }
-               setRemoveDragComparanda("#comparanda-thumbs img");
+                setRemoveDragComparanda("#comparanda-thumbs img");
               }
-              
-              /************************
-               *  @memberOf eu_comparanda.EuComparanda
-               * load_comparanda_from_json
-               * @param e  event from file selector
-               *
+
+              /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda load_comparanda_from_json
+               * @param e
+               *          event from file selector
+               * 
                * 
                */
               function load_comparanda_from_json(e) {
@@ -374,11 +376,17 @@
 
                 console.log("loading eu from file");
                 reader.onload = function(f) {
-                  //TODO json fails to parse
-                  var json = JSON.parse(f.target.result)
-                  console.log("adding to comparanda from file...");
+                  try {
+                    // TODO json fails to parse
+                    var json = JSON.parse(f.target.result)
+                    load_comparanda(json);
+                    console.log("adding to comparanda from file...");
+                  } catch (e) {
+                      alert(e)
+                      console.log(e)
+                  }
                   
-                  load_comparanda(json);
+                  
 
                   $("#comps-file").hide({
                     complete : function() {
@@ -391,8 +399,7 @@
 
               }
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda
-               * export comparanda to json
+               * @memberOf eu_comparanda.EuComparanda export comparanda to json
                */
 
               function save_comparanda_as_json() {
@@ -407,8 +414,8 @@
               }
 
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda
-               * make html from the comparanda
+               * @memberOf eu_comparanda.EuComparanda make html from the
+               *           comparanda
                * 
                * 
                */
@@ -477,8 +484,8 @@
 
               }
               /**
-               * @memberOf eu_comparanda.EuComparanda
-               * structure: { t1:{},t2:{}} needed: <div>
+               * @memberOf eu_comparanda.EuComparanda structure: { t1:{},t2:{}}
+               *           needed: <div>
                * 
                * </div>
                */
@@ -502,8 +509,7 @@
                 return '<div class="eu-items">' + out.join("") + '</div>';
               }
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda
-               * return a hash of form
+               * @memberOf eu_comparanda.EuComparanda return a hash of form
                * 
                * assume for now we have more than one comparand.
                * 

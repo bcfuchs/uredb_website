@@ -26,6 +26,7 @@
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
+<script src="${resource(dir:'js',file:'messages.js')}"></script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -82,5 +83,11 @@
 println flash.lastURI
  %>
  -->
+ <div class="alert" role="alert" id="alert-modal" style="display:none"> 
+
+	    <button type="button" class="close" id="alert-modal-close" aria-label="Close">
+		<span aria-hidden="true">&times;</span></button>
+	    <div class="alert-body"></div>
+</div>	
 </body>
 </html>
