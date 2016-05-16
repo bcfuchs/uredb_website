@@ -5,6 +5,7 @@
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
   var EuComparanda = function(accnum, type) {
+    var msg_json_broken =  "can't read comparanda file..."
 
     $(document)
         .ready(
@@ -382,8 +383,13 @@
                     load_comparanda(json);
                     console.log("adding to comparanda from file...");
                   } catch (e) {
-                      alert(e)
-                      console.log(e)
+                    if (e.message.match(/JSON/)) {
+                      pop_msg(msg_json_broken,'alert-danger');
+                     }
+                    else {
+                      pop_msg(e,'alert-danger');
+                    }
+                     
                   }
                   
                   

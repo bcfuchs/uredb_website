@@ -1,3 +1,13 @@
+/** modal message box */
+#alert-modal {
+	position: fixed;
+	bottom: -18px;
+	left: 0; 
+	opacity: 1;
+	z-index: 99999;
+	font-size: 20px;
+	padding-left: 20%;
+}
 
 span.lighttable-link {
 	cursor: pointer;
