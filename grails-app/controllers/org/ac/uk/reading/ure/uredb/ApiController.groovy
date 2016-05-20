@@ -57,5 +57,15 @@ class ApiController {
         def accs  = org.ac.uk.reading.ure.uredb.Uremeta.executeQuery('select u.accession_number from Uremeta u');
         render accs as JSON;
     }
+    
+    def saveRelatedPreferences() {
+        log.info "User agent: " + request.getHeader("User-Agent")
+       log.info session['token'];
+       log.info params
+       def prefs = request.JSON
+       log.info request.JSON
+       def out = [1:session['token'],2:prefs];
+       render out as JSON; 
+    }
     //	def index = { }
 }
