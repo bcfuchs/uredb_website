@@ -153,6 +153,29 @@
   var save_lists = function() {
     var skiplist = $(".cb-eu.provskip");
     var whitelist = $(".cb-eu.provwhite");
+    var storage = $.localStorage;
+    storage.set('skiplist',{});
+    var skiplist_ar = [];
+    skiplist.each(function(k,v){
+      if ($(v).is(':checked')) {
+          var val = $(v).val();
+          skiplist_ar.push(val);
+      }
+      
+    })
+    storage.set('skiplist',{'data':skiplist_ar})
+    
+    storage.set('whitelist',{});
+    var whitelist_ar = [];
+    whitelist.each(function(k,v){
+      if ($(v).is(':checked')) {
+          var val = $(v).val();
+          whitelist_ar.push(val);
+      }
+      
+    })
+    storage.set('whitelist',{data:whitelist_ar})
+    
     console.log(skiplist);
     console.log(whitelist);
   }
