@@ -8,7 +8,7 @@
 <style>
 /** hide left nav on param s */
 #left_nav { <
-	g: if test="${params.s == 'noleftnav'}">  
+	g: if test="${params.s == 'noleftnav'}">   
 			display:none; </
 	g: if>
 }
@@ -28,11 +28,11 @@
 #related-wrapper .row h2 {
 	text-align: left;
 }
+
 #goback:hover {
 	cursor: pointer;
-text-decoration: underline;	
+	text-decoration: underline;
 }
-
 </style>
 </head>
 <body>
@@ -42,26 +42,26 @@ text-decoration: underline;
  -->
 	<script>
     $(document).ready(function() {
-	var toggle_setup = function() {
-      $(document).on('click', '.rad', function() {
-        var id = $(this).attr('id');
-        if (id === "skiplist-toggle") {
-          $("#provider-skiplist-row").show();
-          $("#provider-whitelist-row").hide();
+      var toggle_setup = function() {
+        $(document).on('click', '.rad', function() {
+          var id = $(this).attr('id');
+          if (id === "skiplist-toggle") {
+            $("#provider-skiplist-row").show();
+            $("#provider-whitelist-row").hide();
 
-        } else {
-          $("#provider-skiplist-row").hide();
-          $("#provider-whitelist-row").show();
-        }
+          } else {
+            $("#provider-skiplist-row").hide();
+            $("#provider-whitelist-row").show();
+          }
+        })
+      }
+
+      toggle_setup();
+
+      $("#skiplist-toggle").click();
+      $("#goback").click(function() {
+        window.history.back();
       })
-	}
-	
-	toggle_setup();
-	
-   	$("#skiplist-toggle").click();
-   	$("#goback").click(function(){
-	window.history.back();
-     	})
 
     })
   </script>
@@ -82,7 +82,6 @@ text-decoration: underline;
 					<button type="button" id="skiplist-toggle" class="btn btn-default rad">Skiplist</button>
 					<button type="button" id="whitelist-toggle" class="btn btn-default rad">Whitelist</button>
 				</div>
-				
 			</div>
 			<div class="col-md-2">
 				<button type="button" id="manage-related-done" class="btn btn-success">Done</button>
@@ -107,6 +106,6 @@ text-decoration: underline;
 			<input class="cb-eu" type="checkbox" value='' checked></input>
 			/div>
 		</div>
-		<script src="${resource(dir:'js',file:'related_management.js')}" ></script>
+		<script src="${resource(dir:'js',file:'related_management.js')}"></script>
 </body>
 <html>

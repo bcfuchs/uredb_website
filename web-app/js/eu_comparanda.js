@@ -5,7 +5,7 @@
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
   var EuComparanda = function(accnum, type) {
-    var msg_json_broken =  "can't read comparanda file..."
+    var msg_json_broken = "can't read comparanda file..."
 
     $(document)
         .ready(
@@ -17,9 +17,9 @@
               eu_items = 'eu_items'
               // this_accnum = accnum;
 
-              /**
+              /*****************************************************************
                * 
-               * INIT
+               * @memberOf eu_comparanda.EuComparanda
                * 
                */
 
@@ -209,10 +209,10 @@
                */
 
               // duplicates another function in _iframeOverlay.gsp
-              function addcomp(this_accnum, eu_item) {
+              function addcomp(this_accnum, eu_item, addToCompBar) {
 
                 // add the thumb to the thumb strip
-
+                addToCompBar = addToCompBar || true;
                 var thumb = eu_item.thumb;
                 // NOTE this makes the addcomp function dependant on
                 // document.ready
@@ -241,15 +241,16 @@
                 storage.set(eu_items, JSON.stringify(eu_items_ls));
 
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
+                // init if !
                 if (!thumbs) {
                   // need at least one key
                   thumbs = {
                     '---' : 0
                   };
                 }
-                console.log(thumb)
-                // add to images if this image isn't already there
-                if (!(thumb in thumbs)) {
+
+                // add to images if this image isn't already there and
+                if (!(thumb in thumbs && addToComp === true)) {
 
                   $("#comparanda-thumbs").append('<img src="' + thumb + '"/>');
                   thumbs[thumb] = "";
@@ -309,7 +310,7 @@
               /**
                * @memberOf eu_comparanda.EuComparanda
                * 
-               * load_comparanda
+               * load_comparanda_old
                * @param {Object}
                *          eu -- the eu_items hash from localstorage
                * 
@@ -317,15 +318,15 @@
                * 
                * 
                */
-              function load_comparanda(eu) {
-                
+              function load_comparanda_old(eu) {
+
                 if (accnum in eu) {
                   for ( var thumb in eu[accnum]) {
                     // skip the record thumb
                     if (thumb === "thumb") {
                       continue;
                     }
-                    var eu_item = eu[this_accnum][thumb]
+                    var eu_item = eu[accnum][thumb]
 
                     addcomp(accnum, eu_item);
                   }
@@ -344,19 +345,43 @@
                * 
                * 
                */
-              function load_comparanda_load(eu) {
+              function load_comparanda(eu) {
 
-                if (accnum in eu) {
-                  for ( var thumb in eu[accnum]) {
-                    // skip the record thumb
+                // if (accnum in eu) {
+                // for ( var thumb in eu[accnum]) {
+                // // skip the record thumb
+                // if (thumb === "thumb") {
+                // continue;
+                // }
+                // var eu_item = eu[this_accnum][thumb]
+                //
+                // addcomp(accnum, eu_item);
+                // }
+                // }
+                // get current comparanda
+                var old_comp = getEUdata();
+
+                for ( var acc in eu) {
+                  // add the acc
+
+                  for ( var thumb in eu[acc]) {
+                    // skip the thumb of the ure object
                     if (thumb === "thumb") {
                       continue;
                     }
-                    var eu_item = eu[this_accnum][thumb]
+                    // if the comparand is not in the current localstore, add it
+                    // and also to the bar
+                    if (!(acc in old_comp) || !(thumb in old_comp[acc])) {
+                      var eu_item = eu[acc][thumb]
 
-                    addcomp(accnum, eu_item);
+                      addcomp(acc, eu_item);
+
+                    }
+
                   }
+
                 }
+                // save old_comp
                 setRemoveDragComparanda("#comparanda-thumbs img");
               }
 
@@ -384,15 +409,12 @@
                     console.log("adding to comparanda from file...");
                   } catch (e) {
                     if (e.message.match(/JSON/)) {
-                      pop_msg(msg_json_broken,'alert-danger');
-                     }
-                    else {
-                      pop_msg(e,'alert-danger');
+                      pop_msg(msg_json_broken, 'alert-danger');
+                    } else {
+                      pop_msg(e, 'alert-danger');
                     }
-                     
+
                   }
-                  
-                  
 
                   $("#comps-file").hide({
                     complete : function() {
@@ -537,5 +559,7 @@
    */
 
   window.EuComparanda = EuComparanda
-
+  window.jtest = function() {
+    return "hi"
+  }
 }()
