@@ -17,9 +17,9 @@
               eu_items = 'eu_items'
               // this_accnum = accnum;
 
-              /**
+              /*****************************************************************
                * 
-               * INIT
+               * @memberOf eu_comparanda.EuComparanda
                * 
                */
 
@@ -369,10 +369,11 @@
                     if (thumb === "thumb") {
                       continue;
                     }
-                    // if the comparand is not in the current localstore, add it and also to the bar
+                    // if the comparand is not in the current localstore, add it
+                    // and also to the bar
                     if (!(acc in old_comp) || !(thumb in old_comp[acc])) {
                       var eu_item = eu[acc][thumb]
-                     
+
                       addcomp(acc, eu_item);
 
                     }

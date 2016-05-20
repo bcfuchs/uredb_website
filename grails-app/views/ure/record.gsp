@@ -148,7 +148,47 @@
              %>
              
 			${test4 }
+			<!--  UUID
+			${ java.util.UUID.randomUUID()}
+			<%
+            session['UUID'] = java.util.UUID.randomUUID()
+            def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);
+            def token = th.generateToken();
+            session['token'] = token;
+            %>
+			${session }
+			${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.TOKEN_KEY}
+			<%
+            
+            %>
+-->
+<script>
+$(document).ready(function(){
+  	storage = $.localStorage;
+	var url = '/api/preferences/related'
+	var token = "${token}";
+	console.log(url)
+	
+	var whitelist = storage.get('whitelist');
+	var skiplist = storage.get('skiplist');
+	var data = JSON.stringify({whitelist:whitelist,skiplist:skiplist})
+	var success = function(d) {
+		console.log(d)
 
+	  
+	}
+	console.log(data)
+	  $.ajax({
+	    contentType: "application/json; charset=utf-8",
+		url:url,
+		dataType: "json",	
+	  	type: "POST",
+	  	data: data,
+	    }).done(success)
+
+  
+});
+</script>
 			<div id="europeana-section" style="display:none;">
 				<ure:europeanaWidget 
 					accnum="${accnum}" 
@@ -171,6 +211,7 @@
      <!--  
      thumbnail : ${thumbnail} ${iframeModel}
       -->
+     <g:form useToken="true"></g:form>
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}"/>
 	<script>
 		// set up the eucomparanda collection system
