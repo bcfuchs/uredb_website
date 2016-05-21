@@ -303,11 +303,14 @@ class UreTagLib {
 
     }
 
+
+
     // This should be pre-computed and-or cached
 
     def europeanaWidget = {attrs, body ->
 
-
+        
+        def model =[:];
         def klass  = attrs.klass
         def uris = attrs.uris
         def gridid = (attrs.gridid) ? attrs.gridid : 'image-grid'
@@ -315,50 +318,36 @@ class UreTagLib {
         def height = (attrs.height) ? attrs.height : '248px'
         def keywords = attrs.keywords
         def period = attrs.period
-        def api_key = grailsApplication.config.europeana.wskey //  grails-app/conf/Private.groovy
-        api_key = 'ZOPCEDTKBM'
-        def search_url = "http://www.europeana.eu/api/v2/search.json?wskey=" + api_key
-
-        def model =[:];
-
-        // http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query='$QUERY'&start=10&thumbnail=true&rows=50'
-        def query = ""
-        if (keywords.size() > 1) {
-            //  log.warn "kw = " + keywords
-            query = keywords.join("+OR+");
-        }
-        else {
-            query = keywords[0]
-        }
         def startrec = 1
-        def uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
-
+        //TODO test
+        def providers = ['Fitzwilliam+Museum','The+European+Library']
+        def uri = _europeana_query_builder(keywords,period,startrec,providers)
         model['info'] =   _getEuropeana(uri)
 
         model['more']  = []
         model['uri'] =[]+ uri
-        
-        def itemsCount = model['info']['itemsCount'] 
+
+        def itemsCount = model['info']['itemsCount']
         log.warn uri
         log.warn itemsCount
-          
-            2.times {
-                // only iterate if there's more
-                log.warn "items Count:" + itemsCount;
-                if (itemsCount > 99) {
-                    startrec = 100 * (it + 1)
-                    uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
-                    def moreItems = _getEuropeana(uri)
-                    if (moreItems['info']) {
-                        itemsCount = moreItems['info']['itemsCount'] 
-                        model['more'] << moreItems
-                        model['uri'] << uri
-                    }
-                    else {
-                        itemsCount = 0;
-                    }
-                }
-            }
+//
+//        2.times {
+//            // only iterate if there's more
+//            log.warn "items Count:" + itemsCount;
+//            if (itemsCount > 99) {
+//                startrec = 100 * (it + 1)
+//                uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
+//                def moreItems = _getEuropeana(uri)
+//                if (moreItems['info']) {
+//                    itemsCount = moreItems['info']['itemsCount']
+//                    model['more'] << moreItems
+//                    model['uri'] << uri
+//                }
+//                else {
+//                    itemsCount = 0;
+//                }
+//            }
+//        }
 
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
 
@@ -373,54 +362,96 @@ class UreTagLib {
         out << render(template:"/taglibTemplates/europeanaWidget", model:model);
 
     }
-/**
- * D3 barchart for word lists
- * 
- * @attrs words a map [word1:cnt,word2:cnt,...]
- * @attrs klass container class
- * @attrs max max number of bars to display
- */
+    /**
+     * D3 barchart for word lists
+     * 
+     * @attrs words a map [word1:cnt,word2:cnt,...]
+     * @attrs klass container class
+     * @attrs max max number of bars to display
+     */
     def wordmapWidget = { attrs,body ->
         def model = [:]
-    
+
         def words = attrs.words;
-       model['wordcount'] = words.sort{ a,b -> b.value <=> a.value}
-       model['klass'] = attrs.klass
-       model['max']  = attrs.max
-       out << render(template:"/taglibTemplates/wordmapWidget", model:model);
-        
-    }
- /**
-  * wordlist Widget
-  * 
-  * @attrs words array of words
-  * @attrs f   the field
-  * @attrs klass container klass
-  * @attrs thumbs map of thumb for each word
-  */
-   def wordlistWidget = { attrs,body ->
-      out << render(template:"/taglibTemplates/wordlistWidget",model:attrs);
+        model['wordcount'] = words.sort{ a,b -> b.value <=> a.value}
+        model['klass'] = attrs.klass
+        model['max']  = attrs.max
+        out << render(template:"/taglibTemplates/wordmapWidget", model:model);
 
     }
-    
-/**
- * dispatch europeana query. 
- * 
- * @param uri
- * @return
- */
+    /**
+     * wordlist Widget
+     * 
+     * @attrs words array of words
+     * @attrs f   the field
+     * @attrs klass container klass
+     * @attrs thumbs map of thumb for each word
+     */
+    def wordlistWidget = { attrs,body ->
+        out << render(template:"/taglibTemplates/wordlistWidget",model:attrs);
+
+    }
+
+    /**
+     * dispatch europeana query. 
+     * 
+     * @param uri
+     * @return
+     */
     @Cacheable('pages')
     def _getEuropeana(uri) {
-       
+
         def data = new URL(uri).getText()
         // log.warn data;
         def json =  JSON.parse(data);
         // also do the transform here.
-     //   log.warn json;
-    
+        //   log.warn json;
+
         return json
 
     }
+
+
+
+    def _europeana_query_builder(keywords,period,startrec,providers) {
+        
+        def api_key = grailsApplication.config.europeana.wskey //  grails-app/conf/Private.groovy
+        api_key = 'ZOPCEDTKBM'
+        def search_url = "http://www.europeana.eu/api/v2/search.json?wskey=" + api_key
+
+
+        // http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query='$QUERY'&start=10&thumbnail=true&rows=50'
+        def query = ""
+        if (keywords.size() > 1) {
+            //  log.warn "kw = " + keywords
+            query = keywords.join("+OR+");
+        }
+        else {
+            query = keywords[0]
+        }
+      
+     
+        // the data provider facet is : provider_aggregation_edm_dataProvider
+        // http://labs.europeana.eu/api/data-fields
+
+       
+        // qf prov1 & qf prov2 is interpreted as an "AND" query
+        // so use +OR+
+        //http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
+      def provs = []
+       providers.each {provider->
+         
+        def provf = "provider_aggregation_edm_dataProvider:%22${provider}%22"
+        provs.push(provf)
+       }
+       def provider_facet = "&qf="+provs.join("+OR+");
+        
+        def uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec+provider_facet
+        //TODO add this to url.
+        log.info session['related_prefs']
+        return uri  
+    }
+
 
 }
 

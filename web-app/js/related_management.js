@@ -128,7 +128,7 @@
 
       var i = 0;
       var checked = false;
-      var checkedMin = 0;
+      var checkedMin = 0; 
       var klass = "provwhite"
       for ( var a in pv_sorted) {
         i += 1;

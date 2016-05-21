@@ -59,11 +59,15 @@ class ApiController {
     }
     
     def saveRelatedPreferences() {
-        log.info "User agent: " + request.getHeader("User-Agent")
-       log.info session['token'];
-       log.info params
+     
+       def url = request.forwardURI;
+      
        def prefs = request.JSON
-       log.info request.JSON
+     
+       if (prefs['token'] == session['token']) {
+           
+           session['related_prefs'] = prefs
+       }
        def out = [1:session['token'],2:prefs];
        render out as JSON; 
     }
