@@ -317,7 +317,7 @@ class UreTagLib {
         def width = (attrs.width) ? attrs.width : '248px'
         def height = (attrs.height) ? attrs.height : '248px'
         def keywords = attrs.keywords
-        def period = attrs.period
+        def period = (attrs.period)?attrs.period : ''
         def startrec = 1
         //TODO test
        
@@ -328,7 +328,7 @@ class UreTagLib {
             mode = prefs.mode;
             providers =  prefs.data.whitelist.data;
         }
-        
+        log.info prefs;
         def uri = _europeana_query_builder(keywords,period,startrec,providers,mode)
         model['info'] =   _getEuropeana(uri)
 
@@ -421,13 +421,11 @@ class UreTagLib {
 
 
 
-    def _europeana_query_builder(keywords,period,startrec,providers,mode) {
+    def _europeana_query_builder( keywords,String period,Integer startrec,List providers,String mode) {
 
         def api_key = grailsApplication.config.europeana.wskey //  grails-app/conf/Private.groovy
         api_key = 'ZOPCEDTKBM'
         def search_url = "http://www.europeana.eu/api/v2/search.json?wskey=" + api_key
-
-
         // http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query='$QUERY'&start=10&thumbnail=true&rows=50'
         def query = ""
         if (keywords.size() > 1) {
