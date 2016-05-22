@@ -1,16 +1,18 @@
 /** EU COMPARANDA */
 
 !function() {
+
   /**
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
-  var EuComparanda = function(accnum, type) {
+  var EuComparanda = function(accnum) {
     var msg_json_broken = "can't read comparanda file..."
-
+      console.log("EuComparanda")
+   
     $(document)
         .ready(
             function() {
-
+              console.log("I'm over here...")
               var storage, eu_items, this_accnum;
               storage = $.localStorage;
 
@@ -52,7 +54,13 @@
                 $("#comparanda-thumbs").data('thumbs', "");
 
               });
-
+              
+              $("#manage-related").click(function(){
+                window.location.href="/manage/related"
+          
+                
+              });
+            
               /**
                * init load of data from storage
                */
@@ -544,7 +552,7 @@
                */
 
               function getEUdata() {
-                console.log("getEUdata")
+                console.log("getEUdata 3")
                 return storage.get(eu_items);
 
               }
