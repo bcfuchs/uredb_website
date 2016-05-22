@@ -41,17 +41,25 @@
 
  -->
 	<script>
+	
     $(document).ready(function() {
+      var storage = $.localStorage;
       var toggle_setup = function() {
         $(document).on('click', '.rad', function() {
           var id = $(this).attr('id');
+         
           if (id === "skiplist-toggle") {
-            $("#provider-skiplist-row").show();
+            $("#provider-skiplist-row").show()
             $("#provider-whitelist-row").hide();
+            // set to mode selected
+            // TODO -- needs to be read on init and displayed. 
+            storage.set('search-mode',"skiplist")
+            
 
           } else {
-            $("#provider-skiplist-row").hide();
+            $("#provider-skiplist-row").hide()
             $("#provider-whitelist-row").show();
+            storage.set('search-mode',"whitelist")
           }
         })
       }

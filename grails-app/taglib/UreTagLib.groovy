@@ -309,7 +309,7 @@ class UreTagLib {
 
     def europeanaWidget = {attrs, body ->
 
-        
+
         def model =[:];
         def klass  = attrs.klass
         def uris = attrs.uris
@@ -320,8 +320,16 @@ class UreTagLib {
         def period = attrs.period
         def startrec = 1
         //TODO test
-        def providers = ['Fitzwilliam+Museum','The+European+Library']
-        def uri = _europeana_query_builder(keywords,period,startrec,providers)
+       
+        def prefs = session['related_prefs']
+        def providers =[];
+        def mode = ""; // whitelist, skiplist, ""
+        if (prefs != null ) {
+            mode = prefs.mode;
+            providers =  prefs.data.whitelist.data;
+        }
+        
+        def uri = _europeana_query_builder(keywords,period,startrec,providers,mode)
         model['info'] =   _getEuropeana(uri)
 
         model['more']  = []
@@ -330,24 +338,24 @@ class UreTagLib {
         def itemsCount = model['info']['itemsCount']
         log.warn uri
         log.warn itemsCount
-//
-//        2.times {
-//            // only iterate if there's more
-//            log.warn "items Count:" + itemsCount;
-//            if (itemsCount > 99) {
-//                startrec = 100 * (it + 1)
-//                uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
-//                def moreItems = _getEuropeana(uri)
-//                if (moreItems['info']) {
-//                    itemsCount = moreItems['info']['itemsCount']
-//                    model['more'] << moreItems
-//                    model['uri'] << uri
-//                }
-//                else {
-//                    itemsCount = 0;
-//                }
-//            }
-//        }
+        //
+        //        2.times {
+        //            // only iterate if there's more
+        //            log.warn "items Count:" + itemsCount;
+        //            if (itemsCount > 99) {
+        //                startrec = 100 * (it + 1)
+        //                uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
+        //                def moreItems = _getEuropeana(uri)
+        //                if (moreItems['info']) {
+        //                    itemsCount = moreItems['info']['itemsCount']
+        //                    model['more'] << moreItems
+        //                    model['uri'] << uri
+        //                }
+        //                else {
+        //                    itemsCount = 0;
+        //                }
+        //            }
+        //        }
 
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
 
@@ -413,8 +421,8 @@ class UreTagLib {
 
 
 
-    def _europeana_query_builder(keywords,period,startrec,providers) {
-        
+    def _europeana_query_builder(keywords,period,startrec,providers,mode) {
+
         def api_key = grailsApplication.config.europeana.wskey //  grails-app/conf/Private.groovy
         api_key = 'ZOPCEDTKBM'
         def search_url = "http://www.europeana.eu/api/v2/search.json?wskey=" + api_key
@@ -429,27 +437,34 @@ class UreTagLib {
         else {
             query = keywords[0]
         }
-      
-     
+
+        def uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec
+
+
         // the data provider facet is : provider_aggregation_edm_dataProvider
         // http://labs.europeana.eu/api/data-fields
+        def prefs = session['related_prefs']
+        def provs = []
+     
+        if  ( mode == "whitelist") {
 
-       
-        // qf prov1 & qf prov2 is interpreted as an "AND" query
-        // so use +OR+
-        //http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
-      def provs = []
-       providers.each {provider->
-         
-        def provf = "provider_aggregation_edm_dataProvider:%22${provider}%22"
-        provs.push(provf)
-       }
-       def provider_facet = "&qf="+provs.join("+OR+");
-        
-        def uri = search_url + "&query="+query+"&thumbnail=true&rows=200&profile=rich&start="+startrec+provider_facet
+            // qf prov1 & qf prov2 is interpreted as an "AND" query
+            // so use +OR+
+            //http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
+           
+            providers.each {provider->
+            //    provider = provider.replaceAll(/\s/,"%20")
+                def provf = "provider_aggregation_edm_dataProvider:%22${URLEncoder.encode(provider)}%22"
+                provs.push(provf)
+            }
+            def provider_facet = "&qf="+provs.join("+OR+");
+
+            uri = uri  +provider_facet
+        }
         //TODO add this to url.
-        log.info session['related_prefs']
-        return uri  
+        log.info "---------------<<<"
+      
+        return uri
     }
 
 

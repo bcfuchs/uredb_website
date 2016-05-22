@@ -4,6 +4,8 @@
   function getRelatedPrefs() {
 
     var whitelist = storage.get('whitelist');
+  
+    
     var skiplist = storage.get('skiplist');
     return {
       whitelist : whitelist,
@@ -24,6 +26,11 @@
       }).done(success)
   }
   
+  function getMode() {
+    var mode = ""
+    mode = storage.get('search-mode')
+    return mode
+  }
  
 
 
@@ -34,7 +41,8 @@
 
     }
     var rel =  getRelatedPrefs();
-    var data = {data:rel,token:token}
+    var mode = getMode();
+    var data = {data:rel,token:token,mode:mode}
     console.log(data)
     sendData(JSON.stringify(data),success);
   }
