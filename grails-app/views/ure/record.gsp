@@ -2,12 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Ure Museum Database: ${accnum}</title>
-	<meta name="layout" content="ure/main" />  
-	<script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-	<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
-	
-	<script>
+<title>Ure Museum Database: ${accnum}</title>
+<meta name="layout" content="ure/main" />
+<script src="${resource(dir:'js',file:'image-modal.js')}"></script>
+<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
+<script>
 		// set global js vars for highlighting text
 		
 		var  uredb_matcher_hasMatch = false;
@@ -34,28 +33,25 @@
 		  
 		})
 	</script>
-	<style>
-		/** hide left nav on param s */
-		#left_nav {
-		<g:if test="${params.s == 'noleftnav'}">
-			display:none;
-		</g:if>
-		
-		}
-		
-	#left-nav-search {
-	display:block !important;
-	
+<style>
+/** hide left nav on param s */
+#left_nav { <
+	g: if test="${params.s == 'noleftnav'}"> 
+			display:none; </
+	g: if>
 }
-	</style>
-	<g:set var="recordId" value="${id}" scope="request" />
-	<g:set var="nextRecordId" value="${nextid}" scope="request" />
-	<g:set var="isRecordPage" value="true" scope="request" />
+
+#left-nav-search {
+	display: block !important;
+}
+</style>
+<g:set var="recordId" value="${id}" scope="request" />
+<g:set var="nextRecordId" value="${nextid}" scope="request" />
+<g:set var="isRecordPage" value="true" scope="request" />
 </head>
 <body>
-
-<span>
-<%
+	<span>
+		<%
     if (flash.lastURI =~ /searchable/) {
 		flash.fromSearch = true
         
@@ -68,8 +64,7 @@
 	}
     
  %>
- </span>
-      
+	</span>
 	<div id="record-page-wrapper" class="record-page-wrapper">
 		<script src="${resource(dir:'js',file:'record.js')}"></script>
 		<g:if test="${flash.fromSearch == true}">
@@ -77,7 +72,6 @@
 				<a href="${flash.searchUrl}">back to search</a>
 			</span>
 		</g:if>
-		
 		<!--  #switcher -->
 		<h2>
 			${accnum}:
@@ -85,16 +79,18 @@
 			${nextid}
 		</h2>
 		<div id="record-main">
-		
 			<div id="meta2">
 				<g:render template="/shared/ure/meta2" var="t" model="[record:record]" />
 			</div>
 			<!--  #meta2 -->
-			
 			<g:render template="/ure/citationWidget" />
 			<h2>Related content from Europeana</h2>
 			<% 
-           
+               /** Extract keywords from the record info
+               *
+               *   TODO --build results grid in client. 
+               */
+               
               // keywords are created in the recordService
               // this is just dev code here
               // probably we need a complex query
@@ -143,11 +139,10 @@
               return keywords
               }
              def keywords = make_keywords(record)
-             def test4 = [];
-             keywords.each { test4 << it }
+             def kw_display = [];
+             keywords.each { kw_display << it }
              %>
-             
-			${test4 }
+			${kw_display }
 			<!-- 
 			<%
            
@@ -158,23 +153,17 @@
 	
 			
 -->
-<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
-<script>
-! function(){
-	syncRelated("${token}");
-	console.log("${token}")
-  
-}()
-</script>
-			<div id="europeana-section" style="display:none;">
-				<ure:europeanaWidget 
-					accnum="${accnum}" 
-					keywords="${keywords}" 
-					gridid="euwidget" 
-					klass="euwidget" 
-					displayInfobox="true" 
-					height="100px"
-					width="100px" />
+			<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
+			<script>
+				! function(){
+					syncRelated("${token}");
+					console.log("${token}")
+				  
+				}()
+			</script>
+			<div id="europeana-section" style="display: none;">
+				<ure:europeanaWidget accnum="${accnum}" keywords="${keywords}" gridid="euwidget" klass="euwidget" displayInfobox="true"
+					height="100px" width="100px" />
 			</div>
 		</div>
 		<!-- #record-main -->
@@ -185,11 +174,11 @@
     	def thumbnail = thumb?.base + "/thumb/"+ thumb?.filename ;
         def iframeModel = [accnum:accnum,short_title:short_title,thumbnail:thumbnail,bla:0]
      %>
-     <!--  
+	<!--  
      thumbnail : ${thumbnail} ${iframeModel}
       -->
-     <g:form useToken="true"></g:form>
-	<g:render template="/ure/iframeOverlay" model="${iframeModel}"/>
+	<g:form useToken="true"></g:form>
+	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
 	<script>
 		// set up the eucomparanda collection system
 		EuComparanda("${accnum}");

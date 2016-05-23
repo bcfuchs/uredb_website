@@ -17,8 +17,8 @@
               storage = $.localStorage;
 
               eu_items = 'eu_items'
-              // this_accnum = accnum;
-
+              this_accnum = accnum;
+              
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
@@ -244,10 +244,23 @@
                 }
 
                 // add this eu item to the accnum array
-                eu_items_ls[this_accnum][thumb] = eu_item
+                if ( ! eu_items_ls[this_accnum][thumb]) {
+                  eu_items_ls[this_accnum][thumb] = eu_item
                 // store it
-                storage.set(eu_items, JSON.stringify(eu_items_ls));
-
+                  storage.set(eu_items, JSON.stringify(eu_items_ls));
+                }
+                add_to_comp_bar(thumb);
+               
+              } // function addcomp
+              
+              
+              /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda 
+               * 
+               * 
+               */ 
+              
+              function add_to_comp_bar(thumb) {
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 // init if !
                 if (!thumbs) {
@@ -266,11 +279,15 @@
                   setRemoveDragComparanda("#comparanda-thumbs img[src='" + thumb + "']")
                 }
 
-              } // function addcomp
+                
+                
+              }
+              
+              
               /*****************************************************************
                * @memberOf eu_comparanda.EuComparanda removecomp
                * 
-               */
+               */ 
               function removecomp(thumb) {
                 console.log("removecomp " + thumb)
                 // add the thumb to the thumb strip
@@ -385,6 +402,10 @@
                       addcomp(acc, eu_item);
 
                     }
+                    if ((this_accnum in old_comp) &&(thumb in old_comp[this_accnum])) {
+                      add_to_comp_bar(thumb)
+                    }
+                    
 
                   }
 
