@@ -181,10 +181,12 @@
   }
 
   var done_setup = function() {
+    var storage = $.localStorage;
     $("#manage-related-done").click(function() {
       var res;
       save_lists();
       $(this).html("Saved!")
+      storage.set('refresh',true);
 
       setTimeout(function() {
         // window.location.href="/options";

@@ -43,7 +43,18 @@
 	<script>
 	
     $(document).ready(function() {
+      
       var storage = $.localStorage;
+      if (storage.isSet('refresh') && storage.get('refresh') === true) {
+        storage.set('refresh',false)
+        location.reload();
+         console.log('reloading...')
+         
+         
+        }
+      else {
+		console.log('not reloading')
+      }
       var toggle_setup = function() {
         $(document).on('click', '.rad', function() {
           var id = $(this).attr('id');
@@ -68,7 +79,7 @@
 
       $("#skiplist-toggle").click();
       $("#goback").click(function() {
-        window.history.back();
+        window.location.href = document.referrer;
       })
 
     })

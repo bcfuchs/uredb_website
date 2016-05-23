@@ -320,7 +320,7 @@ class UreTagLib {
         def period = (attrs.period)?attrs.period : ''
         def startrec = 1
         //TODO test
-       
+
         def prefs = session['related_prefs']
         def providers =[];
         def mode = ""; // whitelist, skiplist, ""
@@ -443,15 +443,15 @@ class UreTagLib {
         // http://labs.europeana.eu/api/data-fields
         def prefs = session['related_prefs']
         def provs = []
-     
+
         if  ( mode == "whitelist") {
 
             // qf prov1 & qf prov2 is interpreted as an "AND" query
             // so use +OR+
             //http://www.europeana.eu/api/v2/search.json?wskey=ZOPCEDTKBM&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
-           
+            log.info providers
             providers.each {provider->
-            //    provider = provider.replaceAll(/\s/,"%20")
+                //    provider = provider.replaceAll(/\s/,"%20")
                 def provf = "provider_aggregation_edm_dataProvider:%22${URLEncoder.encode(provider)}%22"
                 provs.push(provf)
             }
@@ -461,7 +461,7 @@ class UreTagLib {
         }
         //TODO add this to url.
         log.info "---------------<<<"
-      
+
         return uri
     }
 
