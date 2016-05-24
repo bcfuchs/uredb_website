@@ -367,7 +367,7 @@
                *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into comp div
-               * 
+               *  
                * 
                */
               function load_comparanda(eu) {
