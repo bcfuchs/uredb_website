@@ -79,11 +79,11 @@ items2.each {
 	<!--  ajax: populate this grid with data from server  -->
 	<script>
 
-	var doEuRelated = function() {
-	  var data = {}
+	var doEuRelated = function(templateSel,gridSel,data) {
+	  
 	  data = JSON.stringify(data)
 	  var url = "/api/related"
-	  var template = $($(".gridlist-cell")[0]).clone();
+	  var template = $($(templateSel + " .gridlist-cell")[0]).clone();
 	  
 	  var success = function(d) {
 	  	for (var i = 0; i < d.length; i++) {
@@ -96,6 +96,7 @@ items2.each {
 			t.data('eu-link',item.link);
 			t.data('ure-image-url',item.thumb);
 			t.data('ure-dcSubject',item.dcSubject);
+			$(gridSel).append(t);
 	  		}
 	  	} // success
 		  $.ajax({
@@ -108,7 +109,15 @@ items2.each {
 	}
 	
 	$(document).ready(function(){
-
+		var data = 	{accnum:"${accnum}", 
+				keywords:${keywords as JSON}, 
+				gridid:"euwidget", 
+				klass:"euwidget", 
+				displayInfobox:"true",
+				height:"100px",
+				width:"100px"} 
+		console.log(data)
+	//  doEuRelated()
 	});
 	
 	

@@ -161,9 +161,22 @@
 				  
 				}()
 			</script>
+			<!-- 
+			KEYWORDS
+			<%
+            def kw_json = keywords as JSON;
+            %>
+            ${kw_json}
+			 -->
+			
 			<div id="europeana-section" style="display: none;">
-				<ure:europeanaWidget accnum="${accnum}" keywords="${keywords}" gridid="euwidget" klass="euwidget" displayInfobox="true"
-					height="100px" width="100px" />
+				<ure:europeanaWidget 
+				accnum="${accnum}" 
+				keywords="${keywords}" 
+				gridid="euwidget" 
+				klass="euwidget" 
+				displayInfobox="true"
+				height="100px" width="100px" />
 			</div>
 		</div>
 		<!-- #record-main -->
