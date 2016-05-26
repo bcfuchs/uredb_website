@@ -44,6 +44,9 @@ class UreTagLib {
             out << "anonymousUser"
         }
     }
+    def test1 = { attrs,body->
+        return 2;
+    }
     //TODO these should be provided by a service
     def getRecordById  =  { attrs,body->
         // if we find it, return a rendered version
@@ -62,7 +65,11 @@ class UreTagLib {
         }
 
     }
-    def getRecordProperty  = { attrs,body->
+    def    relatedAPI() {
+        
+        return 4;
+    }
+    def getRecordProperty2  = { attrs,body->
         // if we find it, return a rendered version
 
         // if we don't, return a not found
@@ -303,35 +310,17 @@ class UreTagLib {
 
     }
 
-
-
-    // This should be pre-computed and-or cached
-
-    def europeanaWidget = {attrs, body ->
-
-
-        def model =[:];
-        def klass  = attrs.klass
-        def uris = attrs.uris
-        def gridid = (attrs.gridid) ? attrs.gridid : 'image-grid'
-        def width = (attrs.width) ? attrs.width : '248px'
-        def height = (attrs.height) ? attrs.height : '248px'
-        def keywords = attrs.keywords
-        def period = (attrs.period)?attrs.period : ''
-        def startrec = 1
-        //TODO test
-
-        def prefs = session['related_prefs']
+    def _europeanaWidget(klass,uris,gridid,width,height,keywords,period,startrec,prefs) {
+        def model = [:]
         def providers =[];
         def mode = ""; // whitelist, skiplist, ""
         if (prefs != null ) {
             mode = prefs.mode;
             providers =  prefs.data.whitelist.data;
         }
-        log.info prefs;
+       
         def uri = _europeana_query_builder(keywords,period,startrec,providers,mode)
         model['info'] =   _getEuropeana(uri)
-
         model['more']  = []
         model['uri'] =[]+ uri
 
@@ -357,14 +346,37 @@ class UreTagLib {
         //            }
         //        }
 
-        model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
-
-
         model['keywords'] = keywords;
         model['klass'] = klass;
         model['gridid'] = gridid;
         model['width'] = width;
         model['height'] = height;
+        log.info "done with _eur"
+        return model;
+        
+    }
+
+    // This should be pre-computed and-or cached
+
+    def europeanaWidget = {attrs, body ->
+
+      
+        def model =[:];
+        def klass  = attrs.klass
+        def uris = attrs.uris
+        def gridid = (attrs.gridid) ? attrs.gridid : 'image-grid'
+        def width = (attrs.width) ? attrs.width : '248px'
+        def height = (attrs.height) ? attrs.height : '248px'
+        def keywords = attrs.keywords
+        def period = (attrs.period)?attrs.period : ''
+      
+        def startrec = 1
+        def prefs = session['related_prefs']
+        
+        model = _europeanaWidget(klass,uris,gridid,width,height,keywords,period,startrec,prefs);
+        model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
+       
+       
         //log.warn model as JSON;
         // in here do all the munging
         out << render(template:"/taglibTemplates/europeanaWidget", model:model);
@@ -464,6 +476,8 @@ class UreTagLib {
 
         return uri
     }
+    
+  
 
 
 }

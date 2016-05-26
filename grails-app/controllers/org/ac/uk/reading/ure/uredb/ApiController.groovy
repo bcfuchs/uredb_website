@@ -1,6 +1,7 @@
 package org.ac.uk.reading.ure.uredb
 
 import grails.converters.*
+import org.springframework.context.ApplicationContext
 
 /**
  * ApiController
@@ -58,6 +59,7 @@ class ApiController {
         render accs as JSON;
     }
     
+    
     def saveRelatedPreferences() {
      
        def url = request.forwardURI;
@@ -71,5 +73,18 @@ class ApiController {
        def out = [1:session['token'],2:prefs];
        render out as JSON; 
     }
+    
     //	def index = { }
+    
+    def europeanaRelatedSearch() {
+        
+        def req = request.JSON
+        log.info req
+        def g = grailsApplication.mainContext.getBean('UreTagLib')
+       
+        def t = g.relatedAPI();
+        log.info t
+        def out = [1:2, "t":t,"req":req]
+        render out as JSON;
+    }
 }
