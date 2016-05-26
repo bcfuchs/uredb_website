@@ -111,14 +111,14 @@ items2.each {
 
 	});
 	
-	*/
+	
 	</script>
 	<div id="${gridid}" class="ure-grid ${klass_ }">
-		<%   def hideInfodiv = (displayInfobox.toBoolean())?"hide-infodiv":"showtheinfobox" %>
+		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
 		<g:each var="item" in="${items}">
 			<!--  $item.dcSubject -->
 			<%
-    
+
     def back_url = "background-image: url("+ item.thumb+ ')';
     
      %>

@@ -748,7 +748,8 @@ a.white {
              background-color: #660000;
              background-image: url(../../images/ure/banner2.jpg);
              background-repeat: no-repeat;
-             background-position: center center;
+            // background-position: center center;
+                background-position: 98% 10%;
              padding: 0em 0em 0em 0em;
              height: 4em;
              /* font-size: 0.8em; */
