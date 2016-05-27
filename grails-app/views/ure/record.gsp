@@ -164,9 +164,17 @@
 			<!-- 
 			KEYWORDS
 			<%
-            def kw_json = keywords as JSON;
+            def kw_json = ['greek','vase'];
+            def error;
+            try {
+                kw_json = keywords as JSON;
+            }
+            catch(e) {
+                error = e
+            }
             %>
             ${kw_json}
+            ${error}
 			 -->
 			
 			<div id="europeana-section" style="display: none;">

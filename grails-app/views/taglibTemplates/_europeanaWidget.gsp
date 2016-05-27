@@ -81,9 +81,22 @@ items2.each {
 	/**
 	* Set up Eu related grid and helper functions 
 	*/
+	<% 
+    def kw_json;
+    def error_1;
+    try {
+        kw_json = keywords as JSON;
+    }
+    catch(Exception e) {
+        kw_json = "['attic','vase']";
+    	error_1 = e;
+        }
+    
+    %> 
+    // ${error_1}
 	$(document).ready(function(){
 		var data = 	{accnum:"${accnum}", 
-				keywords:${keywords as JSON}, 
+				keywords:${kw_json}, 
 				gridid:"euwidget", 
 				klass:"euwidget", 
 				displayInfobox:"true",
