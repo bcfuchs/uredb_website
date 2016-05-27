@@ -51,7 +51,14 @@
 
         $(gridSel).append(t);
       }
-      $(window).trigger("resize");
+	var signal = "fire_EuComparanda"
+	
+	$(window).trigger("resize");
+	var e = $.Event(signal);
+	$(window).trigger(e, {
+		id: "finished doEuRelated"
+	    });
+
     } // success
     var successa = function(d) {
       console.log("success!")

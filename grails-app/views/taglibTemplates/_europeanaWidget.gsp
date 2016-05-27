@@ -114,7 +114,7 @@ items2.each {
 	});
 }()
 	</script>
-	<div id="testgrid"></div>
+	
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->

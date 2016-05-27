@@ -194,7 +194,13 @@
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
 	<script>
 		// set up the eucomparanda collection system
-		EuComparanda("${accnum}");
+		// this can only be called after grid has finished build!!!
+		var signal = "fire_EuComparanda" // fired in europeana_widget.js
+		$(window).on(signal, function (e, data) {
+		   	EuComparanda("${accnum}");
+        	// console.log("got a packet from " + data.id);
+    });
+		
      </script>
 </body>
 <html>

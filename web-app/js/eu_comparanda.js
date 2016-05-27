@@ -13,9 +13,9 @@
         .ready(
             function() {
               console.log("I'm over here...")
-              var storage, eu_items, this_accnum;
+              var storage, eu_items, this_accnum, eu_draggable_sel;
               storage = $.localStorage;
-
+              eu_draggable_sel = "#euwidget .cell"
               eu_items = 'eu_items'
               this_accnum = accnum;
               
@@ -107,8 +107,8 @@
                 // console.log(out)
                 return out;
               }
-
-              $("#euwidget .cell").draggable({
+             console.log("set draggable");
+              $(eu_draggable_sel).draggable({
                 snap : "#comparanda",
                 // show target tooltip on start hide on finish
                 // start: function() {
@@ -268,8 +268,8 @@
                   thumbs = {
                     '---' : 0
                   };
-                }
-
+                } 
+                var addToComp = true;
                 // add to images if this image isn't already there and
                 if (!(thumb in thumbs && addToComp === true)) {
 
