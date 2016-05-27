@@ -1,17 +1,75 @@
 /**
- * This module exports two functions makeGrid() make a grid of europeana
- * thumbnails -exclude blacklisted items
- * 
- * voterSetup() set up relevance voting
+ * This module exports three functions makeGrid() -- make a grid of europeana
+ * thumbnails -exclude blacklisted items doEuRelated() --fetch data from
+ * europeana queries voterSetup() -- set up relevance voting
  * 
  * 
  */
 !function() {
   /**
    * @memberOf europeana_widget
+   * doEuRelated
+   */
+  var doEuRelated = function(templateSel, gridSel, data) {
+
+    data = JSON.stringify(data)
+    var endpoint_url = "/api/related"
+    var template = $($(templateSel + " .gridlist-cell")[0]).clone();
+
+    // make style for each element.
+    var makeStyle = function(w, h, thumburl) {
+      return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
+    }
+
+    var success = function(data) {
+      var items = data.info.items;
+      var width = data.width;
+      var height = data.height;
+      var displayInfobox = data.displayInfobox;
+      var hideInfodiv = displayInfobox?"hide-infodiv":"showtheinfobox";
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var t = $(template).clone();
+        item.thumb = item.edmPreview;
+       
+        
+        var style = makeStyle(width, height, item.thumb);
+        $(t).attr('data-ure-uri', item.edmPreview)
+        $(t).attr('data-eu-provider', item.dataProvider);
+        $(t).attr('data-eu-id', item.id);
+        $(t).attr('data-eu-guid', item.guid)
+        $(t).attr('data-eu-link', item.edmIsShownAt);
+        $(t).attr('data-ure-image-url', item.edmPreview);
+        $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware);
+        $(t).attr('style', style);
+        $(t).find(".short_title").html(item.title);
+        $(t).find(".caption").html(item.provider);
+        $(t).find(".date").html(item.date + " " + item.period);
+      
+        
+        $(t).addClass(hideInfodiv)
+
+        $(gridSel).append(t);
+      }
+      $(window).trigger("resize");
+    } // success
+    var successa = function(d) {
+      console.log("success!")
+      console.log(d)
+    }
+    $.ajax({
+      contentType : "application/json; charset=utf-8",
+      url : endpoint_url,
+      dataType : "json",
+      type : "POST",
+      data : data,
+    }).done(success)
+  }
+  window.europeanaWidget_doEuRelated = doEuRelated;
+  /**
+   * @memberOf europeana_widget
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
-   
 
     var storage, cellSelector, blacklist_store, providerBlacklist, providerBlacklistThreshold, providerBlacklist_store;
 
@@ -114,8 +172,7 @@
   window.europeanaWidget_makeGrid = makeGrid;
 
   /**
-   * @memberOf europeana_widget
-   * relevance voting
+   * @memberOf europeana_widget relevance voting
    * 
    * voteSetup
    * 
@@ -151,37 +208,35 @@
       // remove the overlay click function
       $(itemSelector).unbind('click', window.overlayHandler)
 
-      /** 
-       * Vote handler 
+      /**
+       * Vote handler
        * 
        * @memberOf europeana_widget.voteSetup.vote
        * 
        */
       voteHandler = function() {
-        var item,provider,v,providerBlacklist, providerBlacklist_store, vote_store;
+        var item, provider, v, providerBlacklist, providerBlacklist_store, vote_store;
         providerBlacklist_store = 'providerBlacklist';
         vote_store = 'vote';
 
         // show red on vote
         $(this).toggleClass('btn-success').toggleClass('btn-danger');
         v = storage.get(vote_store);
-     
+
         providerBlacklist = storage.get(providerBlacklist_store);
         item = $(this).parent().attr('data-ure-image-url');
         provider = $(this).parent().attr('data-eu-provider');
 
         if ($(this).hasClass('btn-danger')) {
-          
+
           // add to blacklist
           if (!(accnum in v))
             v[accnum] = {};
 
           v[accnum][item] = "";
 
-         // add to provider blacklist
-          provider in providerBlacklist ? 
-              providerBlacklist[provider] += 1 : 
-                providerBlacklist[provider] = 1
+          // add to provider blacklist
+          provider in providerBlacklist ? providerBlacklist[provider] += 1 : providerBlacklist[provider] = 1
 
         }
 
@@ -207,7 +262,7 @@
       // END vote
     } // vote = function(divs)
 
-    // link to  voting toggle
+    // link to voting toggle
 
     $(document).on('click', toggleSelector, function() {
       var startText = "tag as not relevant"
