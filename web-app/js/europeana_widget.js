@@ -7,8 +7,7 @@
  */
 !function() {
   /**
-   * @memberOf europeana_widget
-   * doEuRelated
+   * @memberOf europeana_widget doEuRelated
    */
   var doEuRelated = function(templateSel, gridSel, data) {
 
@@ -20,19 +19,26 @@
     var makeStyle = function(w, h, thumburl) {
       return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
     }
-
+    var getDate = function(item) {
+      
+      var out = "";
+      if ('edmTimespanLabel' in item && item.edmTimespanLabel !== "")
+        out += item.edmTimespanLabel[0].def + " ";
+      if ('edmTimespanBroaderTerm' in item && item.edmTimespanBroaderTerm)
+        out += item.edmTimespanBroaderTerm;
+      return out;
+    }
     var success = function(data) {
       var items = data.info.items;
       var width = data.width;
       var height = data.height;
       var displayInfobox = data.displayInfobox;
-      var hideInfodiv = displayInfobox?"hide-infodiv":"showtheinfobox";
+      var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         var t = $(template).clone();
         item.thumb = item.edmPreview;
-       
-        
+
         var style = makeStyle(width, height, item.thumb);
         $(t).attr('data-ure-uri', item.edmPreview)
         $(t).attr('data-eu-provider', item.dataProvider);
@@ -40,24 +46,25 @@
         $(t).attr('data-eu-guid', item.guid)
         $(t).attr('data-eu-link', item.edmIsShownAt);
         $(t).attr('data-ure-image-url', item.edmPreview);
-        $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware);
+        if ("dcSubjectLangAware" in item)
+          $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware.def);
         $(t).attr('style', style);
         $(t).find(".short_title").html(item.title);
-        $(t).find(".caption").html(item.provider);
-        $(t).find(".date").html(item.date + " " + item.period);
+        $(t).find(".caption").html(item.dataProvider);
       
-        
+        $(t).find(".date").html(getDate(item));
+
         $(t).addClass(hideInfodiv)
 
         $(gridSel).append(t);
       }
-	var signal = "fire_EuComparanda"
-	
-	$(window).trigger("resize");
-	var e = $.Event(signal);
-	$(window).trigger(e, {
-		id: "finished doEuRelated"
-	    });
+      var signal = "fire_EuComparanda"
+
+      $(window).trigger("resize");
+      var e = $.Event(signal);
+      $(window).trigger(e, {
+        id : "finished doEuRelated"
+      });
 
     } // success
     var successa = function(d) {
@@ -70,7 +77,12 @@
       dataType : "json",
       type : "POST",
       data : data,
-    }).done(success)
+    }).done(success).fail(function(j, t, e) {
+      alert(e);
+    }).always(function() {
+      alert("complete");
+    });
+
   }
   window.europeanaWidget_doEuRelated = doEuRelated;
   /**
