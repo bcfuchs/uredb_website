@@ -82,9 +82,9 @@ class ApiController {
         log.info req
         def g = grailsApplication.mainContext.getBean('UreTagLib')
        
-        def t = g.relatedAPI();
-        log.info t
-        def out = [1:2, "t":t,"req":req]
+        def out = g.relatedAPI(req);
+        log.info out 
+        //out = [1:2, "t":t,"req": 1]
         render out as JSON;
     }
 }

@@ -84,21 +84,39 @@ items2.each {
 	  data = JSON.stringify(data)
 	  var url = "/api/related"
 	  var template = $($(templateSel + " .gridlist-cell")[0]).clone();
+
+	  // make style for each element. 
+	  var makeStyle = function(w,h,thumburl){
+	     return 'width:' + w + '; height:'+ h +'; background-image: url('+ thumburl+ ')';
+	  }
 	  
-	  var success = function(d) {
-	  	for (var i = 0; i < d.length; i++) {
-			var item = d[i]; 
+	  var success = function(data) {
+	      var items = data.info.items;
+	      var width = data.width;
+	      var height = data.height;
+	      
+	  	for (var i = 0; i < items.length; i++) {
+			var item = items[i]; 
 			var t = $(template).clone();
-			t.data('ure-uri',item.thumb)
-			t.data('eu-provider',item.provider);
-			t.data('eu-id',item.id);
-			t.data('eu-guid',item.guid)
-			t.data('eu-link',item.link);
-			t.data('ure-image-url',item.thumb);
-			t.data('ure-dcSubject',item.dcSubject);
+			item.thumb = item.edmPreview;
+			var style = makeStyle(width,height,item.thumb);
+			$(t).attr('data-ure-uri',item.edmPreview)
+			$(t).attr('data-eu-provider',item.dataProvider);
+			$(t).attr('data-eu-id',item.id);
+			$(t).attr('data-eu-guid',item.guid)
+			$(t).attr('data-eu-link',item.edmIsShownAt);
+			$(t).attr('data-ure-image-url',item.edmPreview);
+			$(t).attr('data-ure-dcSubject',item.dcSubjectLangAware);
+			$(t).attr('style',style);
+			console.log(item)
 			$(gridSel).append(t);
 	  		}
+		  $(window).trigger("resize");
 	  	} // success
+	  	var successa = function(d) {
+		  	console.log("success!")
+			console.log(d)
+		  	}
 		  $.ajax({
       		contentType : "application/json; charset=utf-8",
       		url : url,
@@ -117,37 +135,23 @@ items2.each {
 				height:"100px",
 				width:"100px"} 
 		console.log(data)
-	//  doEuRelated()
+		var templateSel = "#gridTemplate";
+		var gridSel = "#${gridid}"
+			
+		doEuRelated(templateSel,gridSel,data);
+		 // set up freewall grid and some other stuff
+		europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
+		// set up the voting. 
+		europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
+	  
 	});
 	
 	
 	</script>
-	<div id="${gridid}" class="ure-grid ${klass_ }">
+	<div id="testgrid" ></div>
+	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
-		<g:each var="item" in="${items}">
-			<!--  $item.dcSubject -->
-			<%
-
-    def back_url = "background-image: url("+ item.thumb+ ')';
-    
-     %>
-			<div class="cell gridlist-cell" data-ure-uri="${item.thumb}" data-eu-all='' data-eu-provider='${item.provider}'
-				data-eu-id="${item.id }" data-eu-guid="${item.guid }" data-eu-link="${item.link}" data-ure-image-url="${item.thumb}"
-				data-dcSubject="${item.dcSubject }" style='width:${width}; height: ${height}; ${back_url }'>
-				<div class="image-infobox ${hideInfodiv}">
-					<div class="short_title">
-						${item.title}
-					</div>
-					<div class="date">
-						${item.date?.def}
-						${item.period?.def}
-					</div>
-					<div class="caption">
-						${item.provider}
-					</div>
-				</div>
-			</div>
-		</g:each>
+	<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
 	</div>
 </div>
 <script src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
@@ -155,11 +159,7 @@ items2.each {
 
 ! function() {
 $(document).ready(function(){
-    // set up freewall grid and some other stuff
-	europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
-	// set up the voting. 
-	europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
-  
+   
 	
 });
 
@@ -176,77 +176,20 @@ $(document).on('click','.cb-eu',function(){
 });
    }()
 </script>
-<style>
-#relevance-vote {
-	padding-left: 20px;
-}
 
-.voterbtn {
-	position: absolute;
-	bottom: 0;
-}
+<div id="gridTemplate" style="display:none;">
+<div class="cell gridlist-cell" data-ure-uri >
+				<div class="image-infobox">
+					<div class="short_title">
+						
+					</div>
+					<div class="date">
+					
+					</div>
+					<div class="caption">
+					
+					</div>
+				</div>
+			</div>
 
-#${
-gridid
-}
-{
-}
-#${
-gridid
-}
-.cell {
-	background-size: cover;
-	border: 2px solid gray;
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
-	color: #000;
-}
-
-#${
-gridid
-}
-.image-infobox {
-	background: black;
-	color: white;
-	opacity: 0.6;
-	padding-left: 3px;
-	font-size: 8px;
-}
-
-#${
-gridid
-}
-.image-infobox div {
-	line-height: normal;
-	padding-bottom: 10px;
-}
-
-#${
-gridid
-}
-.image-infobox  .short_title {
-	font-style: italic;
-	font-weight: bold;
-}
-
-#${
-gridid
-}
-.image-infobox .desc {
-	line-height: 10px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-#${
-gridid
-}
-.hide-infodiv {
-	display: none;
-}
-
-.fieldlist-img {
-	height: 40px;
-}
-</style>
+</div>

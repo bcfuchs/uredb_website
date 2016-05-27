@@ -65,9 +65,23 @@ class UreTagLib {
         }
 
     }
-    def    relatedAPI() {
+    
+    def  relatedAPI(req) {
+        def klass,uris,gridid,width,height,keywords,period,startrec,prefs
+        startrec = 1;
+        prefs = session['related_prefs'];
+       
+        return _europeanaWidget(req.klass,
+            req.uris,
+            req.gridid,
+            req.width,
+            req.height,
+            req.keywords,
+            req.period,
+            startrec,
+            prefs);
         
-        return 4;
+      
     }
     def getRecordProperty2  = { attrs,body->
         // if we find it, return a rendered version

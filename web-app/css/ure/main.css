@@ -252,7 +252,61 @@ font-size: bold;
 	
 }
 
+/** Europeana Widget */
 
+#relevance-vote {
+	padding-left: 20px;
+}
+
+.voterbtn {
+	position: absolute;
+	bottom: 0;
+}
+
+
+.eu-grid .cell {
+	background-size: cover;
+	border: 2px solid gray;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	color: #000;
+}
+
+.eu-grid .image-infobox {
+	background: black;
+	color: white;
+	opacity: 0.6;
+	padding-left: 3px;
+	font-size: 8px;
+}
+
+.eu-grid  .image-infobox div {
+	line-height: normal;
+	padding-bottom: 10px;
+}
+
+.eu-grid .image-infobox  .short_title {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.eu-grid .image-infobox .desc {
+	line-height: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.eu-grid  .hide-infodiv {
+	display: none;
+}
+
+.fieldlist-img {
+	height: 40px;
+}
+/** END  Europeana Widget */
+
+/** MEDIA */
 @media (min-width: 768px) {
 	.navbar-nav>li>a {
 	    padding-top: 10px !important;
