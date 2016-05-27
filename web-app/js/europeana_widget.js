@@ -11,7 +11,7 @@
    * @memberOf europeana_widget
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
-    // START
+   
 
     var storage, cellSelector, blacklist_store, providerBlacklist, providerBlacklistThreshold, providerBlacklist_store;
 

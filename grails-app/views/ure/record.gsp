@@ -188,7 +188,7 @@
         def iframeModel = [accnum:accnum,short_title:short_title,thumbnail:thumbnail,bla:0]
      %>
 	<!--  
-     thumbnail : ${thumbnail} ${iframeModel}
+  
       -->
 	<g:form useToken="true"></g:form>
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
