@@ -10,7 +10,7 @@
    * @memberOf europeana_widget doEuRelated
    */
   var doEuRelated = function(templateSel, gridSel, data) {
-
+  
     data = JSON.stringify(data)
     var endpoint_url = "/api/related"
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
@@ -20,7 +20,7 @@
       return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
     }
     var getDate = function(item) {
-      
+
       var out = "";
       if ('edmTimespanLabel' in item && item.edmTimespanLabel !== "")
         out += item.edmTimespanLabel[0].def + " ";
@@ -28,14 +28,37 @@
         out += item.edmTimespanBroaderTerm;
       return out;
     }
+
+    var makeProviderlist = function(provs) {
+     console.log('makeng provider list... ');
+     var providers = Object.keys(provs)
+     console.log(providers.length)
+      
+      for (var i = 0; i < providers.length; i++) {
+        var t = $($("#provider-label-template label")[0]).clone();
+        console.log(t)
+        var provider = providers[i]
+        $(t).attr('data-eu-provider-list', provider);
+       
+        $(t).find('input').val(provider)
+        $(t).append('<span>'+provider+'</span>')
+       
+        $("#provider-filter").append(t)
+      }
+    }
+
     var success = function(data) {
       var items = data.info.items;
       var width = data.width;
       var height = data.height;
+      var providers = {};
       var displayInfobox = data.displayInfobox;
       var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
+        var provider = item.dataProvider;
+        if (!(provider in providers))
+           providers[provider] = provider
         var t = $(template).clone();
         item.thumb = item.edmPreview;
 
@@ -51,16 +74,20 @@
         $(t).attr('style', style);
         $(t).find(".short_title").html(item.title);
         $(t).find(".caption").html(item.dataProvider);
-      
+
         $(t).find(".date").html(getDate(item));
 
         $(t).addClass(hideInfodiv)
 
         $(gridSel).append(t);
       }
+//TODO move to complete
+      
+      makeProviderlist(providers);
       var signal = "fire_EuComparanda"
 
       $(window).trigger("resize");
+      
       var e = $.Event(signal);
       $(window).trigger(e, {
         id : "finished doEuRelated"

@@ -62,19 +62,21 @@ items2.each {
 
 %>
 -->
+
+<div id="wow"></div>
 	<span style="text-decoration: underline; cursor: pointer;" id="filterbymuseum" data-target="#provider-filter"
 		data-toggle="collapse">Filter by museum</span>
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
 	<div id="provider-filter" class="collapse controls span2">
-		<!--  TODO move this to js	 -->
-		<% providers.sort().each {  %>
-        <label class="checkbox-inline provider-checklist" data-eu-provider-list='${it.key}'>
-            <input class="cb-eu" type="checkbox" value='${it.key}' checked> ${it.key}</input>
-       </label>
-         <%  }   %>
+		
+         
 	</div>
+	
+	<script>
+	
+	</script>
 	<!--  ajax: populate this grid with data from server  -->
 	<script>
 ! function() {
@@ -152,4 +154,9 @@ $(document).ready(function(){
 			<div class="caption"></div>
 		</div>
 	</div>
+</div>
+<div id="provider-label-template"  style="display: none;">
+  <label class="checkbox-inline provider-checklist" data-eu-provider-list='key'>
+            <input class="cb-eu" type="checkbox" value='key' checked></input>
+  </label>
 </div>

@@ -373,11 +373,11 @@ class RecordService {
             // get the labels from i18n
             def fa  = messageSource.getMessage("uredb.labels.uremeta."+it,null,"---",Locale.default);
             if (!(fa ==~ /---/)) { label = fa }
-            log.warn fa
+            //log.warn fa
 
             //            // fix any labels that aren't dealt with in i18n
             label = (label =~ /_/).replaceAll(" ").capitalize();
-            System.err.println "bl -> it = ${it} fa = ${fa} label = ${label}"
+            //System.err.println "bl -> it = ${it} fa = ${fa} label = ${label}"
             out[it] = label
         }
 
