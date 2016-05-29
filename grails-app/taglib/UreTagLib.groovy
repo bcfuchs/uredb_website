@@ -328,9 +328,14 @@ class UreTagLib {
         def model = [:]
         def providers =[];
         def mode = ""; // whitelist, skiplist, ""
-        if (prefs != null ) {
-            mode = prefs.mode;
-            providers =  prefs.data.whitelist.data;
+        if (prefs != null) {
+            mode = prefs.mode?:"";
+            try {
+            providers =  prefs.data?.whitelist?.data? prefs.data.whitelist.data:[]
+            }
+            catch(Exception e) {
+                log.warn e;
+            }
         }
        
         def uri = _europeana_query_builder(keywords,period,startrec,providers,mode)
@@ -385,7 +390,10 @@ class UreTagLib {
         def period = (attrs.period)?attrs.period : ''
       
         def startrec = 1
-        def prefs = session['related_prefs']
+        def prefs = [:];
+        if (session['related_prefs'] != null) {
+            prefs = session['related_prefs']
+        }
         
         model = _europeanaWidget(klass,uris,gridid,width,height,keywords,period,startrec,prefs);
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;

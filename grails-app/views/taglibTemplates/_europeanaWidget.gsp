@@ -63,7 +63,7 @@ items2.each {
 %>
 -->
 
-<div id="wow"></div>
+
 	<span style="text-decoration: underline; cursor: pointer;" id="filterbymuseum" data-target="#provider-filter"
 		data-toggle="collapse">Filter by museum</span>
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"

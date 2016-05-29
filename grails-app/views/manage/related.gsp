@@ -79,7 +79,8 @@
 
       $("#skiplist-toggle").click();
       $("#goback").click(function() {
-        window.location.href = document.referrer;
+     //   window.location.href = document.referrer;
+        window.location.href = "/record/${session.accnum}"
       })
 
     })
@@ -89,6 +90,19 @@
 	display: none;
 }
 </style>
+<!-- 
+CHECK
+<%
+flash.message = "wow"
+println "message:" + flash.message;
+ 
+ 
+ 
+ println "flash: " +  flash.accnum
+ println "session: " + session.accnum
+%>
+
+ -->
 	<div id="related-wrapper" class="container">
 		<h1>Related Item Management</h1>
 		<h3 id="goback">&larr;back</h3>
