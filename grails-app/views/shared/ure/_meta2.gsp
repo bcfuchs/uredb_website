@@ -300,6 +300,15 @@ Dimensions:
 									${fields.location.label}
 								</div>
 								<div class="col-md-8 ">
+								<!--  LOCXX
+								<% 
+                                	def loc = fields.location.content;
+                                    if (loc =~ /choolloans/) {
+                                        println fields.location.content
+                                        fields.location.content = "RMS Loans Online";
+                                    }
+                                 %>
+                                 -->
 									${fields.location.content}
 								</div>
 							</div>

@@ -4,6 +4,11 @@
 <head>
 <title>Ure Museum Database: ${accnum}</title>
 <meta name="layout" content="ure/main" />
+ <% 
+         flash.accnum = accnum
+         session.accnum = accnum 
+         flash.message  = "HI"
+%>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
 <script>
@@ -13,7 +18,7 @@
 		<g:if test="${session.uredb_hasMatch}">
 			var uredb_matcher_matchfield = "${session.uredb_matchfield}";
 			var uredb_matcher_matchval = "${session.uredb_matchval}";
-			 uredb_matcher_hasMatch = true;
+			uredb_matcher_hasMatch = true;
 		</g:if>
 		
 		<%
@@ -25,7 +30,7 @@
 		 // save data about this object to the DOM
 		 $(document).data('ure-item',{accnum:'${accnum}'});
 		 $(document).data('eu-items',{})
-		 
+		
 		// add an item to menubar
 		  	$("#breadcrumb-items-left").html('<a href="/fieldlist/accession_number">objects</a> > ${accnum}');
 		  	$("#breadcrumb-items-left").css("margin-left","-85px")
