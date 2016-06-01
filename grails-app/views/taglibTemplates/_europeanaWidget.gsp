@@ -69,7 +69,9 @@ System.err.println "WOW5.2"
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
-	<span id="itemsCount" style="text-decoration: underline; cursor: pointer;"></span>
+	<span id="itemsCount" style="padding-left: 12px; text-decoration: underline; cursor: pointer;"></span>
+	&nbsp;of&nbsp;<span id="total-results" style="padding-left: 12px; "></span>
+	
 	<div id="provider-filter" class="collapse controls span2">
 		
          
@@ -107,7 +109,7 @@ System.err.println "WOW5.2"
 				
 				}
 			
-			return 1;
+			return out;
 			}
 		var startrec = get_startrec();
 		

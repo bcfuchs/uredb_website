@@ -131,6 +131,7 @@
       // TODO move to complete--or not
      $("#itemsCount").html(window.eu_cursor)
       makeProviderlist(providers);
+     $("#total-results").html(data.info.totalResults)
     
 
       $(window).trigger("resize");
