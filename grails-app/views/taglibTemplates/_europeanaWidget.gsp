@@ -58,7 +58,7 @@ items2.each {
     // note: most items dont have date or period
   
 }
-
+System.err.println "WOW5.2"
 
 %>
 -->
@@ -69,6 +69,7 @@ items2.each {
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
+	<span id="itemsCount" style="text-decoration: underline; cursor: pointer;"></span>
 	<div id="provider-filter" class="collapse controls span2">
 		
          
@@ -79,43 +80,69 @@ items2.each {
 	</script>
 	<!--  ajax: populate this grid with data from server  -->
 	<script>
+	<% 
+  def  kw_json = "['attic','vase']";
+
+  def error_1;
+  try {
+      kw_json = keywords as JSON;
+  }
+  catch(Exception e) {
+  	error_1 = e;
+      }
+
+  %> 
 ! function() {
 	/**
 	* Set up Eu related grid and helper functions 
 	*/
-	<% 
-    def kw_json;
-    def error_1;
-    try {
-        kw_json = keywords as JSON;
-    }
-    catch(Exception e) {
-        kw_json = "['attic','vase']";
-    	error_1 = e;
-        }
-    
-    %> 
+
     // ${error_1}
-	$(document).ready(function(){
+	
+		var make_eu_query_data= function() {
+		var get_startrec = function(){
+			var out = 1;
+			if ('eu_cursor' in window){
+				out = window.eu_cursor
+				
+				}
+			
+			return 1;
+			}
+		var startrec = get_startrec();
+		
+		// make data for eu related ajax call 
 		var data = 	{accnum:"${accnum}", 
 				keywords:${kw_json}, 
 				gridid:"euwidget", 
 				klass:"euwidget", 
 				displayInfobox:"true",
 				height:"100px",
-				width:"100px"} 
-		
-		var templateSel = "#gridTemplate";
-		var gridSel = "#${gridid}"
-			
-		europeanaWidget_doEuRelated(templateSel,gridSel,data);
-		 // set up freewall grid and some other stuff
-		europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
+				width:"100px",
+				startrec:startrec} 
+		return data;
+		}
+		var makeEuRelatedItems = function() {
+			var data = make_eu_query_data();
+			var templateSel = "#gridTemplate";
+			var gridSel = "#${gridid}"
+			europeanaWidget_doEuRelated(templateSel,gridSel,data);
+			 // set up freewall grid and some other stuff
+			europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
 		// set up the voting. 
-		europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
-	  
-	});
+			europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
+		}
+		$(document).ready(function(){
+			makeEuRelatedItems();
+		});
 
+	/**
+	* More eu items
+	*/
+		$(document).on('click','#itemsCount',function(){
+			// get the next batch..
+			makeEuRelatedItems();
+			})
 	/** 
 	 * Museum filter pane toggle
 	 */
@@ -137,6 +164,8 @@ items2.each {
 </div>
 <script src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
 <script>
+
+
 
 ! function() {
 $(document).ready(function(){

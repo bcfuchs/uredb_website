@@ -68,7 +68,8 @@ class UreTagLib {
     
     def  relatedAPI(req) {
         def klass,uris,gridid,width,height,keywords,period,startrec,prefs
-        startrec = 1;
+        
+        startrec = startrec as Integer;
         prefs = session['related_prefs'];
        
         return _europeanaWidget(req.klass,
@@ -78,7 +79,7 @@ class UreTagLib {
             req.height,
             req.keywords,
             req.period,
-            startrec,
+            req.startrec,
             prefs);
         
       
@@ -323,11 +324,13 @@ class UreTagLib {
         out << render(template:"/taglibTemplates/gridWidget", model:model)
 
     }
-
+    
+  
     def _europeanaWidget(klass,uris,gridid,width,height,keywords,period,startrec,prefs) {
         def model = [:]
         def providers =[];
         def mode = ""; // whitelist, skiplist, ""
+       // def start = info.start? info.start: 1;
         if (prefs != null) {
             mode = prefs.mode?:"";
             try {
@@ -380,7 +383,7 @@ class UreTagLib {
     def europeanaWidget = {attrs, body ->
 
       
-        def model =[:];
+        def Map model =[:];
         def klass  = attrs.klass
         def uris = attrs.uris
         def gridid = (attrs.gridid) ? attrs.gridid : 'image-grid'
@@ -495,6 +498,7 @@ class UreTagLib {
         }
         //TODO add this to url.
         log.info "---------------<<<"
+        log.info uri
 
         return uri
     }

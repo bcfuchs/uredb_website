@@ -1,3 +1,5 @@
+
+
 /** modal message box */
 #alert-modal {
 	position: fixed;
@@ -251,8 +253,11 @@ font-size: bold;
 	
 	
 }
-
-/** Europeana Widget */
+._________________________ Europeana Widget _________________________ {}
+/** 
+* Europeana Widget
+* 
+*/
 
 #relevance-vote {
 	padding-left: 20px;
@@ -288,6 +293,9 @@ font-size: bold;
 .eu-grid .image-infobox  .short_title {
 	font-style: italic;
 	font-weight: bold;
+	overflow: hidden;
+	text-overflow-multiline:ellipsis;
+	height: 19px;
 }
 
 .eu-grid .image-infobox .desc {
@@ -300,6 +308,8 @@ font-size: bold;
 .eu-grid  .hide-infodiv {
 	display: none;
 }
+
+
 
 .fieldlist-img {
 	height: 40px;
