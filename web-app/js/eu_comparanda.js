@@ -7,89 +7,92 @@
    */
   var EuComparanda = function(accnum) {
     var msg_json_broken = "can't read comparanda file..."
-      console.log("EuComparanda")
-   
+    console.log("EuComparanda")
+
     $(document)
         .ready(
             function() {
-              console.log("I'm over here...")
+
               var storage, eu_items, this_accnum, eu_draggable_sel;
               storage = $.localStorage;
               eu_draggable_sel = "#euwidget .cell"
               eu_items = 'eu_items'
               this_accnum = accnum;
-              
+
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
                * 
                */
+              var init = function() {
+                /**
+                 * bind functions to mini-dashboard
+                 */
+                $("#view-comps").click(function() {
+                  window.location.href = "/comparanda"
 
-              /**
-               * bind functions to mini-dashboard
-               */
-              $("#view-comps").click(function() {
-                window.location.href = "/comparanda"
+                });
 
-              });
+                $("#save-comps-as-html").click(function() {
+                  save_comparanda_as_html();
+                })
 
-              $("#save-comps-as-html").click(function() {
-                save_comparanda_as_html();
-              })
+                $("#save-comps-as-json").click(function() {
+                  save_comparanda_as_json();
+                });
 
-              $("#save-comps-as-json").click(function() {
-                save_comparanda_as_json();
-              });
+                $("#load-comps").click(function() {
+                  $("#comps-file").toggle();
+                  document.getElementById('comps-file').addEventListener('change', load_comparanda_from_json, false);
 
-              $("#load-comps").click(function() {
-                $("#comps-file").toggle();
-                document.getElementById('comps-file').addEventListener('change', load_comparanda_from_json, false);
+                });
 
-              });
+                $("#clear-comps").click(function() {
+                  var eu = getEUdata();
+                  storage.set(eu_items, {})
+                  $("#comparanda-thumbs").html("")
+                  $("#comparanda-thumbs").data('thumbs', "");
 
-              $("#clear-comps").click(function() {
+                });
+
+                $("#manage-related").click(function() {
+                  window.location.href = "/manage/related"
+
+                });
+
+                /**
+                 * init load of data from storage
+                 */
+                // prevent freewall from showing image strip vertically.
+                $("#europeana-section").delay(200).slideDown(1000);
+                // attach iframeoverlay to body
+                var ifr = $("#iframeOverlay").remove();
+                $('body').append(ifr);
                 var eu = getEUdata();
-                storage.set(eu_items, {})
-                $("#comparanda-thumbs").html("")
-                $("#comparanda-thumbs").data('thumbs', "");
+                if (eu !== null) {
+                  load_comparanda(eu)
+                }
 
-              });
-              
-              $("#manage-related").click(function(){
-                window.location.href="/manage/related"
-          
-                
-              });
-            
-              /**
-               * init load of data from storage
-               */
-              // prevent freewall from showing image strip vertically.
-              $("#europeana-section").delay(200).slideDown(1000);
-              // attach iframeoverlay to body
-              var ifr = $("#iframeOverlay").remove();
-              $('body').append(ifr);
-              var eu = getEUdata();
-              if (eu !== null) {
-                load_comparanda(eu)
-              }
+                /***************************************************************
+                 * 
+                 * make the images draggable show tooltip on target when drag
+                 * starts
+                 */
+                $("#euwidget .cell").each(function(v) {
+                  $(this).attr("title", "drag me to comparanda to save!");
+                  $(this).attr("data-toggle", "tooltip");
 
-              /*****************************************************************
-               * 
-               * make the images draggable show tooltip on target when drag
-               * starts
-               */
-              $("#euwidget .cell").each(function(v) {
-                $(this).attr("title", "drag me to comparanda to save!");
-                $(this).attr("data-toggle", "tooltip");
+                });
+                $('#euwidget .cell [data-toggle="tooltip"]').tooltip()
 
-              });
-              $('#euwidget .cell [data-toggle="tooltip"]').tooltip()
+                $("#euwidget .cell").hover(function() {
+                  $(this).tooltip("show");
+                  $("#comparanda").tooltip('show');
+                })
+              }// init
 
-              $("#euwidget .cell").hover(function() {
-                $(this).tooltip("show");
-                $("#comparanda").tooltip('show');
-              })
+              init();
+
               /**
                * 
                * @memberOf eu_comparanda.EuComparanda
@@ -107,7 +110,8 @@
                 // console.log(out)
                 return out;
               }
-             console.log("set draggable");
+
+              console.log("set draggable");
               $(eu_draggable_sel).draggable({
                 snap : "#comparanda",
                 // show target tooltip on start hide on finish
@@ -244,22 +248,21 @@
                 }
 
                 // add this eu item to the accnum array
-                if ( ! eu_items_ls[this_accnum][thumb]) {
+                if (!eu_items_ls[this_accnum][thumb]) {
                   eu_items_ls[this_accnum][thumb] = eu_item
-                // store it
+                  // store it
                   storage.set(eu_items, JSON.stringify(eu_items_ls));
                 }
                 add_to_comp_bar(thumb);
-               
+
               } // function addcomp
-              
-              
+
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda 
+               * @memberOf eu_comparanda.EuComparanda
                * 
                * 
-               */ 
-              
+               */
+
               function add_to_comp_bar(thumb) {
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 // init if !
@@ -268,7 +271,7 @@
                   thumbs = {
                     '---' : 0
                   };
-                } 
+                }
                 var addToComp = true;
                 // add to images if this image isn't already there and
                 if (!(thumb in thumbs && addToComp === true)) {
@@ -279,15 +282,12 @@
                   setRemoveDragComparanda("#comparanda-thumbs img[src='" + thumb + "']")
                 }
 
-                
-                
               }
-              
-              
+
               /*****************************************************************
                * @memberOf eu_comparanda.EuComparanda removecomp
                * 
-               */ 
+               */
               function removecomp(thumb) {
                 console.log("removecomp " + thumb)
                 // add the thumb to the thumb strip
@@ -367,7 +367,7 @@
                *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into comp div
-               *  
+               * 
                * 
                */
               function load_comparanda(eu) {
@@ -402,10 +402,9 @@
                       addcomp(acc, eu_item);
 
                     }
-                    if ((this_accnum in old_comp) &&(thumb in old_comp[this_accnum])) {
+                    if ((this_accnum in old_comp) && (thumb in old_comp[this_accnum])) {
                       add_to_comp_bar(thumb)
                     }
-                    
 
                   }
 

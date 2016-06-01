@@ -7,7 +7,7 @@
  <% 
          flash.accnum = accnum
          session.accnum = accnum 
-         flash.message  = "HI"
+         flash.message  = "HI2"
 %>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
@@ -143,6 +143,7 @@
 	              }
               return keywords
               }
+             
              def keywords = make_keywords(record)
              def kw_display = [];
              keywords.each { kw_display << it }
@@ -172,7 +173,12 @@
             def kw_json = ['greek','vase'];
             def error;
             try {
+                System.err.println "WOW"
+                System.err.println keywords.toString();
                 kw_json = keywords as JSON;
+                System.err.println "WOW2"
+               // System.err.println kw_json.toString();
+                System.err.println "WOW2---"
             }
             catch(e) {
                 error = e
@@ -180,6 +186,9 @@
             %>
             ${kw_json}
             ${error}
+            <%
+            System.err.println "WOW3"
+            %>
 			 -->
 			
 			<div id="europeana-section" style="display: none;">
@@ -196,7 +205,7 @@
 	</div>
 	<!--  #record-page-wrapper -->
 	<%
-    	
+    	System.err.println "got this far---------------------&-----------" 
     	def thumbnail = thumb?.base + "/thumb/"+ thumb?.filename ;
         def iframeModel = [accnum:accnum,short_title:short_title,thumbnail:thumbnail,bla:0]
      %>
@@ -211,7 +220,7 @@
 		var signal = "fire_EuComparanda" // fired in europeana_widget.js
 		$(window).on(signal, function (e, data) {
 		   	EuComparanda("${accnum}");
-        	// console.log("got a packet from " + data.id);
+        	
     });
 		
      </script>

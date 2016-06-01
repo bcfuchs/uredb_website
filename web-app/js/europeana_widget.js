@@ -1,7 +1,11 @@
 /**
- * This module exports three functions makeGrid() -- make a grid of europeana
- * thumbnails -exclude blacklisted items doEuRelated() --fetch data from
- * europeana queries voterSetup() -- set up relevance voting
+ * This module exports three functions
+ * 
+ * makeGrid() -- make a grid of europeana thumbnails -exclude blacklisted items
+ * 
+ * doEuRelated() --fetch data from europeana queries, and turn into html divs for use with makeGrid. Fire done signal "fire_EuComparanda", picked up by eu_comparanda call. 
+ * 
+ * voterSetup() -- set up relevance voting
  * 
  * 
  */
@@ -10,15 +14,27 @@
    * @memberOf europeana_widget doEuRelated
    */
   var doEuRelated = function(templateSel, gridSel, data) {
-  
+
     data = JSON.stringify(data)
     var endpoint_url = "/api/related"
+    var titleWordLength = 10;
+    
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
 
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     // make style for each element.
     var makeStyle = function(w, h, thumburl) {
       return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
     }
+
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * make a date for overlay from europeana metadata return null if metadata
+     * missing.
+     */
     var getDate = function(item) {
 
       var out = "";
@@ -28,37 +44,68 @@
         out += item.edmTimespanBroaderTerm;
       return out;
     }
-
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var getTitle = function(title) {
+      var out = title[0]
+      var t = out.split(" ")
+      if (t.length > titleWordLength) 
+        out = t.splice(0,titleWordLength).join(" ")
+       return out
+    }
+    
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     var makeProviderlist = function(provs) {
-     console.log('makeng provider list... ');
-     var providers = Object.keys(provs)
-     console.log(providers.length)
-      
+      console.log('makeng provider list... ');
+      var providers = Object.keys(provs)
+      console.log(providers.length)
+
       for (var i = 0; i < providers.length; i++) {
         var t = $($("#provider-label-template label")[0]).clone();
-        console.log(t)
+        
         var provider = providers[i]
         $(t).attr('data-eu-provider-list', provider);
-       
+
         $(t).find('input').val(provider)
-        $(t).append('<span>'+provider+'</span>')
-       
+        $(t).append('<span class="provider">' + provider + '</span>')
+
         $("#provider-filter").append(t)
       }
     }
-
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     var success = function(data) {
+      // clear the grid
+      // TODO save items in grid to a hidden div..or serialize and save to localstorage
+      $(gridSel).html("");
+      //TODO exception no data
       var items = data.info.items;
+      // TODO HACK! 
+      
+      
+     
+      if ('eu_cursor' in window) {
+        window.eu_cursor += data.info.itemsCount;
+      }
+      else {
+        window.eu_cursor =  data.info.itemsCount;
+      }
       var width = data.width;
       var height = data.height;
       var providers = {};
       var displayInfobox = data.displayInfobox;
+     
       var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0; i < items.length; i++) {
+        console.log(item)
         var item = items[i];
         var provider = item.dataProvider;
         if (!(provider in providers))
-           providers[provider] = provider
+          providers[provider] = provider
         var t = $(template).clone();
         item.thumb = item.edmPreview;
 
@@ -81,23 +128,21 @@
 
         $(gridSel).append(t);
       }
-//TODO move to complete
-      
+      // TODO move to complete--or not
+     $("#itemsCount").html(window.eu_cursor)
       makeProviderlist(providers);
-      var signal = "fire_EuComparanda"
+    
 
       $(window).trigger("resize");
-      
+      var signal = "fire_EuComparanda"
       var e = $.Event(signal);
       $(window).trigger(e, {
         id : "finished doEuRelated"
       });
 
     } // success
-    var successa = function(d) {
-      console.log("success!")
-      console.log(d)
-    }
+
+    // get the data from server
     $.ajax({
       contentType : "application/json; charset=utf-8",
       url : endpoint_url,
@@ -105,12 +150,15 @@
       type : "POST",
       data : data,
     }).done(success).fail(function(j, t, e) {
-      alert(e);
+      // TODO better info to user
+      // TODO test for fail
+      console.log(e);
     }).always(function() {
-      alert("complete");
+      console.log("eu data fetch complete");
     });
 
-  }
+  } // END doEuRelated
+
   window.europeanaWidget_doEuRelated = doEuRelated;
   /**
    * @memberOf europeana_widget
