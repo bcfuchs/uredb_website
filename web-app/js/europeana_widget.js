@@ -9,7 +9,7 @@
  * 
  * 
  */
-!function() {
+( function() {
   /**
    * @memberOf europeana_widget doEuRelated
    */
@@ -330,21 +330,27 @@
 
           v[accnum][item] = "";
 
-          // add to provider blacklist
-          provider in providerBlacklist ? providerBlacklist[provider] += 1 : providerBlacklist[provider] = 1
+            // add to provider blacklist
+	    providerBlacklist[provider] = provider in providerBlacklist ? providerBlacklist[provider] +  1 :  1;
+//            provider in providerBlacklist ? providerBlacklist[provider] += 1 : providerBlacklist[provider] = 1
 
         }
 
         else {
           // remove from blacklist
-          if (accnum in v && item in v[accnum]) {
-            delete v[accnum][item];
-          }
+            if (accnum in v && item in v[accnum]) {
+		delete v[accnum][item];
+            }
+	    
+            if (provider in providerBlacklist) {
 
-          if (provider in providerBlacklist) {
-            providerBlacklist[provider] > 1 ? providerBlacklist[provider] -= 1 : delete providerBlacklist[provider]
-          }
+		if (providerBlacklist[provider] > 1) {
+		    providerBlacklist[provider] -= 1 }
+		else {
+		    delete providerBlacklist[provider]
 
+		}
+	    }
         }
 
         // save the results
@@ -378,4 +384,4 @@
     })
   } // voteSetup
   window.europeanaWidget_voteSetup = voteSetup
-}()
+})()
