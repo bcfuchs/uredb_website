@@ -142,7 +142,11 @@
       });
 
     } // success
-
+    
+    
+    // CHANGE FROM HERE
+    // add query builder function to get endpoint_url
+    // new stuff is a chrome snippet for now
     // get the data from server
     $.ajax({
       contentType : "application/json; charset=utf-8",
@@ -157,6 +161,7 @@
     }).always(function() {
       console.log("eu data fetch complete");
     });
+   // CHANGE TO HERE
 
   } // END doEuRelated
 
