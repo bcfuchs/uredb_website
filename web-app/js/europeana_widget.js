@@ -3,22 +3,26 @@
  * 
  * makeGrid() -- make a grid of europeana thumbnails -exclude blacklisted items
  * 
- * doEuRelated() --fetch data from europeana queries, and turn into html divs for use with makeGrid. Fire done signal "fire_EuComparanda", picked up by eu_comparanda call. 
+ * doEuRelated() --fetch data from europeana queries, and turn into html divs
+ * for use with makeGrid. Fire done signal "fire_EuComparanda", picked up by
+ * eu_comparanda call.
  * 
  * voterSetup() -- set up relevance voting
  * 
  * 
  */
-( function() {
+(function() {
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated = function(templateSel, gridSel, data) {
+  var doEuRelated = function(templateSel, gridSel, data, completed_callback) {
 
     data = JSON.stringify(data)
     var endpoint_url = "/api/related"
+    var blank_image_100x100 = "/static/images/blank100x100.png"
     var titleWordLength = 10;
-    
+    var providerlist = {} // provider list
+
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
 
     /**
@@ -50,11 +54,11 @@
     var getTitle = function(title) {
       var out = title[0]
       var t = out.split(" ")
-      if (t.length > titleWordLength) 
-        out = t.splice(0,titleWordLength).join(" ")
-       return out
+      if (t.length > titleWordLength)
+        out = t.splice(0, titleWordLength).join(" ")
+      return out
     }
-    
+
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -65,7 +69,7 @@
 
       for (var i = 0; i < providers.length; i++) {
         var t = $($("#provider-label-template label")[0]).clone();
-        
+
         var provider = providers[i]
         $(t).attr('data-eu-provider-list', provider);
 
@@ -76,38 +80,23 @@
       }
     }
     /**
-     * @memberOf europeana_widget.doEuRelated
+     * @memberOf europeana_widget.doEuRelated called from success
      */
-    var success = function(data) {
-      // clear the grid
-      // TODO save items in grid to a hidden div..or serialize and save to localstorage
-      $(gridSel).html("");
-      //TODO exception no data
-      var items = data.info.items;
-      // TODO HACK! 
-      
-      
-     
-      if ('eu_cursor' in window) {
-        window.eu_cursor += data.info.itemsCount;
-      }
-      else {
-        window.eu_cursor =  data.info.itemsCount;
-      }
-      var width = data.width;
-      var height = data.height;
-      var providers = {};
-      var displayInfobox = data.displayInfobox;
-     
+    var fillGrid = function(items, width, height, displayInfobox) {
+
       var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0; i < items.length; i++) {
-        console.log(item)
+
         var item = items[i];
         var provider = item.dataProvider;
-        if (!(provider in providers))
-          providers[provider] = provider
+        if (!(provider in providerlist))
+          providerlist[provider] = provider
         var t = $(template).clone();
-        item.thumb = item.edmPreview;
+        if ('edmPreview' in item) {
+          item.thumb = item.edmPreview;
+        } else {
+          item.thumb = blank_image_100x100;
+        }
 
         var style = makeStyle(width, height, item.thumb);
         $(t).attr('data-ure-uri', item.edmPreview)
@@ -128,22 +117,66 @@
 
         $(gridSel).append(t);
       }
-      // TODO move to complete--or not
-     $("#itemsCount").html(window.eu_cursor)
-      makeProviderlist(providers);
-     $("#total-results").html(data.info.totalResults)
+
+    }
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var success = function(data) {
+      var width, height, displayInfobox, items;
+      width = data.width;
+      height = data.height;
+      displayInfobox = data.displayInfobox;
+      data = {}
+      if (data && 'info' in data && 'items' in data.info && typeof(data.info.items) == '') 
+      try {
+        items = data.info.items;
+        
+      }
+      catch(e) {
+        
+        alert("can't load eu items!")
+      }
+
+      /** clear the grid */
+
+      $(gridSel).html("");
+      // TODO save cleared items somewhere for re-display
+      // TODO exception no data
     
 
+      /** update the cursor */
+
+      // TODO ONLY if this is "next" call
+      if ('eu_cursor' in window) {
+        window.eu_cursor += data.info.itemsCount;
+      } else {
+        window.eu_cursor = data.info.itemsCount;
+      }
+
+      /** populate the grid with items */
+      fillGrid(items, width, height, displayInfobox)
+
+      /** make controls */
+
+      makeProviderlist(providerlist);
+      $("#itemsCount").html(window.eu_cursor)
+      $("#total-results").html(data.info.totalResults)
+
+      /** trigger freewall recompute. */
       $(window).trigger("resize");
-      var signal = "fire_EuComparanda"
+
+      /** run callbacks */
+      completed_callback.call(this);
+
+      /** send done signal */
+      var signal = "doEuRelated_complete"
       var e = $.Event(signal);
       $(window).trigger(e, {
         id : "finished doEuRelated"
       });
-
     } // success
-    
-    
+
     // CHANGE FROM HERE
     // add query builder function to get endpoint_url
     // new stuff is a chrome snippet for now
@@ -161,7 +194,7 @@
     }).always(function() {
       console.log("eu data fetch complete");
     });
-   // CHANGE TO HERE
+    // CHANGE TO HERE
 
   } // END doEuRelated
 
@@ -170,7 +203,7 @@
    * @memberOf europeana_widget
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
-
+    console.log("makeGrid")
     var storage, cellSelector, blacklist_store, providerBlacklist, providerBlacklistThreshold, providerBlacklist_store;
 
     blacklist_store = "vote"
@@ -193,6 +226,9 @@
         var id = $(this).attr('data-ure-image-url');
         var provider = $(this).attr('data-eu-provider');
         // if the id is in the blacklist (=vote), remove it from the grid
+        console.log(id)
+        if (id.match(/F22901012_1/))
+          debugger;
         if (accnum in vote && id in vote[accnum]) {
           $(this).remove();
         }
@@ -335,27 +371,28 @@
 
           v[accnum][item] = "";
 
-            // add to provider blacklist
-	    providerBlacklist[provider] = provider in providerBlacklist ? providerBlacklist[provider] +  1 :  1;
-//            provider in providerBlacklist ? providerBlacklist[provider] += 1 : providerBlacklist[provider] = 1
+          // add to provider blacklist
+          providerBlacklist[provider] = provider in providerBlacklist ? providerBlacklist[provider] + 1 : 1;
+          // provider in providerBlacklist ? providerBlacklist[provider] += 1 :
+          // providerBlacklist[provider] = 1
 
         }
 
         else {
           // remove from blacklist
-            if (accnum in v && item in v[accnum]) {
-		delete v[accnum][item];
+          if (accnum in v && item in v[accnum]) {
+            delete v[accnum][item];
+          }
+
+          if (provider in providerBlacklist) {
+
+            if (providerBlacklist[provider] > 1) {
+              providerBlacklist[provider] -= 1
+            } else {
+              delete providerBlacklist[provider]
+
             }
-	    
-            if (provider in providerBlacklist) {
-
-		if (providerBlacklist[provider] > 1) {
-		    providerBlacklist[provider] -= 1 }
-		else {
-		    delete providerBlacklist[provider]
-
-		}
-	    }
+          }
         }
 
         // save the results
@@ -378,11 +415,19 @@
         $(this).attr('data-relevance-toggle', 'on');
         $(this).html($(this).data('relevance-finish'))
       } else {
+        // we're done
         $(itemSelector).unbind('click', voteHandler)
         $('.voterbtn').remove();
         $(itemSelector).bind('click', window.overlayHandler)
         $(this).attr('data-relevance-toggle', 'off');
         $(this).html(startText);
+        // send done signal -- pick up in _europeanaWidget
+        var signal = "relevance_tag_complete"
+        alert(signal)
+        var e = $.Event(signal);
+        // $(window).trigger(e, {
+        // id : signal
+        // });
 
       }
 
