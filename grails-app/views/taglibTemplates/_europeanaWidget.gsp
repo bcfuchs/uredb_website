@@ -71,9 +71,7 @@ System.err.println "WOW5.2"
 	&nbsp;of&nbsp;
 	<span id="total-results" style="padding-left: 12px;"></span>
 	<div id="provider-filter" class="collapse controls span2"></div>
-	<script>
 	
-	</script>
 	<!--  ajax: populate this grid with data from server  -->
 	<script>
 	<% 
@@ -92,7 +90,7 @@ System.err.println "WOW5.2"
 ! function() {
 	$(document).ready(function(){
 
-	init_euRelated("${accnum}", ${kw_json},"${gridid}","${width}","${height}",${displayInfobox}) 
+	init_euRelated("${accnum}","${gridid}","${width}","${height}",${displayInfobox}) 
 	})		
 }()
 	</script>
