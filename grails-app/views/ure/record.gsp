@@ -113,14 +113,15 @@
 	                  if (rec.field == "short_title") {
 	                  		if (rec.content =~ /red figure/) {
 	    					 	kw <<'where:(red+AND+figure)'
-	                        //    kw << 'figure'
+	                      
                                 
 	                  		}
 	                     	if (rec.content =~ /black figure/) {
 	                          	kw << 'where:(black+AND+figure)'
-	                       //     kw << 'figure'
+	                      
 	                     	}
 	                  }
+                      
 	                  if (rec.field == 'fabric') {
 	                          rec.content.replaceAll("[^a-zA-Z ]", "").split().each {
                                  
@@ -148,7 +149,8 @@
              def kw_display = [];
              keywords.each { kw_display << it }
              %>
-			${kw_display }
+             <span id="query-display">${kw_display}</span>
+		
 			<!-- 
 			<%
            
@@ -173,24 +175,19 @@
             def kw_json = ['greek','vase'];
             def error;
             try {
-                System.err.println "WOW"
-                System.err.println keywords.toString();
+               
                 kw_json = keywords as JSON;
-                System.err.println "WOW2"
-               // System.err.println kw_json.toString();
-                System.err.println "WOW2---"
+               
             }
             catch(e) {
                 error = e
             }
             %>
-            ${kw_json}
+            <span id="query-keywords">${kw_json}</span>
             ${error}
-            <%
-            System.err.println "WOW3"
-            %>
+            
 			 -->
-			
+		
 			<div id="europeana-section" style="display: none;">
 				<ure:europeanaWidget 
 				accnum="${accnum}" 

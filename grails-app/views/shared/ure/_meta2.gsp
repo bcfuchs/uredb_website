@@ -181,7 +181,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.date.label}
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-8 ure-date">
 					${fields.date.content}
 				</div>
 			</div>
@@ -189,7 +189,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.technique.label}
 				</div>
-				<div class="col-md-8 ">
+				<div class="col-md-8  ure-technique">
 					${fields.technique.content}
 				</div>
 			</div>
@@ -197,7 +197,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.shape.label}
 				</div>
-				<div class="col-md-8 ">
+				<div class="col-md-8 ure-shape">
 					${fields.shape.content}
 				</div>
 			</div>
@@ -205,7 +205,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.material.label}
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-8 ure-material">
 					${fields.material.content}
 				</div>
 			</div>
@@ -213,7 +213,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.fabric.label}
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-8 ure-fabric">
 					${fields.fabric.content}
 				</div>
 			</div>
@@ -221,7 +221,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.diameters.label}
 				</div>
-				<div class="col-md-8 ">
+				<div class="col-md-8 ure-diameters">
 					${fields.diameters.content}
 				</div>
 			</div>
@@ -229,7 +229,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.height.label}
 				</div>
-				<div class="col-md-8 ">
+				<div class="col-md-8 ure-height">
 					${fields.height.content}
 				</div>
 			</div>
@@ -237,7 +237,7 @@ Dimensions:
 				<div class="col-md-4 ure-record-col-left">
 					${fields.handle_height.label}
 				</div>
-				<div class="col-md-8 ">
+				<div class="col-md-8 ure-handle-height">
 					${fields.handle_height.content}
 				</div>
 			</div>
