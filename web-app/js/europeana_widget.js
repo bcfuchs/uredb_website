@@ -15,7 +15,8 @@
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated = function(templateSel, gridSel, data, completed_callback) {
+  var doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
+    
 
     data = JSON.stringify(data)
     var endpoint_url = "/api/related"
@@ -127,8 +128,8 @@
       width = data.width;
       height = data.height;
       displayInfobox = data.displayInfobox;
-      data = {}
-      if (data && 'info' in data && 'items' in data.info && typeof(data.info.items) == '') 
+      
+      if (data && 'info' in data && 'items' in data.info && typeof(data.info.items) !== '') 
       try {
         items = data.info.items;
         
@@ -148,11 +149,14 @@
       /** update the cursor */
 
       // TODO ONLY if this is "next" call
+      
       if ('eu_cursor' in window) {
-        window.eu_cursor += data.info.itemsCount;
+        if (incrementCursor === true )
+          window.eu_cursor += data.info.itemsCount;
       } else {
         window.eu_cursor = data.info.itemsCount;
       }
+      
 
       /** populate the grid with items */
       fillGrid(items, width, height, displayInfobox)
@@ -226,9 +230,7 @@
         var id = $(this).attr('data-ure-image-url');
         var provider = $(this).attr('data-eu-provider');
         // if the id is in the blacklist (=vote), remove it from the grid
-        console.log(id)
-        if (id.match(/F22901012_1/))
-          debugger;
+     
         if (accnum in vote && id in vote[accnum]) {
           $(this).remove();
         }
@@ -406,7 +408,7 @@
     } // vote = function(divs)
 
     // link to voting toggle
-
+    $(document).off('click', toggleSelector);
     $(document).on('click', toggleSelector, function() {
       var startText = "tag as not relevant"
       var sw = $(this).attr('data-relevance-toggle');
@@ -425,9 +427,9 @@
         var signal = "relevance_tag_complete"
         alert(signal)
         var e = $.Event(signal);
-        // $(window).trigger(e, {
-        // id : signal
-        // });
+         $(window).trigger(e, {
+         id : signal
+         });
 
       }
 
@@ -435,3 +437,104 @@
   } // voteSetup
   window.europeanaWidget_voteSetup = voteSetup
 })()
+
+
+! function() {
+  /**
+   * Set up Eu related grid and helper functions 
+   */
+  /**
+   * @memberOf europeana_widget
+   */
+   console.log("init_euRelated")
+   var init_euRelated = function(accnum, kw_json,gridid,width,height,displayInfobox) {
+     
+     /**
+      * @memberOf europeana_widget.init_euRelated
+      */
+     var make_eu_query_data= function() {
+       /**
+        * @memberOf europeana_widget.init_euRelated
+        */
+       var get_startrec = function(){
+         var out = 1;
+         if ('eu_cursor' in window){
+           out = window.eu_cursor
+           
+           }
+         
+         return out;
+         }
+       
+       /**
+        * @memberOf europeana_widget.init_euRelated
+        */
+       var startrec = get_startrec();
+       /**
+        * @memberOf europeana_widget.init_euRelated
+        */
+       // make data for eu related ajax call 
+       var data =  {accnum:accnum, 
+           keywords:kw_json, 
+           gridid:"euwidget", 
+           klass:"euwidget", 
+           displayInfobox:"true",
+           height:"100px",
+           width:"100px",
+           startrec:startrec} 
+         return data;
+     }
+     /**
+      * @memberOf europeana_widget.init_euRelated
+      */
+     var makeEuRelatedItems = function(incrementCursor) {
+       
+       var data = make_eu_query_data();
+       var templateSel = "#gridTemplate";
+       var gridSel = "#"+gridid
+       // set up freewall grid and some other stuff
+       //TODO has to be called at end of eu ajax, so we'll pass it in as a callback
+       var eu_makegrid = function() {
+          europeanaWidget_makeGrid("#"+gridid,width,height,displayInfobox,1100,accnum);  
+       }
+       europeanaWidget_doEuRelated(templateSel,gridSel,data,incrementCursor,eu_makegrid);
+       
+        
+     // set up the voting. 
+       europeanaWidget_voteSetup("#"+gridid + " .cell",'#relevance-vote',accnum)
+     }
+     $(document).ready(function(){
+       makeEuRelatedItems(false);
+     });
+
+     /**
+      * @memberOf europeana_widget.init_euRelated
+      */
+     var signal = "relevance_tag_complete"
+     $(window).on(signal, function (e, data) {
+       console.log(signal)
+         makeEuRelatedItems(false);
+         });
+
+   /**
+    *
+   * More eu items
+   */
+     $(document).on('click','#itemsCount',function(){
+       // get the next batch..
+       makeEuRelatedItems(true);
+       })
+   /** 
+    * Museum filter pane toggle
+    */
+   $(document).on('click','.cb-eu',function(){
+     console.log(this);
+     console.log($(this).val())
+     var mus = $(this).val();
+     $('[data-eu-provider="'+mus+'"]').toggle();
+     $(window).trigger("resize");
+     
+   });
+ } 
+   window.init_euRelated = init_euRelated;
+}()

@@ -90,82 +90,10 @@ System.err.println "WOW5.2"
   %> 
   
 ! function() {
-	/**
-	* Set up Eu related grid and helper functions 
-	*/
+	$(document).ready(function(){
 
-    // ${error_1}
-	
-		var make_eu_query_data= function() {
-			var get_startrec = function(){
-				var out = 1;
-				if ('eu_cursor' in window){
-					out = window.eu_cursor
-					
-					}
-				
-				return out;
-				}
-			var startrec = get_startrec();
-			
-			// make data for eu related ajax call 
-			var data = 	{accnum:"${accnum}", 
-					keywords:${kw_json}, 
-					gridid:"euwidget", 
-					klass:"euwidget", 
-					displayInfobox:"true",
-					height:"100px",
-					width:"100px",
-					startrec:startrec} 
-				return data;
-		}
-		
-		var makeEuRelatedItems = function() {
-			
-			var data = make_eu_query_data();
-			var templateSel = "#gridTemplate";
-			var gridSel = "#${gridid}"
-			// set up freewall grid and some other stuff
-			//TODO has to be called at end of eu ajax, so we'll pass it in as a callback
-			var eu_makegrid = function() {
-					europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
-			}
-			europeanaWidget_doEuRelated(templateSel,gridSel,data,eu_makegrid);
-			
-			 
-		// set up the voting. 
-			europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
-		}
-		$(document).ready(function(){
-			makeEuRelatedItems();
-		});
-
-		
-		var signal = "relevance_tag_complete"
-		$(window).on(signal, function (e, data) {
-			console.log(signal)
-	   		makeEuRelatedItems();
-      	});
-
-	/**
-	* More eu items
-	*/
-		$(document).on('click','#itemsCount',function(){
-			// get the next batch..
-			makeEuRelatedItems();
-			})
-	/** 
-	 * Museum filter pane toggle
-	 */
-	$(document).on('click','.cb-eu',function(){
-		console.log(this);
-		console.log($(this).val())
-		var mus = $(this).val();
-		$('[data-eu-provider="'+mus+'"]').toggle();
-		$(window).trigger("resize");
-	  
-	});
-		
+	init_euRelated("${accnum}", ${kw_json},"${gridid}","${width}","${height}",${displayInfobox}) 
+	})		
 }()
 	</script>
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
