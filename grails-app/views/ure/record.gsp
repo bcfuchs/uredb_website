@@ -217,7 +217,7 @@
 	<script>
 		// set up the eucomparanda collection system
 		// this can only be called after grid has finished build!!!
-		var signal = "fire_EuComparanda" // fired in europeana_widget.js
+		var signal = "doEuRelated_complete" // fired in europeana_widget.js
 		$(window).on(signal, function (e, data) {
 		   	EuComparanda("${accnum}");
         	

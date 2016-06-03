@@ -62,21 +62,15 @@ System.err.println "WOW5.2"
 
 %>
 -->
-
-
 	<span style="text-decoration: underline; cursor: pointer;" id="filterbymuseum" data-target="#provider-filter"
 		data-toggle="collapse">Filter by museum</span>
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
 	<span id="itemsCount" style="padding-left: 12px; text-decoration: underline; cursor: pointer;"></span>
-	&nbsp;of&nbsp;<span id="total-results" style="padding-left: 12px; "></span>
-	
-	<div id="provider-filter" class="collapse controls span2">
-		
-         
-	</div>
-	
+	&nbsp;of&nbsp;
+	<span id="total-results" style="padding-left: 12px;"></span>
+	<div id="provider-filter" class="collapse controls span2"></div>
 	<script>
 	
 	</script>
@@ -94,6 +88,7 @@ System.err.println "WOW5.2"
       }
 
   %> 
+  
 ! function() {
 	/**
 	* Set up Eu related grid and helper functions 
@@ -102,41 +97,55 @@ System.err.println "WOW5.2"
     // ${error_1}
 	
 		var make_eu_query_data= function() {
-		var get_startrec = function(){
-			var out = 1;
-			if ('eu_cursor' in window){
-				out = window.eu_cursor
+			var get_startrec = function(){
+				var out = 1;
+				if ('eu_cursor' in window){
+					out = window.eu_cursor
+					
+					}
 				
+				return out;
 				}
+			var startrec = get_startrec();
 			
-			return out;
-			}
-		var startrec = get_startrec();
-		
-		// make data for eu related ajax call 
-		var data = 	{accnum:"${accnum}", 
-				keywords:${kw_json}, 
-				gridid:"euwidget", 
-				klass:"euwidget", 
-				displayInfobox:"true",
-				height:"100px",
-				width:"100px",
-				startrec:startrec} 
-		return data;
+			// make data for eu related ajax call 
+			var data = 	{accnum:"${accnum}", 
+					keywords:${kw_json}, 
+					gridid:"euwidget", 
+					klass:"euwidget", 
+					displayInfobox:"true",
+					height:"100px",
+					width:"100px",
+					startrec:startrec} 
+				return data;
 		}
+		
 		var makeEuRelatedItems = function() {
+			
 			var data = make_eu_query_data();
 			var templateSel = "#gridTemplate";
 			var gridSel = "#${gridid}"
-			europeanaWidget_doEuRelated(templateSel,gridSel,data);
-			 // set up freewall grid and some other stuff
-			europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
+			// set up freewall grid and some other stuff
+			//TODO has to be called at end of eu ajax, so we'll pass it in as a callback
+			var eu_makegrid = function() {
+					europeanaWidget_makeGrid("#${gridid}","${width}","${height}",${displayInfobox},1100,"${accnum}")	
+			}
+			europeanaWidget_doEuRelated(templateSel,gridSel,data,eu_makegrid);
+			
+			 
 		// set up the voting. 
 			europeanaWidget_voteSetup("#${gridid} .cell",'#relevance-vote',"${accnum}")
 		}
 		$(document).ready(function(){
 			makeEuRelatedItems();
 		});
+
+		
+		var signal = "relevance_tag_complete"
+		$(window).on(signal, function (e, data) {
+			console.log(signal)
+	   		makeEuRelatedItems();
+      	});
 
 	/**
 	* More eu items
@@ -156,9 +165,9 @@ System.err.println "WOW5.2"
 		$(window).trigger("resize");
 	  
 	});
+		
 }()
 	</script>
-	
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
@@ -186,8 +195,8 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-<div id="provider-label-template"  style="display: none;">
-  <label class="checkbox-inline provider-checklist" data-eu-provider-list='key'>
-            <input class="cb-eu" type="checkbox" value='key' checked></input>
-  </label>
+<div id="provider-label-template" style="display: none;">
+	<label class="checkbox-inline provider-checklist" data-eu-provider-list='key'>
+		<input class="cb-eu" type="checkbox" value='key' checked></input>
+	</label>
 </div>
