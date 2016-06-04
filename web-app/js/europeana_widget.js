@@ -17,11 +17,11 @@
    */
   var doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
 
-    data = JSON.stringify(data)
-    var endpoint_url = "/api/related"
-    var blank_image_100x100 = "/static/images/blank100x100.png"
+    data = JSON.stringify(data);
+    var endpoint_url = "/api/related";
+    var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
-    var providerlist = {} // provider list
+    var providerlist = {}; // provider list
 
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
 
@@ -31,7 +31,7 @@
     // make style for each element.
     var makeStyle = function(w, h, thumburl) {
       return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
-    }
+    };
 
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -47,38 +47,38 @@
       if ('edmTimespanBroaderTerm' in item && item.edmTimespanBroaderTerm)
         out += item.edmTimespanBroaderTerm;
       return out;
-    }
+    };
     /**
      * @memberOf europeana_widget.doEuRelated
      */
     var getTitle = function(title) {
-      var out = title[0]
-      var t = out.split(" ")
+      var out = title[0];
+      var t = out.split(" ");
       if (t.length > titleWordLength)
-        out = t.splice(0, titleWordLength).join(" ")
-      return out
-    }
+        out = t.splice(0, titleWordLength).join(" ");
+      return out;
+    };
 
     /**
      * @memberOf europeana_widget.doEuRelated
      */
     var makeProviderlist = function(provs) {
       console.log('makeng provider list... ');
-      var providers = Object.keys(provs)
-      console.log(providers.length)
+      var providers = Object.keys(provs);
+      console.log(providers.length);
 
       for (var i = 0; i < providers.length; i++) {
         var t = $($("#provider-label-template label")[0]).clone();
 
-        var provider = providers[i]
+        var provider = providers[i];
         $(t).attr('data-eu-provider-list', provider);
 
-        $(t).find('input').val(provider)
-        $(t).append('<span class="provider">' + provider + '</span>')
+        $(t).find('input').val(provider);
+        $(t).append('<span class="provider">' + provider + '</span>');
 
-        $("#provider-filter").append(t)
+        $("#provider-filter").append(t);
       }
-    }
+    };
     /**
      * @memberOf europeana_widget.doEuRelated called from success
      */
@@ -90,7 +90,7 @@
         var item = items[i];
         var provider = item.dataProvider;
         if (!(provider in providerlist))
-          providerlist[provider] = provider
+          providerlist[provider] = provider;
         var t = $(template).clone();
         if ('edmPreview' in item) {
           item.thumb = item.edmPreview;
@@ -99,10 +99,10 @@
         }
 
         var style = makeStyle(width, height, item.thumb);
-        $(t).attr('data-ure-uri', item.edmPreview)
+        $(t).attr('data-ure-uri', item.edmPreview);
         $(t).attr('data-eu-provider', item.dataProvider);
         $(t).attr('data-eu-id', item.id);
-        $(t).attr('data-eu-guid', item.guid)
+        $(t).attr('data-eu-guid', item.guid);
         $(t).attr('data-eu-link', item.edmIsShownAt);
         $(t).attr('data-ure-image-url', item.edmPreview);
         if ("dcSubjectLangAware" in item)
@@ -113,12 +113,12 @@
 
         $(t).find(".date").html(getDate(item));
 
-        $(t).addClass(hideInfodiv)
+        $(t).addClass(hideInfodiv);
 
         $(gridSel).append(t);
       }
 
-    }
+    };
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -128,13 +128,13 @@
       height = data.height;
       displayInfobox = data.displayInfobox;
 
-      if (data && 'info' in data && 'items' in data.info && typeof (data.info.items) !== '')
+      if (data && 'info' in data && 'items' in data.info)
         try {
           items = data.info.items;
 
         } catch (e) {
 
-          alert("can't load eu items!")
+          alert("can't load eu items!");
         }
 
       /** clear the grid */
@@ -149,18 +149,19 @@
       if ('eu_cursor' in window) {
         if (incrementCursor === true)
           window.eu_cursor += data.info.itemsCount;
-      } else {
+      } 
+      else {
         window.eu_cursor = data.info.itemsCount;
       }
 
       /** populate the grid with items */
-      fillGrid(items, width, height, displayInfobox)
+      fillGrid(items, width, height, displayInfobox);
 
       /** make controls */
 
       makeProviderlist(providerlist);
-      $("#itemsCount").html(window.eu_cursor)
-      $("#total-results").html(data.info.totalResults)
+      $("#itemsCount").html(window.eu_cursor);
+      $("#total-results").html(data.info.totalResults);
 
       /** trigger freewall recompute. */
       $(window).trigger("resize");
@@ -169,12 +170,12 @@
       completed_callback.call(this);
 
       /** send done signal */
-      var signal = "doEuRelated_complete"
+      var signal = "doEuRelated_complete";
       var e = $.Event(signal);
       $(window).trigger(e, {
         id : "finished doEuRelated"
       });
-    } // success
+    }; // success
 
     // CHANGE FROM HERE
     // add query builder function to get endpoint_url
@@ -195,18 +196,18 @@
     });
     // CHANGE TO HERE
 
-  } // END doEuRelated
+  }; // END doEuRelated
 
   window.europeanaWidget_doEuRelated = doEuRelated;
   /**
    * @memberOf europeana_widget
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
-    console.log("makeGrid")
+    console.log("makeGrid");
     var storage, cellSelector, blacklist_store, providerBlacklist, providerBlacklistThreshold, providerBlacklist_store;
 
-    blacklist_store = "vote"
-    providerBlacklist_store = "providerBlacklist"
+    blacklist_store = "vote";
+    providerBlacklist_store = "providerBlacklist";
     providerBlacklistThreshold = 1;
     cellSelector = gridid + " .cell";
     storage = $.localStorage;
@@ -241,7 +242,7 @@
 
         }
 
-      })
+      });
     }
 
     // build the grid.
@@ -266,7 +267,7 @@
 
     if (displayInfobox === true) {
       $(cellSelector).hover(function() {
-        $(this).find(".image-infobox").toggleClass("hide-infodiv")
+        $(this).find(".image-infobox").toggleClass("hide-infodiv");
       });
     }
     $(cellSelector).css("cursor", "pointer");
@@ -291,16 +292,16 @@
         thumb : thumb,
         ure_accnum : $(document).ure_accnum,
         guid : guid
-      }
+      };
       // add data about this object to the add-item button in the overlay
 
       $("#add-item").data('eu_item', eu_item);
-    }
+    };
     $(cellSelector).bind('click', overlayHandler);
-    window.wall = wall
-    window.overlayHandler = overlayHandler
+    window.wall = wall;
+    window.overlayHandler = overlayHandler;
     // END
-  }
+  };
 
   window.europeanaWidget_makeGrid = makeGrid;
 
@@ -315,37 +316,38 @@
    */
 
   var voteSetup = function(itemSelector, toggleSelector, accnum) {
-    console.log('voteSetup')
-    var voteHandler, store;
+    console.log('voteSetup');
+    var voteHandler;
 
     storage = $.localStorage;
     // create vote object if not present
     if (!(storage.isSet('vote'))) {
-      console.log("setting vote...")
-      storage.set('vote', {})
+      console.log("setting vote...");
+      storage.set('vote', {});
     }
     if (!(storage.isSet('providerBlacklist'))) {
-      console.log("setting providerBlacklist...")
-      storage.set('providerBlacklist', {})
+      console.log("setting providerBlacklist...");
+      storage.set('providerBlacklist', {});
     }
     /**
      * @memberOf europeana_widget.voteSetup
      */
     var vote = function(divs) {
-      var votebutton = '<button class="voterbtn btn btn-sm btn-success">x</button>'
+      var votebutton = '<button class="voterbtn btn btn-sm btn-success">x</button>';
       // overlay a click button
       $(divs).each(function(k, v) {
-        $(v).append(votebutton)
-      })
+        $(v).append(votebutton);
+      });
 
       // remove the overlay click function
-      $(itemSelector).unbind('click', window.overlayHandler)
+      $(itemSelector).unbind('click', window.overlayHandler);
 
       /**
        * Vote handler
        * 
        * @memberOf europeana_widget.voteSetup.vote
        * 
+       * Handle click events on irrelevant items 
        */
       voteHandler = function() {
         var item, provider, v, providerBlacklist, providerBlacklist_store, vote_store;
@@ -384,9 +386,9 @@
           if (provider in providerBlacklist) {
 
             if (providerBlacklist[provider] > 1) {
-              providerBlacklist[provider] -= 1
+              providerBlacklist[provider] -= 1;
             } else {
-              delete providerBlacklist[provider]
+              delete providerBlacklist[provider];
 
             }
           }
@@ -395,32 +397,35 @@
         // save the results
         storage.set('vote', v);
         storage.set('providerBlacklist', providerBlacklist);
-        window.testV = v;
-      }
+        window.eu_test_vote = v;
+      };
 
-      $(document).on('click', '.voterbtn', voteHandler)
+      $(document).on('click', '.voterbtn', voteHandler);
       // END vote
-    } // vote = function(divs)
+    }; // vote = function(divs)
 
-    // link to voting toggle
+   /** Toggle irrelevance voting */
+    //remove all previous handlers so we don't bounce.
     $(document).off('click', toggleSelector);
+    
     $(document).on('click', toggleSelector, function() {
-      var startText = "tag as not relevant"
+      var startText = "tag as not relevant";
       var sw = $(this).attr('data-relevance-toggle');
       if (sw === 'off') {
         vote(itemSelector);
         $(this).attr('data-relevance-toggle', 'on');
-        $(this).html($(this).data('relevance-finish'))
+        $(this).html($(this).data('relevance-finish'));
       } else {
         // we're done
-        $(itemSelector).unbind('click', voteHandler)
+        $(itemSelector).unbind('click', voteHandler);
         $('.voterbtn').remove();
-        $(itemSelector).bind('click', window.overlayHandler)
+        $(itemSelector).bind('click', window.overlayHandler);
         $(this).attr('data-relevance-toggle', 'off');
         $(this).html(startText);
-        // send done signal -- pick up in _europeanaWidget
-        var signal = "relevance_tag_complete"
-        alert(signal)
+        
+        // send done signal -- pick up in _europeanaWidget 
+        var signal = "relevance_tag_complete";
+        alert(signal);
         var e = $.Event(signal);
         $(window).trigger(e, {
           id : signal
@@ -428,10 +433,10 @@
 
       }
 
-    })
-  } // voteSetup
-  window.europeanaWidget_voteSetup = voteSetup
-})()
+    });
+  }; // voteSetup
+  window.europeanaWidget_voteSetup = voteSetup;
+})();
 
 !function() {
   /**
@@ -440,7 +445,7 @@
   /**
    * @memberOf europeana_widget
    */
-  console.log("init_euRelated")
+  console.log("init_euRelated");
   var init_euRelated = function(accnum, gridid, width, height, displayInfobox) {
     
     /**
@@ -451,14 +456,14 @@
      */
     var make_keywords = function() {
 //TODO needs to be configureable!!!
-      var kw = []
+      var kw = [];
 
       var title = $('.ure-title').text();
       if (title.match(/red figure/)) {
-        kw.push('where:(red+AND+figure)')
+        kw.push('where:(red+AND+figure)');
       }
       if (title.match(/black figure/)) {
-        kw.push('where:(black+AND+figure)')
+        kw.push('where:(black+AND+figure)');
       }
       fabric = $('.ure-fabric').text();
       if (fabric !== "") {
@@ -486,12 +491,12 @@
       var get_startrec = function() {
         var out = 1;
         if ('eu_cursor' in window) {
-          out = window.eu_cursor
+          out = window.eu_cursor;
 
         }
 
         return out;
-      }
+      };
 
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
