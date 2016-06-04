@@ -16,7 +16,7 @@
    * @memberOf europeana_widget doEuRelated
    */
   var doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-
+    
     data = JSON.stringify(data);
     var endpoint_url = "/api/related";
     var blank_image_100x100 = "/static/images/blank100x100.png";
@@ -133,7 +133,7 @@
           items = data.info.items;
 
         } catch (e) {
-
+          items = [];
           alert("can't load eu items!");
         }
 
@@ -149,8 +149,7 @@
       if ('eu_cursor' in window) {
         if (incrementCursor === true)
           window.eu_cursor += data.info.itemsCount;
-      } 
-      else {
+      } else {
         window.eu_cursor = data.info.itemsCount;
       }
 
@@ -177,24 +176,50 @@
       });
     }; // success
 
-    // CHANGE FROM HERE
-    // add query builder function to get endpoint_url
-    // new stuff is a chrome snippet for now
-    // get the data from server
-    $.ajax({
-      contentType : "application/json; charset=utf-8",
-      url : endpoint_url,
-      dataType : "json",
-      type : "POST",
-      data : data,
-    }).done(success).fail(function(j, t, e) {
-      // TODO better info to user
-      // TODO test for fail
-      console.log(e);
-    }).always(function() {
-      console.log("eu data fetch complete");
-    });
-    // CHANGE TO HERE
+  
+
+    var success_new = function(info) {
+      console.log('success_new');
+      var data = {};
+      // re-jig data to fit old model.
+      data.info = info; // the return object from EU
+      data.width = "100px";
+      data.height = "100px";
+      data.displayInfoboxOnHover = false;
+      
+      return success(data);
+
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var new_ajax = function() {
+      var keywords = JSON.parse(data).keywords;
+      var startrec  = JSON.parse(data).startrec;
+      var fail = function(e) { console.log(e); }; // fail
+      var done = success_new;
+      var complete = function() {
+        console.log("complete!");
+      }
+      
+      var get_query = function(kw) {
+        return kw.join("+AND+");
+      };
+      console.log(data['keywords'])
+      var qs = get_query(keywords);
+      // TODO -- fix fails if there isn't a thumbnail
+      var query = 'wskey=api2demo&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard';
+      var url_base = 'https://www.europeana.eu/api/v2/search.json?';
+      var url_new = url_base + query;
+      console.log(url_new);
+      $.ajax({
+        url : url_new,
+        dataType : "json",
+        type : "GET"
+
+      }).done(done).fail(fail).complete(complete);
+    };
+    new_ajax();
 
   }; // END doEuRelated
 
@@ -347,7 +372,7 @@
        * 
        * @memberOf europeana_widget.voteSetup.vote
        * 
-       * Handle click events on irrelevant items 
+       * Handle click events on irrelevant items
        */
       voteHandler = function() {
         var item, provider, v, providerBlacklist, providerBlacklist_store, vote_store;
@@ -404,10 +429,10 @@
       // END vote
     }; // vote = function(divs)
 
-   /** Toggle irrelevance voting */
-    //remove all previous handlers so we don't bounce.
+    /** Toggle irrelevance voting */
+    // remove all previous handlers so we don't bounce.
     $(document).off('click', toggleSelector);
-    
+
     $(document).on('click', toggleSelector, function() {
       var startText = "tag as not relevant";
       var sw = $(this).attr('data-relevance-toggle');
@@ -422,8 +447,8 @@
         $(itemSelector).bind('click', window.overlayHandler);
         $(this).attr('data-relevance-toggle', 'off');
         $(this).html(startText);
-        
-        // send done signal -- pick up in _europeanaWidget 
+
+        // send done signal -- pick up in _europeanaWidget
         var signal = "relevance_tag_complete";
         alert(signal);
         var e = $.Event(signal);
@@ -447,7 +472,7 @@
    */
   console.log("init_euRelated");
   var init_euRelated = function(accnum, gridid, width, height, displayInfobox) {
-    
+
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
@@ -455,7 +480,7 @@
      * 
      */
     var make_keywords = function() {
-//TODO needs to be configureable!!!
+      // TODO needs to be configureable!!!
       var kw = [];
 
       var title = $('.ure-title').text();
@@ -468,21 +493,22 @@
       fabric = $('.ure-fabric').text();
       if (fabric !== "") {
         var fkw = fabric.replace(/[^a-zA-Z ]/g, "").split(" ");
-        kw = kw.concat(fkw)
+        kw = kw.concat(fkw);
       }
 
       var keywords = [ 'where(greece+AND+black+AND+figure)' ];
+      
       if (kw.length > 1) {
-        keywords = kw
+        keywords = kw;
       }
 
-      return keywords
-    }
+      return keywords;
+    };
 
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
-     *  get the query data
+     * get the query data
      */
     var make_eu_query_data = function() {
       /**
@@ -502,17 +528,16 @@
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       var startrec = get_startrec();
-      
+
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
-       var kw_json = make_keywords();
-       
+      var kw_json = make_keywords();
+
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       // make data for eu related ajax call
-    
       var data = {
         accnum : accnum,
         keywords : kw_json,
@@ -522,32 +547,32 @@
         height : "100px",
         width : "100px",
         startrec : startrec
-      }
+      };
       return data;
-    }
+    };
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
-    }
+    };
     /**
      * @memberOf europeana_widget.init_euRelated
      */
     var makeEuRelatedItems = function(incrementCursor) {
 
       var data = make_eu_query_data();
-      set_query_display(data.keywords.join(' '))
+      set_query_display(data.keywords.join(' '));
       var templateSel = "#gridTemplate";
-      var gridSel = "#" + gridid
+      var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
       // TODO has to be called at end of eu ajax, so we'll pass it in as a
       // callback
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
-      }
+      };
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.
-      europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum)
-    }
+      europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
+    };
     $(document).ready(function() {
       makeEuRelatedItems(false);
     });
@@ -555,9 +580,9 @@
     /**
      * @memberOf europeana_widget.init_euRelated
      */
-    var signal = "relevance_tag_complete"
+    var signal = "relevance_tag_complete";
     $(window).on(signal, function(e, data) {
-      console.log(signal)
+      console.log(signal);
       makeEuRelatedItems(false);
     });
 
@@ -568,18 +593,18 @@
     $(document).on('click', '#itemsCount', function() {
       // get the next batch..
       makeEuRelatedItems(true);
-    })
+    });
     /**
      * Museum filter pane toggle
      */
     $(document).on('click', '.cb-eu', function() {
       console.log(this);
-      console.log($(this).val())
+      console.log($(this).val());
       var mus = $(this).val();
       $('[data-eu-provider="' + mus + '"]').toggle();
       $(window).trigger("resize");
 
     });
-  }
+  };
   window.init_euRelated = init_euRelated;
 }()
