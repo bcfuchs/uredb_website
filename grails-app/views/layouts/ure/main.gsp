@@ -24,6 +24,7 @@
 <g:layoutHead />
 
 <!--  hack until we can figure out why this isnt working with resources plugin -->
+<script src="${resource(dir:'js',file:'info.js')}"></script>
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
