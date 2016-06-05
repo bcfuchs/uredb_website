@@ -200,15 +200,15 @@
       var done = success_new;
       var complete = function() {
         console.log("complete!");
-      }
+      };
       
       var get_query = function(kw) {
         return kw.join("+AND+");
       };
-      console.log(data['keywords'])
+      console.log(data['keywords']);
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
-      var query = 'wskey=api2demo&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard';
+      var query = 'wskey='+uredb_wskey+'&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard';
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
       console.log(url_new);
@@ -484,24 +484,30 @@
       var kw = [];
 
       var title = $('.ure-title').text();
+      var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ");
       if (title.match(/red figure/)) {
         kw.push('where:(red+AND+figure)');
       }
       if (title.match(/black figure/)) {
         kw.push('where:(black+AND+figure)');
       }
-      fabric = $('.ure-fabric').text();
+      var fabric = $('.ure-fabric').text();
       if (fabric !== "") {
-        var fkw = fabric.replace(/[^a-zA-Z ]/g, "").split(" ");
-        kw = kw.concat(fkw);
+        var fabric_kw = fabric.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ")
+        kw = kw.concat(fabric_kw);
       }
-
+     
       var keywords = [ 'where(greece+AND+black+AND+figure)' ];
       
       if (kw.length > 1) {
         keywords = kw;
+      } 
+      else {
+        if (title_kw.length > 1) {
+          
+          keywords = title_kw;
+        }
       }
-
       return keywords;
     };
 
