@@ -11,6 +11,51 @@
  * 
  * 
  */
+! function(){
+  /**
+   * @memberOf europeana_widget.init_euRelated
+   */
+  var get_search_extras = function() {
+    var out = "";
+    if ($(window).data("search_prefs") !== undefined) {
+      var prefs = $(window).data("search_prefs");
+      var mode  = prefs.mode;
+      if (mode === "whitelist") {
+        var provs = prefs.data.whitelist.data;
+        var f = get_whitelist_providers_facet(provs);
+        out += f;
+      }
+    }
+    return out;
+    
+  };
+  window.get_search_extras =  get_search_extras;
+  /**
+   * @memberOf europeana_widget.init_euRelated
+   */
+  var get_whitelist_providers_facet = function(providers) {
+
+      var provs = [];
+        // qf prov1 & qf prov2 is interpreted as an "AND" query
+        // so use +OR+
+        //http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
+        console.log(providers);
+        for (var i = 0; i < providers.length; i++) {
+          var provider = providers[i];
+            //    provider = provider.replaceAll(/\s/,"%20")
+            var provider_enc = encodeURIComponent(provider);
+            var provf = "provider_aggregation_edm_dataProvider:%22"+provider_enc+ "%22";
+            provs.push(provf);
+            console.log(provf)
+        }
+        var provider_facet = "&qf="+provs.join("+OR+");
+
+        
+        return provider_facet;
+    };
+  window.make_whitelist_providers_query = get_whitelist_providers_facet;
+}();
+
 (function() {
   /**
    * @memberOf europeana_widget doEuRelated
@@ -176,7 +221,10 @@
       });
     }; // success
 
-  
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
 
     var success_new = function(info) {
       console.log('success_new');
@@ -190,10 +238,13 @@
       return success(data);
 
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
+     * 
      */
-    var new_ajax = function() {
+    
+    var ajax_new = function() {
       var keywords = JSON.parse(data).keywords;
       var startrec  = JSON.parse(data).startrec;
       var fail = function(e) { console.log(e); }; // fail
@@ -205,10 +256,12 @@
       var get_query = function(kw) {
         return kw.join("+AND+");
       };
-      console.log(data['keywords']);
+      var extras = "";
+      extras = get_search_extras();
+      console.log(extras)
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
-      var query = 'wskey='+uredb_wskey+'&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard';
+      var query = 'wskey='+uredb_wskey+'&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard'+extras;
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
       console.log(url_new);
@@ -219,7 +272,8 @@
 
       }).done(done).fail(fail).complete(complete);
     };
-    new_ajax();
+    
+    ajax_new();
 
   }; // END doEuRelated
 

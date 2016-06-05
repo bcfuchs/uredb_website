@@ -24,7 +24,7 @@
    * 
    */
   function sendData(data,success) {
-
+    
     var url = '/api/preferences/related'
       $.ajax({
         contentType : "application/json; charset=utf-8",
@@ -60,7 +60,7 @@
     var rel =  getRelatedPrefs();
     var mode = getMode();
     var data = {data:rel,token:token,mode:mode}
-    console.log(data)
+    $(window).data("search_prefs",data);
     sendData(JSON.stringify(data),success);
   }
     
