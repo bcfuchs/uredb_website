@@ -408,6 +408,7 @@
       console.log("setting providerBlacklist...");
       storage.set('providerBlacklist', {});
     }
+    
     /**
      * @memberOf europeana_widget.voteSetup
      */
