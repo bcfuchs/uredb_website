@@ -85,7 +85,9 @@
 		</h2>
 		<div id="record-main">
 			<div id="meta2">
-				<g:render template="/shared/ure/meta2" var="t" model="[record:record]" />
+				<g:render template="/shared/ure/meta2" 
+				var="t" 
+				model="[record:record]" />
 			</div>
 			<!--  #meta2 -->
 			<g:render template="/ure/citationWidget" />
@@ -169,33 +171,11 @@
 				  
 				}()
 			</script>
-			<!-- 
-			KEYWORDS
-			<%
-            def kw_json = ['greek','vase'];
-            def error;
-            try {
-               
-                kw_json = keywords as JSON;
-               
-            }
-            catch(e) {
-                error = e
-            }
-            %>
-            <span id="query-keywords">${kw_json}</span>
-            ${error}
-            
-			 -->
-		
+			
 			<div id="europeana-section" style="display: none;">
-				<ure:europeanaWidget 
-				accnum="${accnum}" 
-				keywords="${keywords}" 
-				gridid="euwidget" 
-				klass="euwidget" 
-				displayInfobox="true"
-				height="100px" width="100px" />
+			<g:render template="/taglibTemplates/europeanaWidget" 
+			model='[height:"100px",width:"100px",accnum:accnum,keywords:keywords,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
+				</g:render>
 			</div>
 		</div>
 		<!-- #record-main -->
