@@ -11,7 +11,10 @@
  * 
  * 
  */
+
 ! function(){
+  
+
   /**
    * @memberOf europeana_widget.init_euRelated
    */
@@ -509,7 +512,7 @@
 
         // send done signal -- pick up in _europeanaWidget
         var signal = "relevance_tag_complete";
-        alert(signal);
+      
         var e = $.Event(signal);
         $(window).trigger(e, {
           id : signal
