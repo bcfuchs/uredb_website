@@ -12,6 +12,9 @@
  * 
  */
 
+! function(){
+  
+
   /**
    * @memberOf europeana_widget.init_euRelated
    */
