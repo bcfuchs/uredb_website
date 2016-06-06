@@ -413,7 +413,7 @@
      * @memberOf europeana_widget.voteSetup
      */
     var vote = function(divs) {
-      var votebutton = '<button class="voterbtn btn btn-sm btn-success">x</button>';
+      var votebutton = '<button class="voterbtn btn btn-sm btn-success">&#10004;</button>';
       // overlay a click button
       $(divs).each(function(k, v) {
         $(v).append(votebutton);
@@ -443,6 +443,8 @@
         provider = $(this).parent().attr('data-eu-provider');
 
         if ($(this).hasClass('btn-danger')) {
+           // change to x
+            $(this).html("x");
 
           // add to blacklist
           if (!(accnum in v))
@@ -458,6 +460,8 @@
         }
 
         else {
+           // change to check
+           $(this).html("&#10004;")
           // remove from blacklist
           if (accnum in v && item in v[accnum]) {
             delete v[accnum][item];
