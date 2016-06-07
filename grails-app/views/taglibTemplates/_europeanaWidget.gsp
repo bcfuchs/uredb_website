@@ -24,7 +24,6 @@
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
 	</div>
 </div>
-<div style="display: none;" id="mys1" data-bla="ok2"></div>
 <script id="europeana_widget_js" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
 <div id="gridTemplate" style="display: none;">
 	<div class="cell gridlist-cell" data-ure-uri>
