@@ -11,7 +11,7 @@
  * 
  * 
  */
-
+/** START */
 ! function(){
   
 
@@ -59,6 +59,7 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
+/** START  doEuRelated */
 (function() {
   /**
    * @memberOf europeana_widget doEuRelated
@@ -170,6 +171,36 @@
     /**
      * @memberOf europeana_widget.doEuRelated
      */
+    var skiplist_filter = function(items) {
+      var skiplist_store = 'skiplist';
+      var skiplist = {};
+      var storage = $.localStorage;
+      var out = [];
+      // get providerBlacklist or start one if none
+      var doSkiplist = false;
+      if (storage.isSet(skiplist_store)) {
+        skiplist = storage.get(skiplist_store);
+        if (skiplist.data.length > 0) 
+          doSkiplist = true;
+      } 
+      
+     if (doSkiplist === true) {
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          if ( skiplist.data.indexOf(item.dataProvider[0]) > -1 ) {
+            out.push(item);
+            console.log(item.dataProvider[0]);
+          }
+        }
+      }
+      else {
+       out = items;   
+      }
+     return out; 
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     var success = function(data) {
       var width, height, displayInfobox, items;
       width = data.width;
@@ -200,7 +231,10 @@
       } else {
         window.eu_cursor = data.info.itemsCount;
       }
-
+      /** filter out items on dataprovider skiplist */
+      // if mode = skiplist
+      items = skiplist_filter(items);
+      
       /** populate the grid with items */
       fillGrid(items, width, height, displayInfobox);
 
@@ -300,7 +334,7 @@
     } else {
       providerBlacklist = storage.set(providerBlacklist_store, {});
     }
-
+    // TODO should this be here? 
     // Remove blacklisted items in "vote" localstorage
     if (storage.isSet(blacklist_store)) {
       var vote = storage.get(blacklist_store);
@@ -316,11 +350,11 @@
         // remove items from blacklisted providers.
         if (provider in providerBlacklist && providerBlacklist[provider] > providerBlacklistThreshold) {
           // remove item
-          $(this).remove();
+     //     $(this).remove();
           // remove filter in provider checklist
           // console.log($('[data-eu-provider-list="' + provider + '"]'));
           // console.log(provider);
-          $('[data-eu-provider-list="' + provider + '"]').remove();
+     //     $('[data-eu-provider-list="' + provider + '"]').remove();
 
         }
 
@@ -525,6 +559,8 @@
   window.europeanaWidget_voteSetup = voteSetup;
 })();
 
+/** START init */
+
 !function() {
   /**
    * Set up Eu related grid and helper functions
@@ -548,7 +584,9 @@
       var title = $('.ure-title').text();
       var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ");
       if (title.match(/red figure/)) {
-        kw.push('where:(red+AND+figure)');
+      //  kw.push('where:(red+figure)');
+        kw.push('red')
+        kw.push('figure')
       }
       if (title.match(/black figure/)) {
         kw.push('where:(black+AND+figure)');
