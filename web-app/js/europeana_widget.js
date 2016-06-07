@@ -201,6 +201,13 @@
     /**
      * @memberOf europeana_widget.doEuRelated
      */
+    var getSearchMode = function() {
+      return $.localStorage('search-mode');
+    };
+    
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     var success = function(data) {
       var width, height, displayInfobox, items;
       width = data.width;
@@ -233,7 +240,8 @@
       }
       /** filter out items on dataprovider skiplist */
       // if mode = skiplist
-      items = skiplist_filter(items);
+      if (getSearchMode === 'skiplist')
+        items = skiplist_filter(items);
       
       /** populate the grid with items */
       fillGrid(items, width, height, displayInfobox);
@@ -295,7 +303,7 @@
       };
       var extras = "";
       extras = get_search_extras();
-      console.log(extras)
+      console.log(extras);
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
       var query = 'wskey='+uredb_wskey+'&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard'+extras;
@@ -498,7 +506,7 @@
 
         else {
            // change to check
-           $(this).html("&#10004;")
+           $(this).html("&#10004;");
           // remove from blacklist
           if (accnum in v && item in v[accnum]) {
             delete v[accnum][item];
