@@ -64,9 +64,24 @@
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-    
+  var doEuRelated_retake = function(){};
+  
+  /**
+   * @memberOf europeana_widget doEuRelated
+   */
+   var doEuRelated = function() {};
+   var doEuRelated_keywords = "";
+   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
+     doEuRelated_keywords = data.keywords;
+     doEuRelated_retake = function(keywords) {
+       var d = JSON.parse(data);
+       d.keywords = keywords;
+       data  = d;
+       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
+     };
+     
     data = JSON.stringify(data);
+    
     var endpoint_url = "/api/related";
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
@@ -204,6 +219,12 @@
     var getSearchMode = function() {
       return $.localStorage('search-mode');
     };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var set_query_display = function(qs) {
+      $("#query-display").html(qs);
+    };
     
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -222,7 +243,8 @@
           items = [];
           alert("can't load eu items!");
         }
-
+      /** set the query display */
+       set_query_display(data.keywords.join(' ')); 
       /** clear the grid */
 
       $(gridSel).html("");
@@ -251,7 +273,6 @@
       makeProviderlist(providerlist);
       $("#itemsCount").html(window.eu_cursor);
       $("#total-results").html(data.info.totalResults);
-
       /** trigger freewall recompute. */
       $(window).trigger("resize");
 
@@ -266,6 +287,8 @@
       });
     }; // success
 
+    var retakeOnZero = true; //TODO move to top
+    var default_keywords = ['black','figure','greece'];
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -273,13 +296,18 @@
 
     var success_new = function(info) {
       console.log('success_new');
+      // quit function and rerun query with safe keywords if items.length === 0
+      if (retakeOnZero === true && info.items.length < 1) {
+       doEuRelated_retake(default_keywords);
+       return 1;
+      }
       var data = {};
       // re-jig data to fit old model.
       data.info = info; // the return object from EU
       data.width = "100px";
       data.height = "100px";
       data.displayInfoboxOnHover = false;
-      
+      data.keywords = doEuRelated_keywords;
       return success(data);
 
     };
@@ -570,26 +598,26 @@
 /** START init */
 
 !function() {
+
   /**
-   * Set up Eu related grid and helper functions
-   */
-  /**
+   *   Set up Eu related grid and helper functions
+   *  
    * @memberOf europeana_widget
    */
-  console.log("init_euRelated");
+  
   var init_euRelated = function(accnum, gridid, width, height, displayInfobox) {
 
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
-     * get keywords from record data in DOM
+     * get keywords from ure item
      * 
      */
-    var make_keywords = function() {
+    var make_keywords = function(ure_item) {
       // TODO needs to be configureable!!!
       var kw = [];
-
-      var title = $('.ure-title').text();
+      var title = ure_item.title;
+      var fabric = ure_item.fabric;
       var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ");
       if (title.match(/red figure/)) {
       //  kw.push('where:(red+figure)');
@@ -599,7 +627,7 @@
       if (title.match(/black figure/)) {
         kw.push('where:(black+AND+figure)');
       }
-      var fabric = $('.ure-fabric').text();
+      
       if (fabric !== "") {
         var fabric_kw = fabric.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ")
         kw = kw.concat(fabric_kw);
@@ -618,6 +646,7 @@
       }
       return keywords;
     };
+
 
     /**
      * @memberOf europeana_widget.init_euRelated
@@ -642,11 +671,13 @@
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       var startrec = get_startrec();
-
+      
+      var title = $('.ure-title').text();
+      var fabric = $('.ure-fabric').text();
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
-      var kw_json = make_keywords();
+      var kw_json = make_keywords({title:title,fabric:fabric});
 
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
@@ -664,16 +695,14 @@
       };
       return data;
     };
-    var set_query_display = function(qs) {
-      $("#query-display").html(qs);
-    };
+   
     /**
      * @memberOf europeana_widget.init_euRelated
      */
     var makeEuRelatedItems = function(incrementCursor) {
 
       var data = make_eu_query_data();
-      set_query_display(data.keywords.join(' '));
+     
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
