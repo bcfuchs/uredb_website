@@ -1,0 +1,31 @@
+/** hide left nav on param s */
+#left_nav { <
+	g: if test="${params.s == 'noleftnav'}">   
+			display:none; </
+	g: if>
+}
+
+#left-nav-search {
+	display: block !important;
+}
+
+.container a {
+	color: black;
+}
+
+#provider-filter-row {
+	display: none;
+}
+
+#related-wrapper .row h2 {
+	text-align: left;
+}
+
+#goback:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.skiplist-list {
+	display: none;
+}
