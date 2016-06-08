@@ -5,35 +5,7 @@
 <title>Ure Museum Database: Related Items Manager</title>
 <meta name="layout" content="ure/main" />
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-<style>
-/** hide left nav on param s */
-#left_nav { <
-	g: if test="${params.s == 'noleftnav'}">   
-			display:none; </
-	g: if>
-}
-
-#left-nav-search {
-	display: block !important;
-}
-
-.container a {
-	color: black;
-}
-
-#provider-filter-row {
-	display: none;
-}
-
-#related-wrapper .row h2 {
-	text-align: left;
-}
-
-#goback:hover {
-	cursor: pointer;
-	text-decoration: underline;
-}
-</style>
+<link rel="stylesheet" href="${resource(dir:'css/ure',file:'related.css')}" />
 </head>
 <body>
 	<!--  Options page 
@@ -80,17 +52,14 @@
       $("#skiplist-toggle").click();
       $("#goback").click(function() {
      //   window.location.href = document.referrer;
-        window.location.href = "/record/${session.accnum}"
+        var accnum  = "${session.accnum}";
+        window.location.href = "/record/" + accnum;
+
       })
 
     })
   </script>
-	<style>
-.skiplist-list {
-	display: none;
-}
-</style>
-<!-- 
+	<!-- 
 CHECK
 <%
 flash.message = "wow"
@@ -131,6 +100,31 @@ println "message:" + flash.message;
 					<div id="provider-filter-white" class="collapse controls span2 "></div>
 				</div>
 			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<h2>Rerun related search with default keywords when search finds no items</h2>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-10">
+			
+					<div class="radio">
+						<label>
+							<input type="radio" name="rerun">
+							Off
+						</label>
+					
+						<label>
+							<input type="radio" name="rerun" checked>
+							On
+						</label>
+					</div>
+					
+				
+			</div>
+			<div class="col-md-2"></div>
 		</div>
 	</div>
 	<div id="templates" style="display: none">
