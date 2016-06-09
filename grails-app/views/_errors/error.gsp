@@ -1,13 +1,27 @@
 <html>
 	<head>
-		<title>Grails Runtime Exception</title>
-		<meta name="layout" content="editor"    />
+		<title>Uredb 500</title>
+		<meta name="layout" content="ure/main"    />
 		<g:set var="layout_nomainmenu"		value="${true}" scope="request"/>
 		<g:set var="layout_nosecondarymenu"	value="${true}" scope="request"/>
+		<style>
+		#details { display:none}
+		</style>
+		<script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
+		<script>
+		easterEgg('j',function(){
+			$(document).ready(function(){
+				$("#details").toggle();
+			});
+			})
+		</script>
 	</head>
 
   <body>
-  
+    
+    <h1>We've run into a problem...</h1>
+    <h2>Please return to the <a href="/">home page</a> and try again</h2>
+    <div id="details">
 	<section id="overview" class="">
     	<div class="alert alert-error">
 			${request.'javax.servlet.error.message'.indexOf(':') != -1 ? request.'javax.servlet.error.message'?.substring(0, request.'javax.servlet.error.message'?.indexOf(':')).encodeAsHTML() : request.'javax.servlet.error.message'?.encodeAsHTML()}
@@ -27,7 +41,7 @@
 	</section>
 		
 	<section id="details" class="">
-	    <h2>Error Details</h2>
+	    <h2>Error Details...</h2>
 	  	<div class="message">
 			<table class="table">
 				<tbody>
@@ -97,6 +111,6 @@
 		    </div>
 		</section>
 	</g:if>
-	
+	</div>
   </body>
 </html>
