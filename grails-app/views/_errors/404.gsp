@@ -14,13 +14,13 @@
   	<section id="Error" class="">
 		<div class="big-message">
 			<div class="container">
-				<h1>
+				<h1 style="display:none">
 					<g:message code="error.404.callout"/>
 				</h1>
 				<h2>
 					<g:message code="error.404.title"/>
 				</h2>
-				<p>
+				<p style="display:none">
 					<g:message code="error.404.message"/>
 				</p>
 				
