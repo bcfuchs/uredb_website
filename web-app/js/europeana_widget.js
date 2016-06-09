@@ -12,8 +12,7 @@
  * 
  */
 /** START */
-! function(){
-  
+!function() {
 
   /**
    * @memberOf europeana_widget.init_euRelated
@@ -22,7 +21,7 @@
     var out = "";
     if ($(window).data("search_prefs") !== undefined) {
       var prefs = $(window).data("search_prefs");
-      var mode  = prefs.mode;
+      var mode = prefs.mode;
       if (mode === "whitelist") {
         var provs = prefs.data.whitelist.data;
         var f = get_whitelist_providers_facet(provs);
@@ -30,58 +29,59 @@
       }
     }
     return out;
-    
+
   };
-  window.get_search_extras =  get_search_extras;
+  window.get_search_extras = get_search_extras;
   /**
    * @memberOf europeana_widget.init_euRelated
    */
   var get_whitelist_providers_facet = function(providers) {
 
-      var provs = [];
-        // qf prov1 & qf prov2 is interpreted as an "AND" query
-        // so use +OR+
-        //http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
-        console.log(providers);
-        for (var i = 0; i < providers.length; i++) {
-          var provider = providers[i];
-            //    provider = provider.replaceAll(/\s/,"%20")
-            var provider_enc = encodeURIComponent(provider);
-            var provf = "provider_aggregation_edm_dataProvider:%22"+provider_enc+ "%22";
-            provs.push(provf);
-            console.log(provf)
-        }
-        var provider_facet = "&qf="+provs.join("+OR+");
+    var provs = [];
+    // qf prov1 & qf prov2 is interpreted as an "AND" query
+    // so use +OR+
+    // http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
+    console.log(providers);
+    for (var i = 0; i < providers.length; i++) {
+      var provider = providers[i];
+      // provider = provider.replaceAll(/\s/,"%20")
+      var provider_enc = encodeURIComponent(provider);
+      var provf = "provider_aggregation_edm_dataProvider:%22" + provider_enc + "%22";
+      provs.push(provf);
+      console.log(provf)
+    }
+    var provider_facet = "&qf=" + provs.join("+OR+");
 
-        
-        return provider_facet;
-    };
+    return provider_facet;
+  };
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-/** START  doEuRelated */
+/** START doEuRelated */
 (function() {
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated_retake = function(){};
-  
+  var doEuRelated_retake = function() {
+  };
+
   /**
    * @memberOf europeana_widget doEuRelated
    */
-   var doEuRelated = function() {};
-   var doEuRelated_keywords = "";
-   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-     doEuRelated_keywords = data.keywords;
-     doEuRelated_retake = function(keywords) {
-       var d = JSON.parse(data);
-       d.keywords = keywords;
-       data  = d;
-       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
-     };
-     
+  var doEuRelated = function() {
+  };
+  var doEuRelated_keywords = "";
+  doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
+    doEuRelated_keywords = data.keywords;
+    doEuRelated_retake = function(keywords) {
+      var d = JSON.parse(data);
+      d.keywords = keywords;
+      data = d;
+      doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
+    };
+
     data = JSON.stringify(data);
-    
+
     var endpoint_url = "/api/related";
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
@@ -195,23 +195,22 @@
       var doSkiplist = false;
       if (storage.isSet(skiplist_store)) {
         skiplist = storage.get(skiplist_store);
-        if (skiplist.data.length > 0) 
+        if (skiplist.data.length > 0)
           doSkiplist = true;
-      } 
-      
-     if (doSkiplist === true) {
+      }
+
+      if (doSkiplist === true) {
         for (var i = 0; i < items.length; i++) {
           var item = items[i];
-          if ( skiplist.data.indexOf(item.dataProvider[0]) > -1 ) {
+          if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
             out.push(item);
             console.log(item.dataProvider[0]);
           }
         }
+      } else {
+        out = items;
       }
-      else {
-       out = items;   
-      }
-     return out; 
+      return out;
     };
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -225,7 +224,7 @@
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
     };
-    
+
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -244,7 +243,7 @@
           alert("can't load eu items!");
         }
       /** set the query display */
-       set_query_display(data.keywords.join(' ')); 
+      set_query_display(data.keywords.join(' '));
       /** clear the grid */
 
       $(gridSel).html("");
@@ -264,7 +263,7 @@
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
         items = skiplist_filter(items);
-      
+
       /** populate the grid with items */
       fillGrid(items, width, height, displayInfobox);
 
@@ -287,8 +286,8 @@
       });
     }; // success
 
-    var retakeOnZero = true; //TODO move to top
-    var default_keywords = ['black','figure','greece'];
+    var retakeOnZero = true; // TODO move to top
+    var default_keywords = [ 'black', 'figure', 'greece' ];
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -298,8 +297,8 @@
       console.log('success_new');
       // quit function and rerun query with safe keywords if items.length === 0
       if (retakeOnZero === true && info.items.length < 1) {
-       doEuRelated_retake(default_keywords);
-       return 1;
+        doEuRelated_retake(default_keywords);
+        return 1;
       }
       var data = {};
       // re-jig data to fit old model.
@@ -311,21 +310,47 @@
       return success(data);
 
     };
-    
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
      */
+
+    var timeout_handler = function(xhr) {
+      console.log("timeout_handler");
+      alert("can't reach Europeana!");
+    };
     
+    var default_handler = function(xhr) {
+      
+      alert("a problem has occurred.");
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
+
     var ajax_new = function() {
       var keywords = JSON.parse(data).keywords;
-      var startrec  = JSON.parse(data).startrec;
-      var fail = function(e) { console.log(e); }; // fail
+      var startrec = JSON.parse(data).startrec;
+      var fail = function(xhr, status, err) {
+        console.log("fail: "+err)
+        console.log(xhr)
+        switch (status) {
+        case "timeout":
+          timeout_handler(xhr);
+        break;
+        default:
+          default_handler(xhr);
+        }
+
+      }; // fail
+      
+     
       var done = success_new;
       var complete = function() {
         console.log("complete!");
       };
-      
+
       var get_query = function(kw) {
         return kw.join("+AND+");
       };
@@ -334,18 +359,21 @@
       console.log(extras);
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
-      var query = 'wskey='+uredb_wskey+'&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec + '&profile=standard'+extras;
+      var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
+          + '&profile=standard' + extras;
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
-      console.log(url_new);
+   //   url_new = "http://ure.local:81"
+     
       $.ajax({
         url : url_new,
         dataType : "json",
         type : "GET"
+      
 
-      }).done(done).fail(fail).complete(complete);
+      }).done(done).fail(fail).always(complete);
     };
-    
+
     ajax_new();
 
   }; // END doEuRelated
@@ -370,7 +398,7 @@
     } else {
       providerBlacklist = storage.set(providerBlacklist_store, {});
     }
-    // TODO should this be here? 
+    // TODO should this be here?
     // Remove blacklisted items in "vote" localstorage
     if (storage.isSet(blacklist_store)) {
       var vote = storage.get(blacklist_store);
@@ -386,11 +414,11 @@
         // remove items from blacklisted providers.
         if (provider in providerBlacklist && providerBlacklist[provider] > providerBlacklistThreshold) {
           // remove item
-     //     $(this).remove();
+          // $(this).remove();
           // remove filter in provider checklist
           // console.log($('[data-eu-provider-list="' + provider + '"]'));
           // console.log(provider);
-     //     $('[data-eu-provider-list="' + provider + '"]').remove();
+          // $('[data-eu-provider-list="' + provider + '"]').remove();
 
         }
 
@@ -481,7 +509,7 @@
       console.log("setting providerBlacklist...");
       storage.set('providerBlacklist', {});
     }
-    
+
     /**
      * @memberOf europeana_widget.voteSetup
      */
@@ -516,8 +544,8 @@
         provider = $(this).parent().attr('data-eu-provider');
 
         if ($(this).hasClass('btn-danger')) {
-           // change to x
-            $(this).html("x");
+          // change to x
+          $(this).html("x");
 
           // add to blacklist
           if (!(accnum in v))
@@ -533,8 +561,8 @@
         }
 
         else {
-           // change to check
-           $(this).html("&#10004;");
+          // change to check
+          $(this).html("&#10004;");
           // remove from blacklist
           if (accnum in v && item in v[accnum]) {
             delete v[accnum][item];
@@ -582,7 +610,7 @@
 
         // send done signal -- pick up in _europeanaWidget
         var signal = "relevance_tag_complete";
-      
+
         var e = $.Event(signal);
         $(window).trigger(e, {
           id : signal
@@ -600,11 +628,11 @@
 !function() {
 
   /**
-   *   Set up Eu related grid and helper functions
-   *  
+   * Set up Eu related grid and helper functions
+   * 
    * @memberOf europeana_widget
    */
-  
+
   var init_euRelated = function(accnum, gridid, width, height, displayInfobox) {
 
     /**
@@ -618,35 +646,35 @@
       var kw = [];
       var title = ure_item.title;
       var fabric = ure_item.fabric;
-      var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ");
+      var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").replace(/^\s+/g, "").replace(/\s$/g, "")
+          .split(" ");
       if (title.match(/red figure/)) {
-      //  kw.push('where:(red+figure)');
+        // kw.push('where:(red+figure)');
         kw.push('red')
         kw.push('figure')
       }
       if (title.match(/black figure/)) {
         kw.push('where:(black+AND+figure)');
       }
-      
+
       if (fabric !== "") {
-        var fabric_kw = fabric.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g," ").replace(/^\s+/g,"").replace(/\s$/g,"").split(" ")
+        var fabric_kw = fabric.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").replace(/^\s+/g, "")
+            .replace(/\s$/g, "").split(" ")
         kw = kw.concat(fabric_kw);
       }
-     
+
       var keywords = [ 'where(greece+AND+black+AND+figure)' ];
-      
+
       if (kw.length > 1) {
         keywords = kw;
-      } 
-      else {
+      } else {
         if (title_kw.length > 1) {
-          
+
           keywords = title_kw;
         }
       }
       return keywords;
     };
-
 
     /**
      * @memberOf europeana_widget.init_euRelated
@@ -671,13 +699,16 @@
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       var startrec = get_startrec();
-      
+
       var title = $('.ure-title').text();
       var fabric = $('.ure-fabric').text();
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
-      var kw_json = make_keywords({title:title,fabric:fabric});
+      var kw_json = make_keywords({
+        title : title,
+        fabric : fabric
+      });
 
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
@@ -695,14 +726,14 @@
       };
       return data;
     };
-   
+
     /**
      * @memberOf europeana_widget.init_euRelated
      */
     var makeEuRelatedItems = function(incrementCursor) {
 
       var data = make_eu_query_data();
-     
+
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
