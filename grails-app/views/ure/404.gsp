@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
     <head>
-        <title>Ure Museum Database</title>
+        <title>Ure Museum Database: 404</title>
         <meta name="layout" content="ure/main" />     
     </head>
  <g:applyLayout name="ure/quickstart2">   
@@ -19,7 +19,7 @@
 					
 				</h1>
 				
-				<p>
+				<p class="hidden" >
 				<g:if test="${error404callout}">
 					<g:message code="error.404.callout" args="${error404callout}"/>
 				</g:if>

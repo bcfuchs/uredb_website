@@ -11,6 +11,7 @@
 %>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
+
 <script>
 		// set global js vars for highlighting text
 		

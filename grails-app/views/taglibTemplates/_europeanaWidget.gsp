@@ -39,3 +39,14 @@
 		<input class="cb-eu" type="checkbox" value='key' checked></input>
 	</label>
 </div>
+<script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
+<script>
+! function() {
+easterEgg('m',function(){
+	$("#itemsCount").click();
+	
+
+	});
+}();
+
+</script>
