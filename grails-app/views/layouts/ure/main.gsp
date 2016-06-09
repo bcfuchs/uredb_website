@@ -91,5 +91,12 @@ println flash.lastURI
 		<span aria-hidden="true">&times;</span></button>
 	    <div class="alert-body"></div>
 </div>	
+<div id="templates-main" style="display:none">
+<div id="template-comp-dropdown" class="dropdown">
+
+</div>
+
+</div>
+</div>
 </body>
 </html>
