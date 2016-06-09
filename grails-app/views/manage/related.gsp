@@ -110,14 +110,39 @@ println "message:" + flash.message;
 		<div class="row">
 			<div class="col-md-10">
 			
-					<div class="radio">
+					<div class="radio" id="rerun-related">
 						<label>
-							<input type="radio" name="rerun">
+							<input type="radio" name="rerun" disabled>
 							Off
 						</label>
 					
 						<label>
-							<input type="radio" name="rerun" checked>
+							<input type="radio" name="rerun" checked disabled>
+							On
+						</label>
+					</div>
+					
+				
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<h2>Share search info</h2>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-10">
+			
+					<div class="radio" id="options-share-search-info">
+						<label>
+							<input type="radio" name="share-search-info" disabled>
+							Off
+						</label>
+					
+						<label>
+							<input type="radio" name="share-search-info" checked disabled>
 							On
 						</label>
 					</div>
@@ -131,8 +156,10 @@ println "message:" + flash.message;
 		<div id="provider-list-template">
 			<label class="checkbox-inline provider-checklist" data-eu-provider-list=''> </label>
 			<input class="cb-eu" type="checkbox" value='' checked></input>
-			/div>
 		</div>
+		<div id="options-template"></div>
+	</div>
+	
 		<script src="${resource(dir:'js',file:'related_management.js')}"></script>
 </body>
 <html>
