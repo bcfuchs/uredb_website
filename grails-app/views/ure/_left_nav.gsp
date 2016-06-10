@@ -23,7 +23,7 @@
 			-->
 		
 		<div id="comps-nav-container" class="ure-dropdown">
-			<span id="comps-nav"  title="comparanda list"
+			<span id="comps-nav"   data-toggle="tooltip" title="comparanda list"
 				class="ure-control-btn glyphicon glyphicon-th-list" data-original-title="clear"></span>
 			<div id="comparanda-nav-list" class="ure-dropdown-content"></div>
 		</div>
@@ -35,76 +35,12 @@
 	<script>
 
 
-	/** guick nav for comparanda */
-	
-	! function() {
-	 
-	  var listsel = "#comparanda-nav-list"
-	  var eu_items_store ="eu_items";
-  	  var storage = $.localStorage;
-	  var get_list = function() {
-	     var items =  storage.get(eu_items_store);
-	    //  console.log(items);
-	      return items;
-	  }
 
-
-	  var make_list = function(listsel,items) {
-		  $(listsel).html("");
-	      var ul = document.createElement("ul");
-	  	$(ul).addClass("comp-nav-list-group")
-	      
-	
-	      for (var rec in items) {
-	          var thumb = items[rec].thumb;
-	          var img = '<img style="height: 20px" src="'+thumb+'"/>'
-	          var url = "/record/"+rec;
-	          var link = '<div><a href="'+url+'">'+rec+"&nbsp;"+img+'</a></div>'
-	          var comps = []
-	          for (var i in items[rec]) {
-					if (i === "thumb") 
-							continue;
-					 var c = '<img src="'+i+'" class="comp-nav-img"/>'
-					 comps.push(c)
-		          }
-	          var content = $('<div class="comp-nav-img-container"></div>').html(comps.join(""))
-	          $(ul).append('<li>'+link+$(content).html()+'</li>')
-	      }
-
-	      $(listsel).html(ul);
-	  }
-
-	  var makeMutationObserver = function(target) {
-	    var observer = new MutationObserver(function( mutations ) {
-	      mutations.forEach(function( mutation ) {
-        	if( mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0 ) 
-	        		make_list(listsel,get_list());
-	
-	      });    
-	    });
-
-	   :
-	    var config = { 
-	    	attributes: true, 
-	    	childList: true, 
-	    	characterData: true 
-	    };
-	     
-	    
-	    observer.observe(target, config);
-	}
-	  
-	  $(document).ready(function(){
-	  	make_list(listsel,get_list());
-	  	// remake list when a comp is added or removed. 
-	  	makeMutationObserver($('#comparanda-thumbs')[0])
-	  	
-		  });
-	  
-
-		}();
 	</script>
 	<style>
+#comparanda-nav-list {
+margin-top: 10px;
+}
 .comp-nav-img-container {
 	display: block;
 
@@ -114,7 +50,7 @@ height: 15px;
 }
 .comp-nav-list-group {
  list-style-type: none;
-    padding: 0;
+    padding: 10px 0 0 0 ;
     border: 1px solid #ddd;
 
 }
@@ -146,7 +82,7 @@ border-bottom:none;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 	padding: 12px 16px;
 	
-	left: -100px;
+	left: -120px;
 	z-index: 1;
 }
 
