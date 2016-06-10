@@ -18,7 +18,7 @@
 </script>
 <script src="${resource(dir:'js/vendor/freewall',file:'freewall.js')}"></script>
 </head>
-<body onload="focusQueryInput();">
+<body>
 	<g:set var="haveQuery" value="${params?.q?.trim()}" />
 	<g:set var="haveResults" value="${searchResult?.results}" />
 	<div id="search-top-row" class="container">
@@ -127,7 +127,7 @@
 				<div class="row">
 					<div class="col-md-10">
 						<ure:gridWidgetForSearchResults gridid="testgridw" klass="testwidget" results="${searchResult?.results}"
-							displayInfobox="false" height="125px" width="125px">
+							displayInfobox="false" height="125px" width="125px" addCellClick="true">
 						</ure:gridWidgetForSearchResults>
 						<div class="paging">
 							<g:if test="${haveResults}">
