@@ -189,7 +189,7 @@
                   // out = '<img class="image-drag-helper" src="'+url+'"/>"'
                   // console.log(out)
                   return out;
-                } // removeImageHelper
+                }; // removeImageHelper
 
                 $(sel).draggable({
 
@@ -311,7 +311,7 @@
                 // }
 
                 // add this eu item to the accnum array
-                delete eu_items_ls[accnum][thumb]
+                delete eu_items_ls[accnum][thumb];
                 // store it
                 storage.set(eu_items, JSON.stringify(eu_items_ls));
 
@@ -397,7 +397,7 @@
                     // if the comparand is not in the current localstore, add it
                     // and also to the bar
                     if (!(acc in old_comp) || !(thumb in old_comp[acc])) {
-                      var eu_item = eu[acc][thumb]
+                      var eu_item = eu[acc][thumb];
 
                       addcomp(acc, eu_item);
 
@@ -450,7 +450,7 @@
                     }
                   });
                   console.log("done loading comparanda from file");
-                }
+                };
                 reader.readAsText(file);
 
               }
@@ -470,8 +470,9 @@
               }
 
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda make html from the
-               *           comparanda
+               * @memberOf eu_comparanda.EuComparanda 
+               * 
+               * make html from the comparanda
                * 
                * 
                */
@@ -495,10 +496,10 @@
 
                 // get the lighttable as html.-- for later
                 // get the list
-                var eu = getEUdata()
+                var eu = getEUdata();
                 var divs = [];
                 var domain = document.domain;
-                var html = document.implementation.createHTMLDocument()
+                var html = document.implementation.createHTMLDocument();
                 var startrec = "http://" + document.domain + "/record/" + Object.keys(eu)[0];
                 var info = "myUre comparanda @ " + new Date();
                 $(html).find("body").append(
@@ -554,10 +555,10 @@
                   }
                   var thumb = t;
                   var url = comp[t]['link'];
-                  console.log(comp[t])
+                
                   var h = '<a target="show" href="' + url + '">' + '<div class="eu-item">' + "\n\t"
                       + '<div class="eu-thumb-item">' + "\n\t\t" + '<img class="eu-thumb" src="' + thumb + '"/>'
-                      + "\n\t" + '</div>' + "\n" + '</div>' + '</a>' + "\n"
+                      + "\n\t" + '</div>' + "\n" + '</div>' + '</a>' + "\n";
                   out.push(h);
 
                 }
@@ -572,7 +573,7 @@
                */
 
               function getEUdata() {
-                console.log("getEUdata 3")
+
                 return storage.get(eu_items);
 
               }
@@ -580,14 +581,108 @@
 
             }); // $(document).ready()
 
-  } // EuComparanda
+  }; // EuComparanda
 
   /**
    * load / save /collect europeana items for $accnum
    */
 
-  window.EuComparanda = EuComparanda
-  window.jtest = function() {
-    return "hi"
-  }
-}()
+  window.EuComparanda = EuComparanda;
+
+}();
+
+/** guick nav for comparanda */
+
+!function() {
+  /*****************************************************************
+   * @memberOf eu_comparanda.EuComparanda 
+   * 
+   * 
+   */
+  var setup_compNavList = function(listsel, observesel) {
+
+    var eu_items_store = "eu_items";
+    var storage = $.localStorage;
+    /*****************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+     * 
+     * 
+     */
+    var get_comp_list = function() {
+      var items = storage.get(eu_items_store);
+      // console.log(items);
+      return items;
+    };
+    /*****************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+     * 
+     * 
+     */
+    var make_list = function(listsel, items) {
+      $(listsel).html("");
+      var ul = document.createElement("ul");
+      $(ul).addClass("comp-nav-list-group");
+
+      for ( var rec in items) {
+        var thumb = items[rec].thumb;
+        var img = '<img style="height: 20px" src="' + thumb + '"/>';
+        var url = "/record/" + rec;
+        var link = '<div><a href="' + url + '">' + rec + "&nbsp;" + img + '</a></div>';
+        var comps = [];
+        for ( var i in items[rec]) {
+          if (i === "thumb")
+            continue;
+          var c = '<img src="' + i + '" class="comp-nav-img"/>';
+          comps.push(c);
+        }
+        var content = $('<div class="comp-nav-img-container"></div>').html(comps.join(""));
+        $(ul).append('<li>' + link + $(content).html() + '</li>');
+      }
+
+      $(listsel).html(ul);
+    };
+    /*****************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+     * 
+     * 
+     */
+    var makeMutationObserver = function(target) {
+      // var MutationObserver = MutationObserver || WebKitMutationObserver ||
+      // MozMutationObserver;
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          // could just do:
+          // if (mutation.type === 'childList')
+          if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)
+            make_list(listsel, get_comp_list());
+
+        });
+      });
+
+      var config = {
+        childList : true
+      };
+
+      observer.observe(target, config);
+    };
+
+    $(document).ready(function() {
+      make_list(listsel, get_comp_list());
+      // remake list when a comp is added or removed.
+      makeMutationObserver($(observesel)[0]);
+
+    });
+  }; // setup_compNavList
+  /*****************************************************************
+   * @memberOf eu_comparanda.EuComparanda
+   * 
+   * 
+   */
+  var init_comNavList = function(){}
+ $(document).ready(function(){
+  var listSelector = "#comparanda-nav-list";
+  var observeSelector = "#comparanda-thumbs";
+  setup_compNavList(listSelector, observeSelector);
+})
+
+}();
