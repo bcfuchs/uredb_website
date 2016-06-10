@@ -9,8 +9,9 @@
 <script>
 ! function() {
   $(document).ready(function(){
-    // export from js/gridwidget.js
-  
+    // export from js/gridwidget.js 2
+    // ${addCellClick}
+  	    
         gridWidget("#${gridid}","${width}","${height}",${displayInfobox},${addCellClick})
    
   

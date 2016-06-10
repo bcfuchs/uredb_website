@@ -270,6 +270,7 @@ class UreTagLib {
         def gridid = (attrs.gridid) ? attrs.gridid : 'image-grid'
         def width = (attrs.width) ? attrs.width :    '248px'
         def height = (attrs.height) ? attrs.height : '248px'
+        def addCellClick = (attrs.addCellClick) ? attrs.addCellClick : true;
 
         /**
          * convert to array of items of form 
@@ -320,6 +321,7 @@ class UreTagLib {
         model['gridid'] = gridid;
         model['width'] = width;
         model['height'] = height;
+        model['addCellClick'] = addCellClick;
 
         out << render(template:"/taglibTemplates/gridWidget", model:model)
 
