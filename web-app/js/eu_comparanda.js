@@ -6,8 +6,8 @@
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
   var EuComparanda = function(accnum) {
-    var msg_json_broken = "can't read comparanda file..."
-    console.log("EuComparanda")
+    var msg_json_broken = "can't read comparanda file...";
+    console.log("EuComparanda");
 
     $(document)
         .ready(
@@ -49,7 +49,8 @@
 
                 $("#clear-comps").click(function() {
                   var eu = getEUdata();
-                  storage.set(eu_items, {})
+                  delete eu[this_accnum];
+                  storage.set(eu_items, eu)
                   $("#comparanda-thumbs").html("")
                   $("#comparanda-thumbs").data('thumbs', "");
 
