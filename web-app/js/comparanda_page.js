@@ -1,9 +1,11 @@
 !function() {
-  EuComparanda(); // import from eu_comparanda.js loads the comparanda --necessary? 
-  
-  $(document).ready(function() {
+
+  EuComparanda(); // import from eu_comparanda.js loads the comparanda
+  // --necessary? Yes
+
+  var make_comparanda_page = function() {
     $("#comparanda").hide();
-    var eu = comparanda_getEUdata();
+    var eu = comparanda_getEUdata(); // exported from eu_comparanda.js
 
     for ( var k in eu) {
       var div = document.createElement('div')
@@ -27,8 +29,10 @@
       }
       $("#comparanda-list").append(div)
     }
-   
-
-  })
+  };
+  
+  $(document).ready(function() {
+    make_comparanda_page();
+  });
 
 }();

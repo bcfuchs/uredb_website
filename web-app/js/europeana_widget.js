@@ -48,7 +48,7 @@
       var provider_enc = encodeURIComponent(provider);
       var provf = "provider_aggregation_edm_dataProvider:%22" + provider_enc + "%22";
       provs.push(provf);
-      console.log(provf)
+      console.log(provf);
     }
     var provider_facet = "&qf=" + provs.join("+OR+");
 

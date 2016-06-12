@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +25,6 @@
 	max-height: 100px;
 }
 </style>
-	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>
+	<script src="${resource(dir:'js',file:'project_page.js"?v=2')}"></script>
 </body>
 </html>
