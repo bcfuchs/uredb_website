@@ -93,7 +93,7 @@ border-bottom:none;
 </style>
 </div>
 <!--  #comparanda -->
-<div id="lighttable-links" class="left_nav1" data-placement="top" data-toggle="tooltip"
+<div id="lighttable-links" class="left_nav1 dev-features" data-placement="top" data-toggle="tooltip"
 	title="drag object images here to add to lighttable">
 	Lighttable
 	<div id="lighttable-thumbs"></div>

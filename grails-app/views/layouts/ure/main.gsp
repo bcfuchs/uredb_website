@@ -27,8 +27,16 @@
 <script src="${resource(dir:'js',file:'info.js')}"></script>
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
+<script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
 <script src="${resource(dir:'js',file:'messages.js')}"></script>
+<script>
+easterEgg('z',function(){
+	$(document).ready(function(){
+		$(".dev-features").toggle();
+	});
+	})
+</script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
