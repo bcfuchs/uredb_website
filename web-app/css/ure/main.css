@@ -1,4 +1,9 @@
+/** dev features */
 
+.dev-features {
+	
+	display: none;
+}
 
 /** modal message box */
 #alert-modal {

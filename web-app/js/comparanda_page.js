@@ -18,8 +18,8 @@
         if (i === 'thumb') {
           continue;
         }
-        var link = eu[k][i]['link']
-        var provider = eu[k][i]['provider']
+        var link = eu[k][i]['link'];
+        var provider = eu[k][i]['provider'];
         console.log(eu[k][i])
         var item = '<div class="row"><img src="' + i + '"/></div>';
         var title = '<div class="row"><a href="' + link + '"><span>' + provider + '</span></a></div>'

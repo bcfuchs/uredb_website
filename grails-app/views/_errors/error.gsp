@@ -7,7 +7,7 @@
 		<style>
 		#details { display:none}
 		</style>
-		<script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
+		
 		<script>
 		easterEgg('j',function(){
 			$(document).ready(function(){
