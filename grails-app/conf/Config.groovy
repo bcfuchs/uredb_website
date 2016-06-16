@@ -54,10 +54,10 @@ grails.cache.config = {
 
 grails  {
 	mail   {
-	 host = "smtp.gmail.com"
+	 host = System.getenv("MAIL_HOST")
 	 port = 465
-	 username = "bcfuchs@gmail.com"
-	 password = "Fi!igree"
+	 username = System.getenv("MAIL_USERNAME")
+	 password =  System.getenv("MAIL_PASSWORD")
 	 props = ["mail.smtp.auth":"true",
 			  "mail.smtp.socketFactory.port":"465",
 			  "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
