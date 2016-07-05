@@ -64,24 +64,24 @@ grails  {
 			  "mail.smtp.socketFactory.fallback":"false"]
    }
 }
-//grails.plugins.springsecurity.rejectIfNoRule = true
-grails.plugins.springsecurity.ui.encodePassword = false;
-grails.plugins.springsecurity.useBasicAuth = false;
-grails.plugins.springsecurity.basic.realmName = "Uredb Dev site Grails"
-grails.plugins.springsecurity.securityConfigType = 'Annotation'
-grails.plugins.springsecurity.userLookup.userDomainClassName = 'org.ac.uk.reading.ure.sec.User'
-grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'org.ac.uk.reading.ure.sec.UserRole'
-grails.plugins.springsecurity.authority.className = 'org.ac.uk.reading.ure.sec.Role'
-grails.plugins.springsecurity.requestMap.className = 'org.ac.uk.reading.ure.sec.Requestmap'
+//grails.plugin.sprinsecurity.rejectIfNoRule = true
+grails.plugin.sprinsecurity.ui.encodePassword = false;
+grails.plugin.sprinsecurity.useBasicAuth = false;
+grails.plugin.sprinsecurity.basic.realmName = "Uredb Dev site Grails"
+grails.plugin.sprinsecurity.securityConfigType = 'Annotation'
+grails.plugin.sprinsecurity.userLookup.userDomainClassName = 'org.ac.uk.reading.ure.sec.User'
+grails.plugin.sprinsecurity.userLookup.authorityJoinClassName = 'org.ac.uk.reading.ure.sec.UserRole'
+grails.plugin.sprinsecurity.authority.className = 'org.ac.uk.reading.ure.sec.Role'
+grails.plugin.sprinsecurity.requestMap.className = 'org.ac.uk.reading.ure.sec.Requestmap'
 
 
-grails.plugins.springsecurity.roleHierarchy = '''
+grails.plugin.sprinsecurity.roleHierarchy = '''
    ROLE_ADMIN > ROLE_CURATOR
    ROLE_CURATOR > ROLE_EDITOR
    ROLE_EDITOR > ROLE_SUBSCRIBER
    ROLE_SUBSCRIBER > ROLE_ANONYMOUS
 '''
-grails.plugins.springsecurity.controllerAnnotations.staticRules = [
+grails.plugin.sprinsecurity.controllerAnnotations.staticRules = [
     '/admin/**':['ROLE_CURATOR'],
     '/uremeta/**':['ROLE_CURATOR'],
 	'/auth/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -170,7 +170,7 @@ environments {
                     'grails.plugin.cache.web.filter.simple.MemoryPageFragmentCachingFilter'
 
             warn   'org.mortbay.log',
-                    'grails.app.services.grails.plugins.springsecurity.ui.SpringSecurityUiService'
+                    'grails.app.services.grails.plugin.sprinsecurity.ui.SpringSecurityUiService'
 
             //	debug 'org.springframework.security'
         //    debug 'org.hibernate.SQL'

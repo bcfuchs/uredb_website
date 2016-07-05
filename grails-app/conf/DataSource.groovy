@@ -1,4 +1,6 @@
-
+System.err.println(System.getenv('DEV2_DB_USER'))
+  url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":3306/uredb_new2"
+  System.err.println(url);
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
@@ -29,7 +31,7 @@ environments {
 
             pooled = true
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/uredb_new2"
+            url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":3306/uredb_new2"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             // dialect = org.hibernatespatial.mysql.MySQLSpatialDialect
