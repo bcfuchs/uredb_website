@@ -26,12 +26,12 @@ environments {
             bulkIndexOnStartup = false }
     }
 
-    dev2 {
+    uredemo {
         dataSource {
 
             pooled = true
             dbCreate = "update"
-            url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":3306/uredb_new2"
+            url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":3306/uredemo"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             // dialect = org.hibernatespatial.mysql.MySQLSpatialDialect
