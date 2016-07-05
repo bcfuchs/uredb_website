@@ -33,7 +33,7 @@ grails.project.dependency.resolution = {
     }
 
 
-    log "info" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "debug" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
     legacyResolve false
     repositories {
