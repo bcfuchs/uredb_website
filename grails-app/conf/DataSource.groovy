@@ -34,9 +34,8 @@ environments {
             url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":3306/uredemo"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
-            // dialect = org.hibernatespatial.mysql.MySQLSpatialDialect
-            username = System.getenv('DEV2_DB_USER')
-            password = System.getenv('DEV2_DB_PWD')
+            username = System.getenv('UREDEMO_DB_USER')
+            password = System.getenv('UREDEMO_DB_PWD')
 
 
         }

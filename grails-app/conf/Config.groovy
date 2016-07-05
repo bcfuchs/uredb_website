@@ -64,30 +64,51 @@ grails  {
 			  "mail.smtp.socketFactory.fallback":"false"]
    }
 }
-//grails.plugin.sprinsecurity.rejectIfNoRule = true
-grails.plugin.sprinsecurity.ui.encodePassword = false;
-grails.plugin.sprinsecurity.useBasicAuth = false;
-grails.plugin.sprinsecurity.basic.realmName = "Uredb Dev site Grails"
-grails.plugin.sprinsecurity.securityConfigType = 'Annotation'
-grails.plugin.sprinsecurity.userLookup.userDomainClassName = 'org.ac.uk.reading.ure.sec.User'
-grails.plugin.sprinsecurity.userLookup.authorityJoinClassName = 'org.ac.uk.reading.ure.sec.UserRole'
-grails.plugin.sprinsecurity.authority.className = 'org.ac.uk.reading.ure.sec.Role'
-grails.plugin.sprinsecurity.requestMap.className = 'org.ac.uk.reading.ure.sec.Requestmap'
+//grails.plugin.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.ui.encodePassword = false;
+grails.plugin.springsecurity.useBasicAuth = false;
+grails.plugin.springsecurity.basic.realmName = "Uredb Dev site Grails"
+grails.plugin.springsecurity.securityConfigType = 'Annotation'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.ac.uk.reading.ure.sec.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.ac.uk.reading.ure.sec.UserRole'
+grails.plugin.springsecurity.authority.className = 'org.ac.uk.reading.ure.sec.Role'
+grails.plugin.springsecurity.requestMap.className = 'org.ac.uk.reading.ure.sec.Requestmap'
+grails.plugin.springsecurity.password.algorithm = 'SHA-256'
+grails.plugin.springsecurity.password.hash.iterations = 1
 
-
-grails.plugin.sprinsecurity.roleHierarchy = '''
+grails.plugin.springsecurity.roleHierarchy = '''
    ROLE_ADMIN > ROLE_CURATOR
    ROLE_CURATOR > ROLE_EDITOR
    ROLE_EDITOR > ROLE_SUBSCRIBER
    ROLE_SUBSCRIBER > ROLE_ANONYMOUS
 '''
-grails.plugin.sprinsecurity.controllerAnnotations.staticRules = [
+/**
+grails.plugin.springsecurity.interceptUrlMap = [
+   ...
+   [pattern: '/secure/**',  access: ['ROLE_ADMIN']],
+   [pattern: '/finance/**', access: ['ROLE_FINANCE', 'isFullyAuthenticated()']]
+]
+
+
+grails.plugin.springsecurity.interceptUrlMap = [
+      [pattern: '/**', access: ['permitAll']],
+            [pattern: '/', access: ['permitAll']]
+      ]
+
+*/
+
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     '/admin/**':['ROLE_CURATOR'],
     '/uremeta/**':['ROLE_CURATOR'],
-	'/auth/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/auth/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/record/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
-   	'/**':['IS_AUTHENTICATED_ANONYMOUSLY']
+    '/**':['IS_AUTHENTICATED_ANONYMOUSLY']
 	];
+
+
+
+
+
 grails.app.context = "/"
 
 // The default codec used to encode data with ${}
@@ -170,7 +191,7 @@ environments {
                     'grails.plugin.cache.web.filter.simple.MemoryPageFragmentCachingFilter'
 
             warn   'org.mortbay.log',
-                    'grails.app.services.grails.plugin.sprinsecurity.ui.SpringSecurityUiService'
+                    'grails.app.services.grails.plugin.springsecurity.ui.SpringSecurityUiService'
 
             //	debug 'org.springframework.security'
         //    debug 'org.hibernate.SQL'
