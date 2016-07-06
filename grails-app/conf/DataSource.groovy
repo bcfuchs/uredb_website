@@ -29,7 +29,7 @@ environments {
 
             pooled = true
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/uredb_new2"
+            url = "jdbc:mysql://"+System.getenv('DEV2_DB_HOSTNAME')+":"+System.getenv('DEV2_DB_PORT')+"/uredb_new2"
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             // dialect = org.hibernatespatial.mysql.MySQLSpatialDialect
