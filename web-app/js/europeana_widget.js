@@ -317,12 +317,12 @@
 
     var timeout_handler = function(xhr) {
       console.log("timeout_handler");
-      alert("can't reach Europeana!");
+      alert("Europeana is not available at this time.");
     };
     
     var default_handler = function(xhr) {
       
-      alert("a problem has occurred.");
+      alert("a problem has occurred with your Europeana search");
     };
     /**
      * @memberOf europeana_widget.doEuRelated
