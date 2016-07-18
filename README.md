@@ -12,7 +12,7 @@ First, install Docker from https://www.docker.com/ if you don't have it.
 Then  build an image from the root directory of this project
 
 ```
-docker build -t uredb_latest . 
+docker build -t uredb_base . 
 ```
 
 Start the database 
