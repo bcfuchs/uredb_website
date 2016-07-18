@@ -3,17 +3,19 @@ Ure Museum online DB
 
 grails app for web access to  the [Ure Museum Collections](http://ure.mobilecollective.co.uk)
 
-Docker
+Running the demo
 ------
 
+First, install Docker from https://www.docker.com/ if you don't have it. 
 
-First, build an image from the root directory of this project
+
+Then  build an image from the root directory of this project
 
 ```
 docker build -t uredb_latest . 
 ```
 
-Then start the database 
+Start the database 
 
 ```
 docker run --name uredemo-mysql -v $(DIR)/data/uredemo.sql:/docker-entrypoint-initdb.d/setup.sql -e MYSQL_ROOT_\
