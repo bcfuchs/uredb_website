@@ -7,10 +7,10 @@ Docker
 ------
 
 
-First, build an image
+First, build an image from the root directory of this project
 
 ```
-docker build -t . uredb_latest
+docker build -t uredb_latest . 
 ```
 
 Then start the database 
