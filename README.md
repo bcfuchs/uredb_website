@@ -21,6 +21,12 @@ Start the database
 docker run --name uredemo-mysql -v "$PWD"/data/uredemo.sql:/docker-entrypoint-initdb.d/setup.sql -e MYSQL_ROOT_\
 PASSWORD=uredemo  -d mysql:latest
 ```
+Make a local .grails / ivy directory for storing jars needed by the app (if it doesn't already exist)
+
+```
+mkdir ~/.grails
+```
+
 Finally, run the image
 
 ```
