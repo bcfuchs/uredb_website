@@ -45,6 +45,27 @@ environments {
         }
     }
 
+    uredemo {
+        dataSource {
+
+            pooled = true
+            dbCreate = "update"
+            url = "jdbc:mysql://"+System.getenv('MYSQL_PORT_3306_TCP_ADDR')+":"+System.getenv('MYSQL_PORT_3306_TCP_PORT')+"/uredemo"
+            driverClassName = "com.mysql.jdbc.Driver"
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+            // dialect = org.hibernatespatial.mysql.MySQLSpatialDialect
+            username = System.getenv('UREDEMO_DB_USER')
+            password = System.getenv('UREDEMO_DB_PWD')
+
+
+        }
+        searchable {
+            // disable bulk index on startup
+            bulkIndexOnStartup = true
+            compassConnection = "ram://test-index"
+        }
+    }
+
 
     test_remote {
         dataSource {
