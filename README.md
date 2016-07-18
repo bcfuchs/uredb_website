@@ -18,7 +18,7 @@ docker build -t uredb_latest .
 Start the database 
 
 ```
-docker run --name uredemo-mysql -v $(DIR)/data/uredemo.sql:/docker-entrypoint-initdb.d/setup.sql -e MYSQL_ROOT_\
+docker run --name uredemo-mysql -v "$PWD"/data/uredemo.sql:/docker-entrypoint-initdb.d/setup.sql -e MYSQL_ROOT_\
 PASSWORD=uredemo  -d mysql:latest
 ```
 Finally, run the image
