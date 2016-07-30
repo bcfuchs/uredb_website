@@ -233,6 +233,7 @@
       width = data.width;
       height = data.height;
       displayInfobox = data.displayInfobox;
+      console.log(data)
 
       if (data && 'info' in data && 'items' in data.info)
         try {
@@ -293,22 +294,29 @@
      * 
      */
 
-    var success_new = function(info) {
-      console.log('success_new');
-      // quit function and rerun query with safe keywords if items.length === 0
-      if (retakeOnZero === true && info.items.length < 1) {
-        doEuRelated_retake(default_keywords);
-        return 1;
-      }
-      var data = {};
-      // re-jig data to fit old model.
-      data.info = info; // the return object from EU
-      data.width = "100px";
-      data.height = "100px";
-      data.displayInfoboxOnHover = false;
-      data.keywords = doEuRelated_keywords;
-      return success(data);
+    var success_new = function(query_url,query_string) {
 
+      return function(info) {
+
+        console.log('success_new');
+        // quit function and rerun query with safe keywords if items.length ===
+        // 0
+        if (retakeOnZero === true && info.items.length < 1) {
+          doEuRelated_retake(default_keywords);
+          return 1;
+        }
+        var data = {};
+        // re-jig data to fit old model.
+        data.info = info; // the return object from EU
+        data.width = "100px";
+        data.height = "100px";
+        data.displayInfoboxOnHover = false;
+        data.keywords = doEuRelated_keywords;
+        data.query_url = query_url;
+        data.query_string = query_string;
+        return success(data);
+
+      };
     };
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -319,9 +327,9 @@
       console.log("timeout_handler");
       alert("Europeana is not available at this time.");
     };
-    
+
     var default_handler = function(xhr) {
-      
+
       alert("a problem has occurred with your Europeana search");
     };
     /**
@@ -333,43 +341,44 @@
       var keywords = JSON.parse(data).keywords;
       var startrec = JSON.parse(data).startrec;
       var fail = function(xhr, status, err) {
-        console.log("fail: "+err)
+        console.log("fail: " + err)
         console.log(xhr)
         switch (status) {
         case "timeout":
           timeout_handler(xhr);
-        break;
+          break;
         default:
           default_handler(xhr);
         }
 
       }; // fail
+
       
-     
-      var done = success_new;
       var complete = function() {
         console.log("complete!");
       };
-
+      // joins the keywords w/ and
       var get_query = function(kw) {
-        return kw.join("+AND+");
+      //  return kw.join("+AND+");
+        return kw.join("+")
       };
       var extras = "";
       extras = get_search_extras();
-      console.log(extras);
+
+      // make query from keywords
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
       var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
           + '&profile=standard' + extras;
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
-   //   url_new = "http://ure.local:81"
-     
+      // url_new = "http://ure.local:81"
+      var done = success_new(url_new,qs);
+
       $.ajax({
         url : url_new,
         dataType : "json",
         type : "GET"
-      
 
       }).done(done).fail(fail).always(complete);
     };
@@ -663,7 +672,8 @@
         kw = kw.concat(fabric_kw);
       }
 
-      var keywords = [ 'where(greece+AND+black+AND+figure)' ];
+      //var keywords = [ 'where(greece+AND+black+AND+figure)' ];
+      var keywords = [ 'greece','black','figure' ];
 
       if (kw.length > 1) {
         keywords = kw;
