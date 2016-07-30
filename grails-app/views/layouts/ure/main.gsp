@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <!-- main.tmpl -->
@@ -13,18 +12,19 @@
   /     )/   ./.-'_       /    |(    ) / \ ./.-'_(    ) )/   )   )  
  (     //    (__.'   .-' /     | `--':/ ._)(__.'  `--':'/   /   (   
   `._.'             (__.'      `.    /                           `-
-
-
  -->
 <script src="//cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
 <script src="//code.jquery.com/jquery-1.11.3.js"></script>
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
-
 <g:layoutHead />
 
-<!--  hack until we can figure out why this isnt working with resources plugin -->
-<script src="${resource(dir:'js',file:'info.js')}"></script>
+
+<% def uredb_wskey = System.getenv("WSKEY");%>
+<script>
+var uredb_wskey = "${uredb_wskey}";
+
+</script>
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
