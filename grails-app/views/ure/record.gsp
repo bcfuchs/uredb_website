@@ -4,14 +4,13 @@
 <head>
 <title>Ure Museum Database: ${accnum}</title>
 <meta name="layout" content="ure/main" />
- <% 
+<% 
          flash.accnum = accnum
          session.accnum = accnum 
          flash.message  = "HI2"
 %>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
-
 <script>
 		// set global js vars for highlighting text
 		
@@ -35,14 +34,13 @@
 		// add an item to menubar
 		  	$("#breadcrumb-items-left").html('<a href="/fieldlist/accession_number">objects</a> > ${accnum}');
 		  	$("#breadcrumb-items-left").css("margin-left","-85px")
-		
-		  
+  
 		})
 	</script>
 <style>
 /** hide left nav on param s */
 #left_nav { <
-	g: if test="${params.s == 'noleftnav'}"> 
+	g: if test="${params.s == 'noleftnav'}">  
 			display:none; </
 	g: if>
 }
@@ -86,83 +84,19 @@
 		</h2>
 		<div id="record-main">
 			<div id="meta2">
-				<g:render template="/shared/ure/meta2" 
-				var="t" 
-				model="[record:record]" />
+				<g:render template="/shared/ure/meta2" var="t" model="[record:record]" />
 			</div>
 			<!--  #meta2 -->
 			<g:render template="/ure/citationWidget" />
 			<h2>Related content from Europeana</h2>
-			<% 
-               /** Extract keywords from the record info
-               *
-               *   TODO --build results grid in client. 
-               */
-               
-              // keywords are created in the recordService
-              // this is just dev code here
-              // probably we need a complex query
-              // e.g. (corinthian || (black && figure)
-              //TODO -- keywords should be generated per object in db, and available to editor to change. 
-			  // IN<-- records
-              // OUT--> query, keywords.  
-               def make_keywords = {record ->
-	             def kw = []
-	             def fields = []
-	             def test3 = "nno"
-	             def fabric = "greece"
-	              record.each { rec->
-	              	  fields << rec.field;
-	                  if (rec.field == "short_title") {
-	                  		if (rec.content =~ /red figure/) {
-	    					 	kw <<'where:(red+AND+figure)'
-	                      
-                                
-	                  		}
-	                     	if (rec.content =~ /black figure/) {
-	                          	kw << 'where:(black+AND+figure)'
-	                      
-	                     	}
-	                  }
-                      
-	                  if (rec.field == 'fabric') {
-	                          rec.content.replaceAll("[^a-zA-Z ]", "").split().each {
-                                 
-	                              kw << it
-	                          }
-	                  }
-	              }
-		        if (kw.size() > 1) { 
-	                keywords = kw
-	                } 
-		          def test4 = [];
-	              
-	              
-	              if (keywords.size() < 1) {
-	                  keywords = ['greece', 'black','figure']
-                      keywords = ['where(greece+AND+black+AND+figure)']
-                      
-                      // where = a joined phrase
-                      // so display as "greece, black figure" with one link.
-	              }
-              return keywords
-              }
-             
-             def keywords = make_keywords(record)
-             def kw_display = [];
-             keywords.each { kw_display << it }
-             %>
-             <span id="query-display">${kw_display}</span>
-		
+			<span id="keywords-display"></span> ||
+			<span id="query-display"></span>
 			<!-- 
 			<%
-           
             def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);
             def token = th.generateToken();
             session['token'] = token;
             %>
-	
-			
 -->
 			<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
 			<script>
@@ -172,10 +106,9 @@
 				  
 				}()
 			</script>
-			
 			<div id="europeana-section" style="display: none;">
-			<g:render template="/taglibTemplates/europeanaWidget" 
-			model='[height:"100px",width:"100px",accnum:accnum,keywords:keywords,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
+				<g:render template="/taglibTemplates/europeanaWidget"
+					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
 				</g:render>
 			</div>
 		</div>
@@ -183,13 +116,10 @@
 	</div>
 	<!--  #record-page-wrapper -->
 	<%
-    	System.err.println "got this far---------------------&-----------" 
     	def thumbnail = thumb?.base + "/thumb/"+ thumb?.filename ;
         def iframeModel = [accnum:accnum,short_title:short_title,thumbnail:thumbnail,bla:0]
      %>
-	<!--  
-  
-      -->
+
 	<g:form useToken="true"></g:form>
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
 	<script>

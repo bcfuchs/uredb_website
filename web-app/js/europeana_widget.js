@@ -218,9 +218,14 @@
     var getSearchMode = function() {
       return $.localStorage('search-mode');
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
      */
+    var set_keywords_display = function(qs) {
+      $("#keywords-display").html(qs);
+    };
+    
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
     };
@@ -233,8 +238,6 @@
       width = data.width;
       height = data.height;
       displayInfobox = data.displayInfobox;
-      console.log(data)
-
       if (data && 'info' in data && 'items' in data.info)
         try {
           items = data.info.items;
@@ -244,7 +247,8 @@
           alert("can't load eu items!");
         }
       /** set the query display */
-      set_query_display(data.keywords.join(' '));
+      set_keywords_display(data.keywords.join(' '));
+      set_query_display(data.query_string);
       /** clear the grid */
 
       $(gridSel).html("");
