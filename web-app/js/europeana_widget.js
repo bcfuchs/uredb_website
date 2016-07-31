@@ -71,15 +71,22 @@
   var doEuRelated = function() {
   };
   var doEuRelated_keywords = "";
+  var retakeButtonSel = "#retake-button"
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
     doEuRelated_keywords = data.keywords;
+    $("#retake-button-terms").val(doEuRelated_keywords.join(" "))
     doEuRelated_retake = function(keywords) {
       var d = JSON.parse(data);
       d.keywords = keywords;
       data = d;
       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
     };
-
+    $(retakeButtonSel).click(function(){
+      var terms = $("#retake-button-terms").val();
+      alert("querying Europeana for '"+terms+"'...")
+      doEuRelated_retake(terms.split(" "));
+      
+    })
     data = JSON.stringify(data);
 
     var endpoint_url = "/api/related";

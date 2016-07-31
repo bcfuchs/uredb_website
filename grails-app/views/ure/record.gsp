@@ -40,7 +40,7 @@
 <style>
 /** hide left nav on param s */
 #left_nav { <
-	g: if test="${params.s == 'noleftnav'}">  
+	g: if test="${params.s == 'noleftnav'}">   
 			display:none; </
 	g: if>
 }
@@ -89,8 +89,11 @@
 			<!--  #meta2 -->
 			<g:render template="/ure/citationWidget" />
 			<h2>Related content from Europeana</h2>
-			<span id="keywords-display"></span> ||
+			<span id="keywords-display"></span>
+			||
 			<span id="query-display"></span>
+			<g:render template="/ure/queryRetakeWidget" />
+			
 			<!-- 
 			<%
             def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);
@@ -119,7 +122,6 @@
     	def thumbnail = thumb?.base + "/thumb/"+ thumb?.filename ;
         def iframeModel = [accnum:accnum,short_title:short_title,thumbnail:thumbnail,bla:0]
      %>
-
 	<g:form useToken="true"></g:form>
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
 	<script>
