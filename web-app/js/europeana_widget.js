@@ -68,28 +68,35 @@
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated = function() {
-  };
+  var doEuRelated = function() { };
   var doEuRelated_keywords = "";
-  var retakeButtonSel = "#retake-button"
+  var retakeButtonSel = "#retake-button";
+  /**
+   * @memberOf europeana_widget doEuRelated
+   */
+  var set_search_redo_button = function(kw,doEuRelated_retake) {
+    $("#retake-button-terms").val(kw.join(" "));
+     $(retakeButtonSel).click(function(){
+      var terms = $("#retake-button-terms").val();
+      alert("querying Europeana for '"+terms+"'...");
+      doEuRelated_retake(terms.split(" "));
+      
+    });
+    
+  };
+  
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-    doEuRelated_keywords = data.keywords;
-    $("#retake-button-terms").val(doEuRelated_keywords.join(" "))
-    doEuRelated_retake = function(keywords) {
+   doEuRelated_keywords = data.keywords;
+  
+   doEuRelated_retake = function(keywords) {
       var d = JSON.parse(data);
       d.keywords = keywords;
       data = d;
       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
     };
-    $(retakeButtonSel).click(function(){
-      var terms = $("#retake-button-terms").val();
-      alert("querying Europeana for '"+terms+"'...")
-      doEuRelated_retake(terms.split(" "));
-      
-    })
+    
+    set_search_redo_button(data.keywords,doEuRelated_retake);
     data = JSON.stringify(data);
-
-    var endpoint_url = "/api/related";
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
     var providerlist = {}; // provider list
