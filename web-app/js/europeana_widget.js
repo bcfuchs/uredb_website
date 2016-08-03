@@ -68,40 +68,46 @@
   /**
    * @memberOf europeana_widget doEuRelated
    */
-  var doEuRelated = function() { };
-  var doEuRelated_keywords = "";
-  var retakeButtonSel = "#retake-button";
-  /**
-   * @memberOf europeana_widget doEuRelated
-   */
-  var set_search_redo_button = function(kw,doEuRelated_retake) {
-    $("#retake-button-terms").val(kw.join(" "));
-     $(retakeButtonSel).click(function(){
-      var terms = $("#retake-button-terms").val();
-      alert("querying Europeana for '"+terms+"'...");
-      doEuRelated_retake(terms.split(" "));
-      
-    });
-    
+  var doEuRelated = function() {
   };
   
+  var doEuRelated_keywords = "";
+  var retakeButtonSel = "#retake-button";
+
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-   doEuRelated_keywords = data.keywords;
-  
-   doEuRelated_retake = function(keywords) {
-      var d = JSON.parse(data);
-      d.keywords = keywords;
-      data = d;
-      doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
-    };
     
-    set_search_redo_button(data.keywords,doEuRelated_retake);
-    data = JSON.stringify(data);
+    doEuRelated_keywords = data.keywords;
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
     var providerlist = {}; // provider list
-
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
+
+    doEuRelated_retake = function(keywords) {
+      var d = JSON.parse(data);
+      d.keywords = keywords;
+      data = d; // reset data
+      doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
+    };
+    
+    
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var search_reset_button = function(keywords) {
+      $("#retake-button-terms").val(keywords.join(" "));
+      $(retakeButtonSel).click(function() {
+        // get the terms from the input box
+        var terms = $("#retake-button-terms").val();
+        alert("querying Europeana for '" + terms + "'...");
+        doEuRelated_retake(terms.split(" ")); // function reference reset w/ new data on each call
+
+      });
+    };
+    search_reset_button(data.keywords);
+    
+    //TODO -- is this still necessary? probably not!
+    data = JSON.stringify(data); 
+   
 
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -126,6 +132,7 @@
         out += item.edmTimespanBroaderTerm;
       return out;
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -157,6 +164,7 @@
         $("#provider-filter").append(t);
       }
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated called from success
      */
@@ -197,6 +205,7 @@
       }
 
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -226,13 +235,14 @@
       }
       return out;
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
      */
     var getSearchMode = function() {
       return $.localStorage('search-mode');
     };
-    
+
     /**
      * @memberOf europeana_widget.doEuRelated
      */
@@ -240,6 +250,9 @@
       $("#keywords-display").html(qs);
     };
     
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
     };
@@ -312,7 +325,7 @@
      * 
      */
 
-    var success_new = function(query_url,query_string) {
+    var success_new = function(query_url, query_string) {
 
       return function(info) {
 
@@ -371,13 +384,12 @@
 
       }; // fail
 
-      
       var complete = function() {
         console.log("complete!");
       };
       // joins the keywords w/ and
       var get_query = function(kw) {
-      //  return kw.join("+AND+");
+        // return kw.join("+AND+");
         return kw.join("+")
       };
       var extras = "";
@@ -391,7 +403,7 @@
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
       // url_new = "http://ure.local:81"
-      var done = success_new(url_new,qs);
+      var done = success_new(url_new, qs);
 
       $.ajax({
         url : url_new,
@@ -690,8 +702,8 @@
         kw = kw.concat(fabric_kw);
       }
 
-      //var keywords = [ 'where(greece+AND+black+AND+figure)' ];
-      var keywords = [ 'greece','black','figure' ];
+      // var keywords = [ 'where(greece+AND+black+AND+figure)' ];
+      var keywords = [ 'greece', 'black', 'figure' ];
 
       if (kw.length > 1) {
         keywords = kw;
