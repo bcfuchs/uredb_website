@@ -6,9 +6,13 @@
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
-	<span id="itemsCount" style="padding-left: 12px; text-decoration: underline; cursor: pointer;"></span>
-	&nbsp;of&nbsp;
-	<span id="total-results" style="padding-left: 12px;"></span>
+	<div id="pagination-widget">
+		<span id="euless" class="incrementer">&lt;</span>
+		<span id="itemsCount"></span>
+		&nbsp;of&nbsp;
+		<span id="total-results" style="padding-left: 12px;"></span>
+		<span id="eumore" class="incrementer">&gt;</span>
+	</div>
 	<div id="provider-filter" class="collapse controls span2"></div>
 	<!--  ajax: populate this grid with data from server  -->
 	<script>	 
@@ -41,12 +45,10 @@
 </div>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
 <script>
-! function() {
-easterEgg('m',function(){
-	$("#itemsCount").click();
-	
+  !function() {
+    easterEgg('m', function() {
+      $("#itemsCount").click();
 
-	});
-}();
-
+    });
+  }();
 </script>

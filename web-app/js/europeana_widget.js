@@ -1,4 +1,7 @@
 /**
+ 
+ * 
+ * 
  * This module exports three functions
  * 
  * makeGrid() -- make a grid of europeana thumbnails -exclude blacklisted items
@@ -57,16 +60,19 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-/** START doEuRelated */
+/**
+ * 
+ *  START doEuRelated 
+ **/
 (function() {
   /**
-   * @memberOf europeana_widget doEuRelated
+   * @memberOf europeana_widget.doEuRelated
    */
   var doEuRelated_retake = function() {
   };
 
   /**
-   * @memberOf europeana_widget doEuRelated
+   * @memberOf europeana_widget.doEuRelated
    */
   var doEuRelated = function() {
   };
@@ -86,6 +92,7 @@
       var d = JSON.parse(data);
       d.keywords = keywords;
       data = d; // reset data
+      delete window.eu_cursor; // reset the cursor
       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
     };
     
@@ -166,7 +173,9 @@
     };
     
     /**
-     * @memberOf europeana_widget.doEuRelated called from success
+     * @memberOf europeana_widget.doEuRelated 
+     * fill the grid with items
+     * called from success
      */
     var fillGrid = function(items, width, height, displayInfobox) {
 
@@ -256,6 +265,31 @@
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
     };
+    /**
+     * control pagination display based on state of pagination data
+     */
+    var update_pagination = function(incrementCursor, itemsCount,totalResults) {
+      if ('eu_cursor' in window) {
+        if (incrementCursor === true)
+          window.eu_cursor += itemsCount;
+      } else {
+        window.eu_cursor = itemsCount;
+        
+      }
+      $("#itemsCount").html(window.eu_cursor);
+      $("#total-results").html(totalResults);
+      // itemsCount = totalResults
+      // hide eumore
+      
+      if (itemsCount == totalResults) {
+          $("#eumore").hide();
+          $("#euless").show();   
+      }
+      
+      
+      
+      
+    };
 
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -282,15 +316,9 @@
       // TODO save cleared items somewhere for re-display
       // TODO exception no data
 
-      /** update the cursor */
-
-      // TODO ONLY if this is "next" call
-      if ('eu_cursor' in window) {
-        if (incrementCursor === true)
-          window.eu_cursor += data.info.itemsCount;
-      } else {
-        window.eu_cursor = data.info.itemsCount;
-      }
+      /** increment the cursor */
+// XXXXXXXXXXXXXXXXXXXXX
+     update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults)
       /** filter out items on dataprovider skiplist */
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
@@ -302,8 +330,7 @@
       /** make controls */
 
       makeProviderlist(providerlist);
-      $("#itemsCount").html(window.eu_cursor);
-      $("#total-results").html(data.info.totalResults);
+     
       /** trigger freewall recompute. */
       $(window).trigger("resize");
 
@@ -418,11 +445,14 @@
   }; // END doEuRelated
 
   window.europeanaWidget_doEuRelated = doEuRelated;
+  
   /**
    * @memberOf europeana_widget
+   * 
+   * Prepare items for the grid
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
-    console.log("makeGrid");
+    console.log("makeGrid ");
     var storage, cellSelector, blacklist_store, providerBlacklist, providerBlacklistThreshold, providerBlacklist_store;
 
     blacklist_store = "vote";
@@ -462,7 +492,7 @@
         }
 
       });
-    }
+    }  //if
 
     // build the grid.
     var wall = new Freewall(gridid);
@@ -490,6 +520,8 @@
       });
     }
     $(cellSelector).css("cursor", "pointer");
+    
+    
     /**
      * @memberOf europeana_widget.makeGrid
      */
@@ -519,7 +551,7 @@
     $(cellSelector).bind('click', overlayHandler);
     window.wall = wall;
     window.overlayHandler = overlayHandler;
-    // END
+    // END makeGrid
   };
 
   window.europeanaWidget_makeGrid = makeGrid;
@@ -667,7 +699,7 @@
 !function() {
 
   /**
-   * Set up Eu related grid and helper functions
+   * Set up Eu-related grid and helper functions
    * 
    * @memberOf europeana_widget
    */
@@ -799,12 +831,12 @@
       console.log(signal);
       makeEuRelatedItems(false);
     });
-
+  
     /**
      * 
-     * More eu items
+     * Get more eu items
      */
-    $(document).on('click', '#itemsCount', function() {
+    $(document).on('click', '#eumore', function() {
       // get the next batch..
       makeEuRelatedItems(true);
     });
