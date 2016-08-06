@@ -281,10 +281,15 @@
       // itemsCount = totalResults
       // hide eumore
       
-      if (itemsCount == totalResults) {
+      if (window.eu_cursor === totalResults) {
           $("#eumore").hide();
           $("#euless").show();   
       }
+      if (window.eu_cursor > totalResults) {
+        $("#eumore").hide();
+        $("#euless").show();  
+        $("#itemsCount").html(totalResults);
+    }
       
       
       
