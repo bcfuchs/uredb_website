@@ -249,10 +249,15 @@ a#extlink:link {
 }
 
 #pagination-widget .incrementer {
-	text-decoration: underline;
+//	text-decoration: underline;
 	cursor: pointer;
 	"
 }
+
+#pagination-widget .incrementer:hover {
+	color: aqua;
+	
+} 
 
 #relevance-vote {
 	padding-left: 20px;

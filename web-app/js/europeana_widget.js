@@ -266,9 +266,13 @@
       $("#query-display").html(qs);
     };
     /**
+     * @memberOf europeana_widget.doEuRelated
      * control pagination display based on state of pagination data
      */
-    var update_pagination = function(incrementCursor, itemsCount,totalResults) {
+    var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
+      paginationSize = 100;
+      $("#eumore").show();
+      $("#euless").show();  
       if ('eu_cursor' in window) {
         if (incrementCursor === true)
           window.eu_cursor += itemsCount;
@@ -276,20 +280,27 @@
         window.eu_cursor = itemsCount;
         
       }
+      
       $("#itemsCount").html(window.eu_cursor);
+      
       $("#total-results").html(totalResults);
       // itemsCount = totalResults
       // hide eumore
-      
+      // if the cursor is at the end 
       if (window.eu_cursor === totalResults) {
           $("#eumore").hide();
-          $("#euless").show();   
+          $("#euless").show(); 
+          
       }
+      // if the cursor is beyond end of data
       if (window.eu_cursor > totalResults) {
         $("#eumore").hide();
         $("#euless").show();  
         $("#itemsCount").html(totalResults);
     }
+      // if the batch is <= paginationSize or we are on the first batch..
+      if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
+        $("#euless").hide();
       
       
       
@@ -312,6 +323,8 @@
           items = [];
           alert("can't load eu items!");
         }
+       /** alert success */
+       alert("found " + data.info.totalResults + " europeana items");
       /** set the query display */
       set_keywords_display(data.keywords.join(' '));
       set_query_display(data.query_string);
@@ -322,8 +335,7 @@
       // TODO exception no data
 
       /** increment the cursor */
-// XXXXXXXXXXXXXXXXXXXXX
-     update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults)
+     update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults);
       /** filter out items on dataprovider skiplist */
       // if mode = skiplist
       if (getSearchMode === 'skiplist')

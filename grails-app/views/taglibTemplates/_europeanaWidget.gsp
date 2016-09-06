@@ -1,5 +1,6 @@
 <%@ page import="grails.converters.*"%>
 <%@ page import="java.util.logging.Logger"%>
+
 <div id="europeanaWidget">
 	<span style="text-decoration: underline; cursor: pointer;" id="filterbymuseum" data-target="#provider-filter"
 		data-toggle="collapse">Filter by museum</span>
@@ -23,12 +24,15 @@
       });
     })();
   </script>
+  
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
 	</div>
 </div>
+
 <script id="europeana_widget_js" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
+
 <div id="gridTemplate" style="display: none;">
 	<div class="cell gridlist-cell" data-ure-uri>
 		<div class="image-infobox">
@@ -48,7 +52,6 @@
   !function() {
     easterEgg('m', function() {
       $("#itemsCount").click();
-
     });
   }();
 </script>
