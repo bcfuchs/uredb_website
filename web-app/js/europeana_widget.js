@@ -68,8 +68,7 @@
   /**
    * @memberOf europeana_widget.doEuRelated
    */
-  var doEuRelated_retake = function() {
-  };
+  var doEuRelated_retake;
 
   /**
    * @memberOf europeana_widget.doEuRelated
@@ -81,16 +80,28 @@
   var retakeButtonSel = "#retake-button";
 
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-    
+    console.log("doEuRelated...");
+  
     doEuRelated_keywords = data.keywords;
+    
+ 
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
     var providerlist = {}; // provider list
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
-
+    var retakeOnZero = true; // TODO move to top
+    var default_keywords = [ 'black', 'figure', 'greece' ];
+    
+    /** 
+     * redo the query with default kws if the supplied kws return 0
+     * 
+     */
     doEuRelated_retake = function(keywords) {
-      var d = JSON.parse(data);
+      window.europeanaWidget_keywords = keywords;
+      var d = JSON.parse(data); // original data
       d.keywords = keywords;
+      d.startrec=1;
+      alert("doEuRelated_retake kws are: " + keywords);
       data = d; // reset data
       delete window.eu_cursor; // reset the cursor
       doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
@@ -106,8 +117,10 @@
         // get the terms from the input box
         var terms = $("#retake-button-terms").val();
         alert("querying Europeana for '" + terms + "'...");
-        doEuRelated_retake(terms.split(" ")); // function reference reset w/ new data on each call
-
+        var keywords = terms.split(" ");
+       
+        doEuRelated_retake(keywords); // function reference reset w/ new data on each call
+       
       });
     };
     search_reset_button(data.keywords);
@@ -305,7 +318,7 @@
       
       
       
-    };
+    }
 
     /**
      * @memberOf europeana_widget.doEuRelated
@@ -362,8 +375,7 @@
       });
     }; // success
 
-    var retakeOnZero = true; // TODO move to top
-    var default_keywords = [ 'black', 'figure', 'greece' ];
+   
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -376,6 +388,8 @@
         console.log('success_new');
         // quit function and rerun query with safe keywords if items.length ===
         // 0
+        console.log(info.items.length)
+        // redo search with default keywords if page keywords fail.
         if (retakeOnZero === true && info.items.length < 1) {
           doEuRelated_retake(default_keywords);
           return 1;
@@ -822,7 +836,18 @@
     var makeEuRelatedItems = function(incrementCursor) {
 
       var data = make_eu_query_data();
-
+      // use keywords if we're paginating or running a user query 
+      // set at keyword input
+      // TODO -- this should be an object with a state flag!
+      if ('europeanaWidget_keywords' in window) {
+       
+        data.keywords = window.europeanaWidget_keywords;
+        alert("kw from window: " + data.keywords);
+        delete window.europeanaWidget_keywords;
+      }
+      else {
+        alert("OMG!!!");
+      }
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
@@ -831,6 +856,7 @@
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
+      
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.
@@ -850,13 +876,17 @@
     });
   
     /**
-     * 
+     *  @memberOf europeana_widget.init_euRelated
      * Get more eu items
      */
-    $(document).on('click', '#eumore', function() {
-      // get the next batch..
-      makeEuRelatedItems(true);
-    });
+    var set_next_page_button = function() {
+      $(document).on('click', '#eumore', function() {
+        // get the next batch..
+        makeEuRelatedItems(true);
+      
+      });
+    };
+    set_next_page_button();
     /**
      * Museum filter pane toggle
      */
@@ -870,4 +900,4 @@
     });
   };
   window.init_euRelated = init_euRelated;
-}()
+}();
