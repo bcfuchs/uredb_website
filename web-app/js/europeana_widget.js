@@ -2,7 +2,7 @@
  
  * 
  * 
- * This module exports three functions
+ * This module exports three functions with the prefix europeanaWidget_
  * 
  * makeGrid() -- make a grid of europeana thumbnails -exclude blacklisted items
  * 
@@ -34,6 +34,7 @@
     return out;
 
   };
+  
   window.get_search_extras = get_search_extras;
   /**
    * @memberOf europeana_widget.init_euRelated
@@ -155,6 +156,8 @@
     
     /**
      * @memberOf europeana_widget.doEuRelated
+     * 
+     * NOT USED!!!
      */
     var getTitle = function(title) {
       var out = title[0];
@@ -188,8 +191,9 @@
     /**
      * @memberOf europeana_widget.doEuRelated 
      * fill the grid with items
-     * called from success
+     * called from ajax success
      */
+    
     var fillGrid = function(items, width, height, displayInfobox) {
 
       var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
@@ -226,9 +230,11 @@
         $(gridSel).append(t);
       }
 
-    };
+    }; // fillGrid
     
     /**
+     * add a filter to skip providers. 
+     * 
      * @memberOf europeana_widget.doEuRelated
      */
     var skiplist_filter = function(items) {
@@ -274,6 +280,7 @@
     
     /**
      * @memberOf europeana_widget.doEuRelated
+     * display the query
      */
     var set_query_display = function(qs) {
       $("#query-display").html(qs);
@@ -286,6 +293,8 @@
       paginationSize = 100;
       $("#eumore").show();
       $("#euless").show();  
+      // increment the cursor if there is one. 
+      
       if ('eu_cursor' in window) {
         if (incrementCursor === true)
           window.eu_cursor += itemsCount;
@@ -318,12 +327,13 @@
       
       
       
-    }
+    }; // update_pagination. 
 
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
-     * callback to run on query return. 
+     * callback to run on  data returned by query.
+     * calls UI functions defined above as closures. 
      */
     var success = function(data) {
       var width, height, displayInfobox, items;
@@ -338,7 +348,7 @@
           items = [];
           alert("can't load eu items!");
         }
-       /** alert success */
+       /** alert success: message to display in flash message box */
       alert("found " + data.info.totalResults + " europeana items");
       
       /** set the query display */
@@ -351,8 +361,11 @@
       // TODO save cleared items somewhere for re-display
       // TODO exception no data
 
-      /** increment the cursor */
+      /** update the pagination */
+      
       update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults);
+      
+      
       /** filter out items on dataprovider skiplist */
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
@@ -381,22 +394,28 @@
 
    
     /**
+     * 
+     * refactor the callback to run on query data. 
+     * add step to rerun query if no items found by query. 
+     * no rerun if retaokeOnZero is false.. 
+     * 
      * @memberOf europeana_widget.doEuRelated
      * 
      */
 
     var success_new = function(query_url, query_string) {
-
+      var min_items = 1;
       return function(info) {
 
         console.log('success_new');
         // quit function and rerun query with safe keywords if items.length ===
         // 0
-        console.log(info.items.length)
+        console.log("found " + info.items.length + "items");
         // redo search with default keywords if page keywords fail.
-        if (retakeOnZero === true && info.items.length < 1) {
+   
+        if (retakeOnZero === true && info.items.length < min_items) {
           doEuRelated_retake(default_keywords);
-          return 1;
+          return 1; 
         }
         var data = {};
         // re-jig data to fit old model.
@@ -420,6 +439,11 @@
       console.log("timeout_handler");
       alert("Europeana is not available at this time.");
     };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * call if we get this far...
+     */
 
     var default_handler = function(xhr) {
 
@@ -431,11 +455,12 @@
      */
 
     var ajax_new = function() {
+      
       var keywords = JSON.parse(data).keywords;
       var startrec = JSON.parse(data).startrec;
       var fail = function(xhr, status, err) {
-        console.log("fail: " + err)
-        console.log(xhr)
+        console.log("fail: " + err);
+        console.log(xhr);
         switch (status) {
         case "timeout":
           timeout_handler(xhr);
@@ -452,7 +477,7 @@
       // joins the keywords w/ and
       var get_query = function(kw) {
         // return kw.join("+AND+");
-        return kw.join("+")
+        return kw.join("+");
       };
       var extras = "";
       extras = get_search_extras();
@@ -464,7 +489,7 @@
           + '&profile=standard' + extras;
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + query;
-      // url_new = "http://ure.local:81"
+      // add data to success and get new callback. 
       var done = success_new(url_new, qs);
 
       $.ajax({
@@ -734,7 +759,10 @@
 !function() {
 
   /**
-   * Set up Eu-related grid of items with   helper functions
+   * Set up data for input into europeana widget
+   *    -make_keywords
+   *    -make_eu_query_data
+   *    -makeEuRelatedItems 
    * 
    * 
    * @memberOf europeana_widget
@@ -787,7 +815,7 @@
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
-     * get the query data
+     * get the query data from the page. 
      */
     var make_eu_query_data = function() {
       /**
@@ -801,19 +829,19 @@
         }
 
         return out;
-      };
+      };  // get_startrec
 
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       var startrec = get_startrec();
-
   
+      var title = $('.ure-title').text();
+      var fabric = $('.ure-fabric').text();
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
-      var title = $('.ure-title').text();
-      var fabric = $('.ure-fabric').text();
+ 
       var kw_json = make_keywords({
         title : title,
         fabric : fabric
@@ -834,7 +862,7 @@
         startrec : startrec
       };
       return data;
-    };
+    }; // make_eu_query_data
 
     /**
      * @memberOf europeana_widget.init_euRelated
@@ -851,10 +879,8 @@
         alert("kw from window: " + data.keywords);
         delete window.europeanaWidget_keywords;
       }
-      else {
-        alert("OMG!!!");
-      }
-      // requires gridid 
+     
+   
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
@@ -863,12 +889,15 @@
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
-      
+      // invoke the widget
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.
       europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
-    };
+    }; // makeEuRelatedItems
+    
+    
+    // call the the setup when the window is ready. 
     $(document).ready(function() {
       makeEuRelatedItems(false);
     });
@@ -884,7 +913,7 @@
   
     /**
      *  @memberOf europeana_widget.init_euRelated
-     * Get more eu items
+     * Set up prev/next buttons. Get more eu items
      */
     var set_next_page_button = function() {
       $(document).on('click', '#eumore', function() {
