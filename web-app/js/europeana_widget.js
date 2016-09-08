@@ -16,6 +16,7 @@
  */
 /** START */
 !function() {
+  
 
   /**
    * @memberOf europeana_widget.init_euRelated
@@ -84,7 +85,7 @@
     console.log("doEuRelated...");
   
     doEuRelated_keywords = data.keywords;
-    
+    window.europeanaWidget_keywords = data.keywords;
  
     var blank_image_100x100 = "/static/images/blank100x100.png";
     var titleWordLength = 10;
@@ -98,7 +99,9 @@
      * 
      */
     doEuRelated_retake = function(keywords) {
+      
       window.europeanaWidget_keywords = keywords;
+
       var d = JSON.parse(data); // original data
       d.keywords = keywords;
       d.startrec=1;
@@ -112,7 +115,7 @@
     /**
      * @memberOf europeana_widget.doEuRelated
      */
-    var search_reset_button = function(keywords) {
+    var search_redo_button = function(keywords) {
       $("#retake-button-terms").val(keywords.join(" "));
       $(retakeButtonSel).click(function() {
         // get the terms from the input box
@@ -124,7 +127,7 @@
        
       });
     };
-    search_reset_button(data.keywords);
+    search_redo_button(data.keywords);
     
     //TODO -- is this still necessary? probably not!
     data = JSON.stringify(data); 
@@ -296,9 +299,15 @@
       // increment the cursor if there is one. 
       
       if ('eu_cursor' in window) {
-        if (incrementCursor === true)
+        if (incrementCursor === true) {
           window.eu_cursor += itemsCount;
-      } else {
+      } 
+      else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
+         
+        window.eu_cursor -= itemsCount
+        }
+      }
+       else {
         window.eu_cursor = itemsCount;
         
       }
@@ -874,10 +883,10 @@
       // set at keyword input
       // TODO -- this should be an object with a state flag!
       if ('europeanaWidget_keywords' in window) {
-       
+        
         data.keywords = window.europeanaWidget_keywords;
         alert("kw from window: " + data.keywords);
-        delete window.europeanaWidget_keywords;
+   //     delete window.europeanaWidget_keywords;
       }
      
    
@@ -917,12 +926,25 @@
      */
     var set_next_page_button = function() {
       $(document).on('click', '#eumore', function() {
-        // get the next batch..
+        // get the next batch incrementing the cursor..
         makeEuRelatedItems(true);
       
       });
     };
     set_next_page_button();
+    /**
+     *  @memberOf europeana_widget.init_euRelated
+     * Set up prev/next buttons. Get more eu items
+     */
+    var set_prev_page_button = function() {
+      $(document).on('click', '#euless', function() {
+        // get the last batch incrementing the cursor..
+        window.europeanaWidget_decrementCursor = true;
+        makeEuRelatedItems();
+      
+      });
+    };
+    set_prev_page_button();
     /**
      * Museum filter pane toggle
      */
