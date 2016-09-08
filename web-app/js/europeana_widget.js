@@ -322,6 +322,8 @@
 
     /**
      * @memberOf europeana_widget.doEuRelated
+     * 
+     * callback to run on query return. 
      */
     var success = function(data) {
       var width, height, displayInfobox, items;
@@ -337,10 +339,12 @@
           alert("can't load eu items!");
         }
        /** alert success */
-       alert("found " + data.info.totalResults + " europeana items");
+      alert("found " + data.info.totalResults + " europeana items");
+      
       /** set the query display */
       set_keywords_display(data.keywords.join(' '));
       set_query_display(data.query_string);
+      
       /** clear the grid */
 
       $(gridSel).html("");
@@ -348,7 +352,7 @@
       // TODO exception no data
 
       /** increment the cursor */
-     update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults);
+      update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults);
       /** filter out items on dataprovider skiplist */
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
@@ -730,7 +734,8 @@
 !function() {
 
   /**
-   * Set up Eu-related grid and helper functions
+   * Set up Eu-related grid of items with   helper functions
+   * 
    * 
    * @memberOf europeana_widget
    */
@@ -803,11 +808,12 @@
        */
       var startrec = get_startrec();
 
-      var title = $('.ure-title').text();
-      var fabric = $('.ure-fabric').text();
+  
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
+      var title = $('.ure-title').text();
+      var fabric = $('.ure-fabric').text();
       var kw_json = make_keywords({
         title : title,
         fabric : fabric
@@ -848,6 +854,7 @@
       else {
         alert("OMG!!!");
       }
+      // requires gridid 
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid;
       // set up freewall grid and some other stuff
