@@ -944,6 +944,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     
     var keywords = JSON.parse(data).keywords;
     var startrec = JSON.parse(data).startrec;
+    
     var fail = function(xhr, status, err) {
       console.log("fail: " + err);
       console.log(xhr);
@@ -977,9 +978,10 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     var url_new = url_base + query;
     // add data to success and get new callback. 
     var done = success_new(url_new, qs);
-    //TODO move to top
-    var useQueryCache = true;
+   
+   
     // set up query caching
+    var useQueryCache = true; //TODO move to top
     var eucache = {};
     var storage = $.localStorage; 
     var eu_querycache_store = 'eu_querycache'; 
@@ -990,9 +992,9 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       storage.set(eu_querycache_store,{});
     }
    
-    
+      // TODO parametrize
      // cache switch goes here.
-    var ajaxhandler = function(){
+    var cachehandler = function(){
       
        // cache switch goes here.
        if (url_new in eucache  && useQueryCache === true) {
@@ -1017,8 +1019,9 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
        }
       
         
-      }; // ajaxhandler
-    ajaxhandler();
+      }; // cachehandler
+      
+    cachehandler();
     };
 
     ajax_new();
