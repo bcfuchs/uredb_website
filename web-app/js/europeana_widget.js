@@ -337,12 +337,90 @@
       
       
     }; // update_pagination. 
+    
+    // TODO put this at top
+    String.prototype.hexEncode = function(){
+      var hex, i;
 
+      var result = "";
+      for (i=0; i<this.length; i++) {
+          hex = this.charCodeAt(i).toString(16);
+          result += ("000"+hex).slice(-4);
+      }
+
+      return result
+  }
+    String.prototype.hexDecode = function(){
+      var j;
+      var hexes = this.match(/.{1,4}/g) || [];
+      var back = "";
+      for(j = 0; j<hexes.length; j++) {
+          back += String.fromCharCode(parseInt(hexes[j], 16));
+      }
+
+      return back;
+  }
+    
+    var grid_hash = {}
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
-     * callback to run on  data returned by query.
-     * calls UI functions defined above as closures. 
+     * stash the grid
+     * return the id
+     */
+    
+    var stash_grid = function(gridSel,url){
+     
+      var stashId = 'eu-stash';
+      var stashSel = "#"+stashId;
+     
+      // id of this grid
+      var gridId = url.hexEncode(); 
+      if ((gridId in grid_hash))
+        return gridId;
+      // create the stash if it doesn't exist;
+      if ($(stashSel).length < 1) {
+        var stash_el = $(stashSel).css("display:none;").attr('id',stashId);
+        $('body').append(stash_el);
+        
+      }
+      // clone the grid
+      var el = $(gridSel).clone();
+      // create an element for the grid
+      var wrapper = $(div).id(gridId);
+      wrapper.append(el);
+      $(stashSel).append(wrapper);
+      grid_hash[gridId] = 1;
+      return gridId;
+      
+      
+    };
+    // TODO -- need to keep a list of stashed grid in  localstorage. 
+    // for testing well just keep it in the DOM
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * return the stashed grid if found, else return null;
+     */
+    
+     var get_grid = function(url) {
+       if (!(gridId in grid_hash))
+         return null;
+        var out;
+        var stashId = 'eu-stash';
+        var stashSel = "#" + stashId;
+        var gridId = url.hexEncode();
+        out = $(stashSel).find("#" + gridId);
+        if (out.length < 1)
+          throw "cant find grid for " + url;
+        return out;
+
+    }; // get_grid
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * callback to run on data returned by query. calls UI functions defined
+     * above as closures.
      */
     var success = function(data) {
       var width, height, displayInfobox, items;
@@ -364,9 +442,8 @@
       set_keywords_display(data.keywords.join(' '));
       set_query_display(data.query_string);
       
-      /** clear the grid */
-
-      $(gridSel).html("");
+   
+      
       // TODO save cleared items somewhere for re-display
       // TODO exception no data
 
@@ -379,10 +456,32 @@
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
         items = skiplist_filter(items);
-
-      /** populate the grid with items */
-      fillGrid(items, width, height, displayInfobox);
-
+      // TODO gridcache
+      /**
+       * grid cache
+       * is the cache object set?
+       * is data.query_url in cache? 
+       * Yes: get grid from cache  and put  in the gridSel
+       * No: serialise and store grid in cache
+       * -or- move the grid to a DOM stash.  
+       */
+      /** stash the grid */
+      stash_grid(gridSel,data.query_url);
+      /** clear the grid */
+      $(gridSel).html("");
+      
+      /** populate the grid with items 
+       * Check cache first.
+       */
+      
+      var grid = get_grid(data.query_url);
+      if (grid !== null) {
+        $(gridSel).HTML(grid);
+      }
+      else {
+        fillGrid(items, width, height, displayInfobox);
+      }
+      
       /** make controls */
 
       makeProviderlist(providerlist);
