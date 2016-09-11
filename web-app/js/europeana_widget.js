@@ -206,7 +206,9 @@
         var provider = item.dataProvider;
         if (!(provider in providerlist))
           providerlist[provider] = provider;
+        // clone the template
         var t = $(template).clone();
+        // put a blank image in if there isn't an image
         if ('edmPreview' in item) {
           item.thumb = item.edmPreview;
         } else {
@@ -615,7 +617,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    */
   
   var fillGrid = function(items, width, height, displayInfobox) {
-
+    console.log("fillGrid");
     var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
     for (var i = 0; i < items.length; i++) {
 
@@ -897,6 +899,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
         items = [];
         alert("can't load eu items!");
       }
+      
      /** alert success: message to display in flash message box */
     alert("found " + data.info.totalResults + " europeana items");
     
@@ -1143,7 +1146,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     var wall = new Freewall(gridid);
     wall.reset({
       selector : '.cell',
-      delay : 25,
+      delay : 5,
       animate : true,
       cellW : width,
       cellH : height,
@@ -1155,7 +1158,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     // for scroll bar appear;
     $(window).trigger("resize");
 
-    $(gridid).delay(3000).show();
+    $(gridid).delay(300).show();
 
     // show the infobox on hover
 
@@ -1453,21 +1456,18 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
      * @memberOf europeana_widget.init_euRelated
      */
     var makeEuRelatedItems = function(incrementCursor) {
-
+      
+      var templateSel = "#gridTemplate";
+      var gridSel = "#" + gridid; // input parameter
+      
       var data = make_eu_query_data();
       // use keywords if we're paginating or running a user query 
       // set at keyword input
       // TODO -- this should be an object with a state flag!
-      if ('europeanaWidget_keywords' in window) {
-        
+      if ('europeanaWidget_keywords' in window) { 
         data.keywords = window.europeanaWidget_keywords;
-        alert("kw from window: " + data.keywords);
-   //     delete window.europeanaWidget_keywords;
       }
-     
-   
-      var templateSel = "#gridTemplate";
-      var gridSel = "#" + gridid;
+
       // set up freewall grid and some other stuff
       // TODO has to be called at end of eu ajax, so we'll pass it in as a
       // callback
