@@ -344,43 +344,7 @@
    
 
    
-    /**
-     * 
-     * refactor the callback to run on query data. 
-     * add step to rerun query if no items found by query. 
-     * no rerun if retaokeOnZero is false.. 
-     * 
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     */
-
-    var success_new_old = function(query_url, query_string) {
-      var min_items = 1;
-      return function(info) {
-
-        console.log('success_new');
-        // quit function and rerun query with safe keywords if items.length ===
-        // 0
-        console.log("found " + info.items.length + "items");
-        // redo search with default keywords if page keywords fail.
-   
-        if (retakeOnZero === true && info.items.length < min_items) {
-          doEuRelated_retake(default_keywords);
-          return 1; 
-        }
-        var data = {};
-        // re-jig data to fit old model.
-        data.info = info; // the return object from EU
-        data.width = "100px";
-        data.height = "100px";
-        data.displayInfoboxOnHover = false;
-        data.keywords = doEuRelated_keywords;
-        data.query_url = query_url;
-        data.query_string = query_string;
-        return success(data);
-
-      };
-    };
+ 
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -499,6 +463,8 @@ var doEuRelated = function() {
 
 var doEuRelated_keywords = "";
 var retakeButtonSel = "#retake-button";
+var retake_count = 0;
+var retake_count_max = 2;
 
 doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
   console.log("doEuRelated...");
@@ -851,6 +817,8 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    * Fill the grid, either from cache or from data
    */
   var doFillGrid = function(gridSel,query_url,items,width,height,displayInfobox) {
+  
+    var euWidgetSel = "#europeanaWidget"; // idselector of europeanaWidget
     /**
      * grid cache
      * is the cache object set?
@@ -868,15 +836,17 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
      */
     var grid = get_grid(query_url);
     if (grid !== null) {
-        $(gridSel).html(grid);
+      $("#europeanaWidget").attr('data-didStash',1);
+        $(gridSel).html($(grid).html());
     }
     else {
-      console.log("Filling Grid...!")
+      console.log("Filling grid from data...!");
       fillGrid(items, width, height, displayInfobox);
     }
     
     /** stash the new grid */
-    stash_grid(gridSel,query_url);
+      
+    stash_grid($(gridSel).html(),query_url);
     
   }; // doFillGrid
   /**
@@ -886,7 +856,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    * calls UI functions defined above as closures. 
    */
   var success = function(data) {
-    console.log("success 2")
+ 
     var width, height, displayInfobox, items;
     width = data.width;
     height = data.height;
@@ -908,8 +878,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     set_query_display(data.query_string);
     
     /** clear the grid */
-
-    $(gridSel).html("");
+ //   $(gridSel).html("");
     // TODO save cleared items somewhere for re-display
     // TODO exception no data
 
@@ -961,9 +930,9 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       // quit function and rerun query with safe keywords if items.length ===
       // 0
       console.log("found " + info.items.length + "items");
+      
       // redo search with default keywords if page keywords fail.
- 
-      if (retakeOnZero === true && info.items.length < min_items) {
+      if (retakeOnZero === true && info.items.length < min_items && retake_count < retake_count_max) {
         doEuRelated_retake(default_keywords);
         return 1; 
       }
@@ -1008,6 +977,8 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     
     var keywords = JSON.parse(data).keywords;
     var startrec = JSON.parse(data).startrec;
+    //TODO quick fix
+    if (startrec === 0) { startrec = 1}
     
     var fail = function(xhr, status, err) {
       console.log("fail: " + err);
@@ -1093,6 +1064,73 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
   }; // END doEuRelated
 
   window.europeanaWidget_doEuRelated = doEuRelated;
+
+  /**
+   * @memberOf europeana_widget
+   */
+  
+  var format_freewall = function(gridid,options) {
+    console.log("format_freewall " +gridid)
+    var wall = new Freewall(gridid);
+    wall.reset({
+      selector : '.cell',
+      delay : 5,
+      animate : true,
+      cellW : options.width,
+      cellH : options.height,
+      onResize : function() {
+        wall.refresh();
+      }
+    });
+    wall.fitWidth(options.wallWidth);
+    window.wall = wall;
+    
+  };
+  /**
+   * @memberOf europeana_widget
+   */
+  
+  var format_bootstrap = function(gridid,options) { 
+    console.log("format_bootstrap " +gridid)
+    var cols = 10;
+    var row = $('<div class="row"></div>');
+    var cont = $('<div class="container"></div>');
+    $(gridid + " .cell").each(function(i,v){
+      var cell = $(v).clone();
+      row.append($(cell).addClass("col-md-2").addClass("bs-cell"))
+     // every $cols add to row
+      if ((i + 1) % cols === 0 ) {
+        cont.append(row);
+        row = $('<div class="row"></div>');
+        
+      }
+    });
+    // left-overs...
+    if (row.length > 0) 
+      cont.append(row);
+    
+    
+    $(gridid).html(cont);
+    
+    
+  }
+  /**
+   * @memberOf europeana_widget
+   */
+  
+  var formatGrid = function(gridid,options) {
+    var type = options.type;
+    switch(type) {
+    case "freewall": 
+      format_freewall(gridid,options);
+      break;
+    case "bootstrap":
+      format_bootstrap(gridid,options);
+      break;
+    }
+    
+    
+  }; //formatGrid
   
   /**
    * @memberOf europeana_widget
@@ -1142,19 +1180,13 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       });
     }  //if
 
-    // build the grid.
-    var wall = new Freewall(gridid);
-    wall.reset({
-      selector : '.cell',
-      delay : 5,
-      animate : true,
-      cellW : width,
-      cellH : height,
-      onResize : function() {
-        wall.refresh();
-      }
-    });
-    wall.fitWidth(wallWidth);
+    // Create a freewall grid from the cells
+    
+    var gridtype = "bootstrap"; 
+  //   var gridtype = "freewall"; 
+    var formatGrid_options = {type:gridtype,width:width,height:height,wallWidth:wallWidth};
+    formatGrid(gridid,formatGrid_options);
+  
     // for scroll bar appear;
     $(window).trigger("resize");
 
@@ -1197,7 +1229,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       $("#add-item").data('eu_item', eu_item);
     };
     $(cellSelector).bind('click', overlayHandler);
-    window.wall = wall;
+   
     window.overlayHandler = overlayHandler;
     // END makeGrid
   };

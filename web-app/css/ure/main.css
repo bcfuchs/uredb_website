@@ -276,6 +276,13 @@ a#extlink:link {
 	color: #000;
 }
 
+
+.eu-grid .cell.bs-cell {
+	margin: 5px 5px 5px 5px;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
 .eu-grid .image-infobox {
 	background: black;
 	color: white;
