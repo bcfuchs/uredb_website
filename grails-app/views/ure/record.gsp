@@ -88,10 +88,13 @@
 			</div>
 			<!--  #meta2 -->
 			<g:render template="/ure/citationWidget" />
-			<h2>Related content from Europeana</h2>
+			
+			<h2>Related content from Europeana</h2></html>
+			<span style="padding-right: 5px">Europeana query: </span>
+			
 			<span id="keywords-display"></span>
-			||
-			<span id="query-display"></span>
+		
+			<span id="query-display" style="display: none;"></span>
 			<g:render template="/ure/queryRetakeWidget" />
 			
 			<!-- 

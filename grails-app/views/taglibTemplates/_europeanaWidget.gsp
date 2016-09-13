@@ -7,6 +7,7 @@
 	<span style="text-decoration: underline; cursor: pointer;" id="relevance-vote" data-relevance-finish="finish tagging"
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
+	<span id="query-retake-text" style="padding-left: 12px; text-decoration: underline; cursor: pointer;">custom eu search</span>
 	<div id="pagination-widget">
 		<span id="euless" class="incrementer">&lt;</span>
 		<span id="itemsCount"></span>
@@ -14,6 +15,7 @@
 		<span id="total-results" style="padding-left: 12px;"></span>
 		<span id="eumore" class="incrementer">&gt;</span>
 	</div>
+	
 	<div id="provider-filter" class="collapse controls span2"></div>
 	<!--  ajax: populate this grid with data from server  -->
 	<script id="init_euRelated">	

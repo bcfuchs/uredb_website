@@ -1,3 +1,4 @@
+
 <style>
 .retake {
 	display: inline;
@@ -16,7 +17,7 @@
 <script>
 // toggle retake widget by clicking on the query display. 
   $(document).ready(function() {
-    $("#query-display").click(function() {
+    $("#query-retake-text").click(function() {
       $("#retake-group").toggleClass("hidden");
     })
 
