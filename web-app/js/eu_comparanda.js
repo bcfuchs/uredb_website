@@ -35,7 +35,7 @@
 
                 $("#save-comps-as-html").click(function() {
                   save_comparanda_as_html();
-                })
+                });
 
                 $("#save-comps-as-json").click(function() {
                   save_comparanda_as_json();
@@ -51,7 +51,7 @@
                   var eu = getEUdata();
                   delete eu[this_accnum];
                   storage.set(eu_items, eu)
-                  $("#comparanda-thumbs").html("")
+                  $("#comparanda-thumbs").html("");
                   $("#comparanda-thumbs").data('thumbs', "");
 
                 });
@@ -597,7 +597,7 @@
 !function() {
   /*****************************************************************
    * @memberOf eu_comparanda.EuComparanda 
-   * 
+   * set up the navigation strip
    * 
    */
   var setup_compNavList = function(listsel, observesel) {
@@ -628,7 +628,7 @@
         var thumb = items[rec].thumb;
         var img = '<img style="height: 20px" src="' + thumb + '"/>';
         var url = "/record/" + rec;
-        var link = '<div><a href="' + url + '">' + rec + "&nbsp;" + img + '</a></div>';
+        var link = '<div class="comp-nav-record"><a href="' + url + '">' + rec + "&nbsp;" + img + '</a></div>';
         var comps = [];
         for ( var i in items[rec]) {
           if (i === "thumb")
@@ -636,7 +636,8 @@
           var c = '<img src="' + i + '" class="comp-nav-img"/>';
           comps.push(c);
         }
-        var content = $('<div class="comp-nav-img-container"></div>').html(comps.join(""));
+        var comps_div = '<div class="comp-nav-comps">' + comps.join("") + '</div>';
+        var content = $('<div class="comp-nav-img-container"></div>').html(comps_div);
         $(ul).append('<li>' + link + $(content).html() + '</li>');
       }
 
@@ -679,7 +680,8 @@
    * 
    * 
    */
-  var init_comNavList = function(){}
+  var init_comNavList = function(){};
+  
  $(document).ready(function(){
   var listSelector = "#comparanda-nav-list";
   var observeSelector = "#comparanda-thumbs";

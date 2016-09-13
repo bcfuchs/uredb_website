@@ -96,7 +96,7 @@
     var providerlist = {}; // provider list
     var template = $($(templateSel + " .gridlist-cell")[0]).clone();
     var retakeOnZero = true; // TODO move to top
-    var default_keywords = [ 'black', 'figure', 'greece' ];
+    var default_keywords = [ 'greek','black', 'figure'];
     
     /** 
      * redo the query with default kws if the supplied kws return 0
@@ -481,7 +481,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
   var providerlist = {}; // provider list
   var template = $($(templateSel + " .gridlist-cell")[0]).clone();
   var retakeOnZero = true; // TODO move to top
-  var default_keywords = [ 'black', 'figure', 'greece' ];
+  var default_keywords = [ 'greek','black', 'figure'];
   
   /** 
    * redo the query with default kws if the supplied kws return 0
