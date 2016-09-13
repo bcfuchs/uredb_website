@@ -1,3 +1,4 @@
+<%@ page import="java.util.Properties"%>
 <!DOCTYPE html>
 <html>
 <!-- main.tmpl -->
@@ -20,7 +21,11 @@
 <g:layoutHead />
 
 
-<% def uredb_wskey = System.getenv("WSKEY");%>
+<% def uredb_wskey = System.getenv("WSKEY");
+if (uredb_wskey == null) {
+    uredb_wskey = System.getProperty("WSKEY");
+}
+%>
 <script>
 var uredb_wskey = "${uredb_wskey}";
 

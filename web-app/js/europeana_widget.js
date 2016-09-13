@@ -16,7 +16,11 @@
  */
 /** START */
 !function() {
-  
+  // reset the cache
+  var eu_querycache_store = 'eu_querycache'; 
+  if ( $.localStorage.isSet(eu_querycache_store))  {
+      $.localStorage.set(eu_querycache_store,{})
+  }
 
   /**
    * @memberOf europeana_widget.init_euRelated
@@ -879,7 +883,6 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     
     /** clear the grid */
  //   $(gridSel).html("");
-    // TODO save cleared items somewhere for re-display
     // TODO exception no data
 
     /** update the pagination */

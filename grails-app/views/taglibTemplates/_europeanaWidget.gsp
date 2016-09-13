@@ -16,12 +16,15 @@
 	</div>
 	<div id="provider-filter" class="collapse controls span2"></div>
 	<!--  ajax: populate this grid with data from server  -->
-	<script>	 
+	<script id="init_euRelated">	
+	
 	( function() {
 		$(document).ready(function(){
 		// initialize the grid, using values supplied to the template	
-		 init_euRelated("${accnum}","${gridid}","${width}","${height}", true);
-      });
+		if (! $("#europeanaWidget").attr('data-didStash'))
+			 init_euRelated("${accnum}","${gridid}","${width}","${height}", true);
+
+	      });
     })();
   </script>
   
