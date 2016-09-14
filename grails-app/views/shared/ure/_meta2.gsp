@@ -1,6 +1,4 @@
-<style>
 
-</style>
 <script>
  
 $(document).ready(function(){
@@ -103,7 +101,8 @@ Dimensions:
 		gridid="record-images" 
 		klass="recordImageWidget" 
 		uris="${images}" 
-		displayInfobox="true" height="100px" width="100px">
+		displayInfobox="true" height="100px" width="100px" 
+		addCellClick="false">
 	</ure:gridWidgetForImageUris>
 	<script>
      $(document).ready(function(){

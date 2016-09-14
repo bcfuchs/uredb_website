@@ -31,6 +31,7 @@
              // click on image pops to record
              //TODO should be a callback
         if (addCellClick === true) {    
+       
         $(gridid + " .cell").click(function() {
                var url = $(this).find(".name").attr("data-uri");
                window.location = url

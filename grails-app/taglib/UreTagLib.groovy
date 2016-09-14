@@ -239,6 +239,7 @@ class UreTagLib {
         def model =[:];
         def width = (attrs.width) ? attrs.width : '248px'
         def height = (attrs.height) ? attrs.height : '248px'
+        def addCellClick = (attrs.addCellClick) ? attrs.addCellClick : true;
 
 
         model['info'] =   recordService.getImageInfos(uris)
@@ -247,7 +248,7 @@ class UreTagLib {
         model['gridid'] = gridid;
         model['width'] = width;
         model['height'] = height;
-        model['addCellClick'] =true;
+        model['addCellClick'] =addCellClick;
         //log.warn model
         // in here do all the munging
         //

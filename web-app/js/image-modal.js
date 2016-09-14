@@ -22,11 +22,11 @@
 
             });
 
-          }
+          };
           
 
-          $("body").prepend('<div  id="image-modal"></div>')
-          $("body").prepend('<div id="overlay1">&nbsp;</div>')
+          $("body").prepend('<div  id="image-modal"></div>');
+          $("body").prepend('<div id="overlay1">&nbsp;</div>');
 
           $(sel).click(
               function(e) {
@@ -41,8 +41,8 @@
                   });
                   
                   $("#modalnext").click(function(){
-                    console.log("clicked modalnext")
-                    console.log(prevnext)
+                    console.log("clicked modalnext");
+                    console.log(prevnext);
                     e.preventDefault();
                     prevnext[1].click();
                    
