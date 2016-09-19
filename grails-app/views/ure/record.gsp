@@ -107,8 +107,11 @@
 			<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
 			<script>
 				! function(){
+				window.eu_experimental = false;
+				if (window.eu_experimental === true) { 
 					syncRelated("${token}");
 					console.log("${token}")
+				}
 				  
 				}()
 			</script>
