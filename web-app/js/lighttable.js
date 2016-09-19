@@ -26,14 +26,14 @@
            * 
            */
           $("#lighttable-links").droppable({
-           drop:addToLighttableDrag,
+           drop: addToLighttableDrag,
            scope:"record-images",
           
       
            create: function( event, ui ) { 
              console.log("created a drop ")
       //       console.log(this)
-             },
+             }
  /**
              accept: function(event,ui) {  
             //  $(this).addClass("flash_1").delay(3000).removeClass("flash_1")
