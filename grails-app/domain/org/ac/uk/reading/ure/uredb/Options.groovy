@@ -11,7 +11,7 @@ package org.ac.uk.reading.ure.uredb
 
 class Options {
 
-    String key;
+    String name;
     String value;
     String tags;
     
