@@ -21,7 +21,7 @@
     $('#alert-modal').attr("class", "");
     $('#alert-modal').addClass("alert " + t);
     $('#alert-modal').css({
-      width : $(window).width(),
+      width : $(window).width()
 
     });
     $("#back-button").toggle();
