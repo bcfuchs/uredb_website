@@ -17,7 +17,7 @@ $(document).ready(function(){
 	return $(el).find(".caption").html();
     }
   var get_image = function(el) {
-	return $(el).attr("data-ure-image-url");
+	return $(el).attr("data-ure-image-url").replace('/sm/','/xlarge/');
     }
   var get_prevnext = function(el) {
 	var prev = $(el).prev();

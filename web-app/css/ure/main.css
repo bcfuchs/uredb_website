@@ -173,7 +173,7 @@ img.lighttable-ui-small {
 }
 
 #image-modal .image-modal-container {
-	width: 400px;
+	max-width: 55%;
 	margin: 0 auto;
 	min-height: 600px;
 	background: black;

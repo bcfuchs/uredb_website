@@ -335,12 +335,7 @@ a:hover          {
           height: 18px;
    		 font-size: 12pt;
     	 font-weight: 600;
-         /** 
-	  	  background-image: url(arrow2.gif);
-          background-repeat: no-repeat;
-          background-position: left;
-          height: 1.7em; 
-	  */
+         
           }
 
 
@@ -588,11 +583,7 @@ div.left_nav2 {
                
                color: white;
                vertical-align: top;
-              /* 
-	      background-image: url(arrow.gif);
-               background-repeat: no-repeat;
-               background-position: left; 
-	       */
+          
                }
 
 div:hover.left_nav2
