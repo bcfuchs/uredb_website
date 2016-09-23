@@ -1,5 +1,5 @@
-<%@ page import="grails.converters.*"%>
 <!DOCTYPE html>
+<%@ page import="grails.converters.*"%>
 <html>
 <head>
 <title>Ure Museum Database: ${accnum}</title>
@@ -13,19 +13,16 @@
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
 <script>
 		// set global js vars for highlighting text
-		
 		var  uredb_matcher_hasMatch = false;
 		<g:if test="${session.uredb_hasMatch}">
 			var uredb_matcher_matchfield = "${session.uredb_matchfield}";
 			var uredb_matcher_matchval = "${session.uredb_matchval}";
 			uredb_matcher_hasMatch = true;
-		</g:if>
-		
+		</g:if>		
 		<%
 		// now set hasMatch to false so a match is displayed only when there's actually a match. 
 		session.uredb_hasMatch  = false;
 		%>
-		
 		$(document).ready(function(){
 		 // save data about this object to the DOM
 		 $(document).data('ure-item',{accnum:'${accnum}'});

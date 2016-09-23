@@ -482,16 +482,17 @@
 
                 var style = '<style>'
                     + ' #wrap {margin: 0px 0 0 40px; }'
-                    + ' body { background: #990033; }'
-                    + '#info {background:#000;color:#990033;height:50px;padding:20px 0 0 20px;font-family:sans-serif}'
+                    + ' body { background: #990033 !important; }'
+                    + '#info {background:#000;color: silver;height:50px;padding:20px 0 0 20px;font-family:sans-serif}'
                     + ' .lighttable-item {min-height: 50px; border-top: 3px solid silver;border-bottom: 1px solid gray; color: white;}'
                     + ' .lighttable-item:hover {background: white;color: black;}'
-
+                    + ' .at1 { color:  #990033 }'
                     + ' .lt-item-left { display:inline; float: left;width: 20%;}'
                     + ' .lt-item-right { display:inline; width: 80%;}' + '#left { width: 20%; float: left; }'
                     + '.lt-save-thumb { height: 30px; margin-right: 40px; }'
-                    + '.eu-thumb { height: 30px; margin-right: 40px; }'
-                    + ' .eu-item{ display:inline; float: left;width: 20%;}'
+                    + '.eu-thumb { height: 30px; margin-right: 2px; }'
+                    + ' .eu-item{ display:inline; float: left;}'
+                    +   '#left { background: #990033;}'
                     + '#show { height: 100%; width: 100%; position: fixed; background: white; min-height: 1000px;}'
                     + '</style>'
 
@@ -502,10 +503,10 @@
                 var domain = document.domain;
                 var html = document.implementation.createHTMLDocument();
                 var startrec = "http://" + document.domain + "/record/" + Object.keys(eu)[0];
-                var info = "myUre comparanda @ " + new Date();
+                var info = 'myUre comparanda <span class="at1">@</span> ' + new Date();
                 $(html).find("body").append(
                     '<div id="wrap">' + '<div id="info">' + info + '</div>'
-                        + '<div id="left" class="inner"></div><div id="right" class="inner">'
+                        + '<div id="left" class="inner container"></div><div id="right" class="inner">'
                         + '<iframe id="show" name="show" src="' + startrec + '"></iframe></div>');
                 // image with link -> iframe
                 // one per record
@@ -522,15 +523,17 @@
                   console.log(compHTML);
                   var id = accnum
                   var thumb = eu[accnum]['thumb'];
-                  divs.push('<div class="accnum-reference">' + '<a target="show" href="' + url + '">'
+                  divs.push('<div class="accnum-reference row">' + '<a target="show" href="' + url + '">'
                       + '<div class="lighttable-item">' + '<div class="lt-item-left">'
                       + '<img class="lt-save-thumb" src="' + thumb + '"/>' + '</div>' + '<div class="lt-item-right">'
                       + '<span class="lt-meta">' + id + '</span>' + '</div>' + '</div>' + '</a>'
                       + ' <div style="clear:both"></div>' + compHTML + ' <div style="clear:both"></div>' + '</div>');
 
                 }
+                var bootstrap_css = '<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">';
                 $(html).find("#left").append(divs.join(""));
                 $(html).find("head").append(style);
+                $(html).find("head").append(bootstrap_css);
                 console.log(html)
                 var doc = new XMLSerializer().serializeToString(html);
 

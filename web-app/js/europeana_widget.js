@@ -628,6 +628,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    * add a filter to skip providers. 
    * 
    * @memberOf europeana_widget.doEuRelated
+   * remove items that are on the skiplist. 
    */
   var skiplist_filter = function(items) {
     var skiplist_store = 'skiplist';
@@ -648,6 +649,9 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
         if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
           out.push(item);
           console.log(item.dataProvider[0]);
+        }
+        else {
+          console.log("skipping "+ item.dataProvider[0])
         }
       }
     } else {
@@ -1043,6 +1047,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
        else {
          var newdone = function(data) {
            console.log("NO CACHE!!")
+           console.log(url_new);
            eucache[url_new] = data;
            storage.set(eu_querycache_store,eucache);
            done(data);
@@ -1094,13 +1099,13 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    */
   
   var format_bootstrap = function(gridid,options) { 
-    console.log("format_bootstrap " +gridid)
-    var cols = 10;
+    console.log("format_bootstrap " +gridid);
+    var cols = 9;
     var row = $('<div class="row"></div>');
-    var cont = $('<div class="container"></div>');
+    var cont = $('<div class="container-fluid"></div>');
     $(gridid + " .cell").each(function(i,v){
       var cell = $(v).clone();
-      row.append($(cell).addClass("col-md-2").addClass("bs-cell"))
+      row.append($(cell).addClass("col-md-2").addClass("col-sm-3").addClass("bs-cell"))
      // every $cols add to row
       if ((i + 1) % cols === 0 ) {
         cont.append(row);
@@ -1282,7 +1287,15 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
        * 
        * @memberOf europeana_widget.voteSetup.vote
        * 
-       * Handle click events on irrelevant items
+       * Handle an item voted irrelevant. 
+       * When a vote is cast for irrelevant. 
+       * -- add item provider to blacklist
+       * 
+       * when a vote is undone
+       * -- remove provider from blacklist
+       * 
+       * when tagging is finished, rerun query. 
+       * 
        */
       voteHandler = function() {
         var item, provider, v, providerBlacklist, providerBlacklist_store, vote_store;
@@ -1524,11 +1537,13 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
 
     /**
      * @memberOf europeana_widget.init_euRelated
+     * redo the query on a signal.
      */
+    
     var signal = "relevance_tag_complete";
     $(window).on(signal, function(e, data) {
-      console.log(signal);
-      makeEuRelatedItems(false);
+     
+        makeEuRelatedItems(false);
     });
   
     /**

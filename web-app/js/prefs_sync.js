@@ -25,14 +25,14 @@
    */
   function sendData(data,success) {
     
-    var url = '/api/preferences/related'
+    var url = '/api/preferences/related';
       $.ajax({
         contentType : "application/json; charset=utf-8",
         url : url,
         dataType : "json",
         type : "POST",
-        data : data,
-      }).done(success)
+        data : data
+      }).done(success);
   }
   /**
    * 
@@ -40,9 +40,9 @@
    * 
    */
   function getMode() {
-    var mode = ""
-    mode = storage.get('search-mode')
-    return mode
+    var mode = "";
+    mode = storage.get('search-mode');
+    return mode;
   }
  
 
@@ -56,15 +56,15 @@
     var success = function(d) {
       console.log(d);
 
-    }
+    };
     var rel =  getRelatedPrefs();
     var mode = getMode();
-    var data = {data:rel,token:token,mode:mode}
+    var data = {data:rel,token:token,mode:mode};
     $(window).data("search_prefs",data);
     sendData(JSON.stringify(data),success);
   }
     
 
-window.syncRelated = syncRelated
+window.syncRelated = syncRelated;
 
 }();

@@ -1,6 +1,5 @@
-
 <script>
- 
+ ! (function(){
 $(document).ready(function(){
   $("#ure-images").delay(200).fadeIn(200);
   // fix text anomalies
@@ -33,10 +32,10 @@ $(document).ready(function(){
 
 		return [prev,next]
     }
-  
+  // loaded in header
   imageModal("#record-images .cell",get_image,get_caption,get_prevnext)
 });
-
+ })()
 </script>
 <%
 def fields = [:];
@@ -73,7 +72,6 @@ Terracotta
 Dimensions:
 38.7 x 25.7 cm (15 1/4 x 10 1/8 in.)
  -->
- 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
 <div class="container" id="meta2">
@@ -113,10 +111,7 @@ Dimensions:
 		  $(this).attr('title','drag to add to lighttable');
 			//data-placement="top" data-toggle="tooltip" title="
 			
-			})
-	
-
-       
+		});	       
        // enable dnd for images --> lighttable div
      	var moveImage = function(e) {
      	 	var url = $(this).attr('data-ure-image-url');
@@ -167,7 +162,6 @@ Dimensions:
 					${fields.artist.content}
 				</div>
 			</div>
-			
 			<div class="row">
 				<div class="col-md-4 ure-record-col-left ">
 					${fields.period.label}
@@ -240,7 +234,6 @@ Dimensions:
 					${fields.handle_height.content}
 				</div>
 			</div>
-			
 		</div>
 	</div>
 	<!--  Description -->

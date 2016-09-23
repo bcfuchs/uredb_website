@@ -1,5 +1,5 @@
-<%@ page import="java.util.Properties"%>
 <!DOCTYPE html>
+<%@ page import="java.util.Properties"%>
 <html>
 <!-- main.tmpl -->
 <head>
@@ -19,8 +19,6 @@
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
 <g:layoutHead />
-
-
 <% def uredb_wskey = System.getenv("WSKEY");
 if (uredb_wskey == null) {
     uredb_wskey = System.getProperty("WSKEY");
@@ -28,7 +26,6 @@ if (uredb_wskey == null) {
 %>
 <script>
 var uredb_wskey = "${uredb_wskey}";
-
 </script>
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
@@ -53,8 +50,6 @@ easterEgg('z',function(){
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'earth.old.css')}" />
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'main.css')}" />
 <r:layoutResources />
-
-
 </head>
 <body onload="${pageProperty(name:'body.onload')}">
 	<sec:ifLoggedIn>
