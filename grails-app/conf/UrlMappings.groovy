@@ -17,6 +17,12 @@ class UrlMappings {
         }
 
         /****************
+         *  other stuff
+         *
+         */
+        "/robots.txt" (view: "/robots")
+        
+        /****************
          *  User Pages
          *
          */
@@ -32,10 +38,6 @@ class UrlMappings {
          * */
 
         "/manage/related"(view:"/manage/related")
-
-
-
-
 
         //record page
         "/record/$acc"(controller:"record"){

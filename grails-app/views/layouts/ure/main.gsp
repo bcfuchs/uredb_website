@@ -38,6 +38,8 @@ easterEgg('z',function(){
 		$(".dev-features").toggle();
 	});
 	})
+	
+
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
@@ -51,7 +53,10 @@ easterEgg('z',function(){
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'main.css')}" />
 <r:layoutResources />
 </head>
+
 <body onload="${pageProperty(name:'body.onload')}">
+<div id="beta-warning">This is a beta trial version of the UreDB. 
+Go to <a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a> for the real thing.</div>
 	<sec:ifLoggedIn>
 		<g:render template="/shared/ure/topnav"></g:render>
 	</sec:ifLoggedIn>

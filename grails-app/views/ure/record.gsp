@@ -51,6 +51,7 @@
 <g:set var="isRecordPage" value="true" scope="request" />
 </head>
 <body>
+
 	<span>
 		<%
     if (flash.lastURI =~ /searchable/) {
