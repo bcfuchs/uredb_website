@@ -3,9 +3,8 @@
   var toggler = function(clickSel,showSel) {
 
     $(clickSel).css({cursor:'pointer'})
-    $('[data-toggler-target="'+showSel+'"]')
-      .css({'text-decoration':'underline'});
-    
+        
+    $('[data-toggler-target="'+showSel+'"]').toggleClass("list-toggler-item-on")
     var togglelist = []
     $(clickSel).each(function(){
       togglelist.push($(this).attr('data-toggler-target'))
@@ -17,8 +16,9 @@
     
     $(clickSel).click(function(){
       var target = $(this).attr('data-toggler-target');
-      $(clickSel).css({'text-decoration':'none'})
-      $(this).css({'text-decoration':'underline'});
+      $(clickSel).removeClass('list-toggler-item-on');
+      $(this).toggleClass("list-toggler-item-on")
+      
       $(targetSel).hide();
       $(target).show();
       
@@ -26,7 +26,7 @@
 
     }
   $(document).ready(function(){
-    toggler(".list-toggler ","#wordlistwidget-container")
+    toggler(".list-toggler-item ","#wordlistwidget-container")
     })
 
   

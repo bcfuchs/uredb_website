@@ -8,7 +8,7 @@
 <div class="binstat-chart"></div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js"></script>
 <script>
-
+! function(){
 var bar = function(data,vals) {
 
 var color = d3.scale.category10();
@@ -90,6 +90,7 @@ for (var i  in sorted) {
 
 
   bar(data,vals,domain)
+	}()
 
 </script>
 <style>
@@ -101,6 +102,10 @@ for (var i  in sorted) {
   padding: 3px;
   margin: 1px;
   color: white;
+}
+
+.binstat-chart div:hover {
+    opacity: 0.8;
 }
 
 </style>

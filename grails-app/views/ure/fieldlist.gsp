@@ -28,6 +28,25 @@ $(document).ready(function(){
 		#list-toggler {
 			margin: 0 0 20px -10px
 		}
+		.list-toggler-item {
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		
+		.list-toggler-item-on {
+			color: white;
+			text-decoration:underline;
+		}
+		
+		.list-toggler-item-off {
+		
+			color: white;
+		}
+		
+		.flash_message {
+			display:none;
+		}
+		
 </style>	
 
 </head>
@@ -41,9 +60,9 @@ $(document).ready(function(){
 	<span class="flash_message">
 		${flash.message}
 	</span>
-	<div id="list-toggler" class="container btn-group">
-		<button class="list-toggler btn btn-default" data-toggler-target="#wordlistwidget-container">word list</button>
-		<button class="list-toggler btn btn-default" data-toggler-target="#wormapwidget-container">bar chart</button>
+	<div id="list-toggler" class="container">
+		<span class="list-toggler list-toggler-item" data-toggler-target="#wordlistwidget-container">word list</span>
+		<span class="list-toggler list-toggler-item" data-toggler-target="#wormapwidget-container">chart</span>
 	</div>
 	<div id="wordlistwidget-container">
 		<ure:wordlistWidget klass="wordlist-widget" words="${rlist.words}" wordcount="${rlist.wc}"  f="${rlist.f }" thumbs="${rlist.thumbs}"></ure:wordlistWidget>

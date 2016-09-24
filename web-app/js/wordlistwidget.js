@@ -31,11 +31,19 @@
       }
     })  
   }
+  var exclude_num_test = ['fieldlist/date','fieldlist/accession_number'];
+  
   $(document).ready(function(){
   var tests = [
     // test, action
         [(function(w){ return (w === "")?true:false }),(function(el){ $(el).hide()}) ],  // hide blanks
-        [(function(w){ return /[0-9\+\?\-]/.exec(w)?true:false }),(function(el){ $(el).hide()}) ],    // hide words with numbers
+        
+        [(function(w){ return /[0-9\+\?\-]/.exec(w)?true:false }),(function(el){ 
+          if ( exclude_num_test.indexOf(window.location.pathname) > -1) {
+            $(el).hide();
+          }
+          
+        }) ],    // hide words with numbers
         [(function(w){ return ($.inArray(w.toLowerCase(),window.stoplist) > -1)?true:false}),(function(el){ $(el).hide()}) ] // hide stop words
 
                ]
