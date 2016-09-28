@@ -83,7 +83,14 @@ class RecordService {
         }
     return gn(rid);
      }
-
+    /**
+     * Get the raw tokens for the field -- 
+     * @param prop
+     * @return
+     */
+    def getRawTokensForField(String prop) {
+   
+    }
     /**
      * Get the tokens from  the records for field $prop 
      * @param prop
@@ -134,7 +141,7 @@ class RecordService {
 
                     else {
                         // now tokenize them
-                        rlist = _splitter(rlist, p)
+                        rlist = _splitter(rlist, p);
                     }
                 }
 
@@ -154,8 +161,7 @@ class RecordService {
                 else {
                     wc[w] = 1
                 }
-                
-                
+
             }
             
             rlist2['wc'] = wc
@@ -195,7 +201,7 @@ class RecordService {
 
     private List _splitter(List rlist, String p) {
         if (p instanceof String) {
-            rlist << p.split(/[\s\,\)\(\;\.\/\\\:\"\'\!]+/)
+            rlist << p.toLowerCase().split(/[\s\,\)\(\;\.\/\\\:\"\'\!]+/)
         }
         else {
             rlist << p.toString();
