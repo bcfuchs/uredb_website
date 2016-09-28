@@ -1,0 +1,164 @@
+#edit-uremeta input {
+	
+	
+	
+}
+
+#uremeta-form > div{
+	display: inline;
+	
+	
+	
+}
+
+#uremeta-form div.container-left {
+	width: 60%;
+	
+	
+	
+}
+
+#uremeta-form div.container-right {
+	width: 40%;
+	
+	
+}
+.form-control.para {
+	
+	height: 500px;
+	
+}
+
+.form-control.para-small {
+	
+	height: 300px;
+	
+}
+
+.first {
+	
+	padding: 10px 10px 40px 20px;
+	
+}
+
+#Content {
+	//color: #FFFFCC;
+	color: black;
+	background: silver;
+	//background: #660000
+	
+	
+	
+}
+
+body {
+	
+	background: white;
+	color :black;
+}
+
+#cms-page {
+	font-size: 8px;
+	color: silver;
+	
+}
+
+/** pagination */
+
+.pagination a {
+	padding-left: 25px;
+	font-size: 20px;
+	
+	}
+.pagination span {
+	padding-left: 25px;
+	font-size: 20px;
+	
+	}
+.pagination {
+	border: 1px solid gray;
+	width: 100%;
+}
+
+/** table  list.gsp */
+td.accnum {
+	width: 12px;
+}
+#uremeta-table td {
+	max-width: 15%;
+	
+	
+	
+}
+#editor-greeting {
+ padding: 40px 15px;
+  text-align: center;
+  background: white;
+}
+
+#options-list a{
+	font-size: 30px !important;
+	
+}
+.glyph-hide {
+	display:none;
+}
+#options-list {
+	width: 60%;
+	margin-left: 30%;
+}
+#options-list .glyphicon {
+	font-size:40px;
+	float:right;
+	padding-top:10px;
+	padding-right: 20px;
+
+}
+
+#recordedit-media-grid .image-infobox {
+	font-size: 8px;
+	padding-left: 5px !important;
+	
+}
+
+#de td {
+	padding-left: 20px;
+	
+}
+#de td.head {
+	font-size: 16px;
+	font-weight: 600;
+	padding-top: 30px;
+	
+}
+#accnum-show {
+	color: red;
+	
+	
+}
+#save-btn-pic {
+	padding-top: 30px;
+	
+}
+/* --- Desktop --- */
+@media screen and (max-width: 1140px) {
+	#wrapper {
+		max-width: 980px;
+	}
+}
+
+/* --- Tablet --- */
+@media screen and (max-width: 768px) {
+	
+}
+/* --- Mobile --- */
+@media screen and (max-width: 488px) {
+	
+	
+	
+	}
+	
+	
+	
+	
+	

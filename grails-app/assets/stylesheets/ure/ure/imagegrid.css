@@ -1,0 +1,38 @@
+
+/** image grid styles */
+
+#100-grid .cell {
+    background-size: cover;
+    border: 2px solid gray;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    color: #000;
+    }
+#100-grid .image-infobox {
+	background: black;
+	color: white;
+	opacity: 0.6;
+	padding-left: 30px;
+}
+
+#100-grid .image-infobox div {
+	line-height: normal;
+	padding-bottom: 10px;
+}
+
+#100-grid .image-infobox  .short_title {
+	font-style: italic;
+	font-weight: bold;
+}
+
+#100-grid .image-infobox .desc {
+	line-height: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#100-grid .hide-infodiv {
+ display:none;
+ 
+ }	

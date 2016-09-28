@@ -5,11 +5,7 @@ import grails.converters.JSON
 import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
 
-import org.codehaus.groovy.grails.commons.*;
-
-
-
-
+import grails.commons.*;
 /**
  * RecordController
  * 
@@ -20,7 +16,7 @@ import org.codehaus.groovy.grails.commons.*;
 class RecordController  {
 
     //TODO get this from options.
-    def grailsApplication
+//    def grailsApplication
     RecordService recordService;
    
   

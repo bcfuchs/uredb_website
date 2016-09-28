@@ -1,0 +1,414 @@
+/** dev features */
+.dev-features {
+	display: none;
+}
+#beta-warning {
+	padding:0;
+	height: 10px;
+	width: 100%;
+	background: black;
+	color: silver;
+	text-align: center;
+	
+	
+}
+/** modal message box */
+#alert-modal {
+	position: fixed;
+	bottom: -18px;
+	left: 0;
+	opacity: 1;
+	z-index: 99999;
+	font-size: 20px;
+	padding-left: 20%;
+}
+
+span.lighttable-link {
+	cursor: pointer;
+}
+
+#close-lighttable {
+	cursor: pointer;
+}
+
+img.lighttable-ui-small {
+	height: 100px;
+	margin: 5px 5px 5px 5px;
+}
+
+.ure-image-container {
+	display: inline;
+	padding: 10px;
+	cursor: pointer;
+}
+
+#lighttable-links .ure-control-btn {
+	cursor: pointer;
+}
+
+#lighttable-container {
+	position: fixed;
+	display: none;
+	background-color: black;
+	width: 80%;
+	height: 100%;
+	border-top: 4px solid gray;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-bottom-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	border-border-bottom-right-radius: 5px;
+	border-border-top-right-radius: 5px;
+	padding: 10px;
+}
+
+#lighttable-container-inner {
+	overflow: hidden;
+	height: 100%;
+}
+
+#lighttable-trash {
+	display: none;
+}
+
+#lighttable-container .control-btn {
+	color: white;
+	cursor: pointer;
+	/* border: thin ridge white;
+	
+	background-color: green;
+	
+	max-width: 100px; */
+	cursor: pointer;
+	/* text-align: center;
+	display: inline;
+	padding: 5px 10px 5px 10px;
+	margin: 10px;
+ */
+}
+
+#lighttable-controls {
+	padding: 5px 0 5px 10px;
+	background-color: black;
+	border-top: 4px solid gray;
+	border-left: 4px solid gray;
+	border-bottom: 4px solid gray;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-moz-border-bottom-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	border-border-bottom-left-radius: 5px;
+	border-border-top-left-radius: 5px;
+	width: 30px;
+	position: relative;
+	top: -14px;
+	left: -40px;
+}
+
+#lighttable-thumbs img {
+	height: 32px;
+	margin: 1px;
+}
+
+.img-selected  img {
+	border: 1px solid rgb(86, 180, 239);
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px
+		rgba(82, 168, 236, 0.6);
+	height: auto;
+}
+
+.img-selected  canvas {
+	border: 4px solid rgb(86, 180, 239);
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px
+		rgba(82, 168, 236, 0.6);
+	height: auto;
+}
+
+/** image modal */
+
+/** modal message box */
+#overlay1 {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 9991;
+	opacity: 0.6;
+	display: none;
+}
+
+#image-modal {
+	position: fixed; //
+	bottom: 108px; //
+	top: 10px; //
+	left: 200px; //
+	opacity: 0.7;
+	z-index: 9992;
+	padding: 10%;
+	display: none;
+	width: 100%;
+	height: 100%; //
+	background: black;
+	padding: 0;
+}
+
+#image-modal .close-image {
+	color: white;
+	position: relative;
+	top: -280px;
+	left: -19px;
+	padding-bottom: 20px;
+	padding-top: 10px;
+	padding-left: 5px;
+	background: black;
+	width: 19px;
+	-webkit-border-bottom-left-radius: 3px;
+	-moz-border-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+}
+
+.image-modal-nav-container {
+	font-size: 20px;
+	text-decoration: none;
+	color: silver;
+}
+
+.image-modal-nav-container a:nth-child(1) {
+	float: left;
+	margin-right: 90%;
+	text-decoration: none;
+	font-size: 20px;
+}
+
+#image-modal .image-modal-container {
+	max-width: 55%;
+	margin: 0 auto;
+	min-height: 600px;
+	background: black;
+	position: relative;
+}
+
+#image-modal .image-modal-data-container {
+	margin: 0 auto;
+	width: 100%;
+}
+
+.image-modal-nav-container {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+#image-modal .caption-container {
+	min-height: 100px;
+	background: black;
+	color: white;
+	padding: 10px;
+	text-align: center;
+	font-size: 18px;
+}
+
+#image-modal img {
+	max-width: 100%;
+	margin: auto;
+	display: block;
+	opacity: 1;
+}
+
+#extlink-container {
+	padding-top: 10px;
+}
+
+a#extlink:link {
+	text-decoration: none !important;
+}
+
+#close-image-button:hover {
+	color: silver;
+}
+
+#close-image-button {
+	cursor: pointer;
+	font-size: bold;
+}
+
+#top2_nav h1 {
+	position: relative;
+	top: -7px;
+	font-size: 1.9em;
+}
+
+/** Searchable */
+#main .title {
+	background: none;
+	border-top: none;
+}
+._________________________ Comparanda Controls _________________________ {
+	
+}
+
+#comparanda-nav-list {
+	//margin-top: 10px;
+	
+}
+.comp-nav-img-container {
+	display: block;
+
+}
+.comp-nav-img {
+	height: 15px;
+}
+.comp-nav-list-group {
+ 	list-style-type: none;
+    padding: 0 0 0 0 ;
+    border: 1px solid #ddd;
+    opacity: 1;
+    background: pink;
+
+}
+.comp-nav-list-group img {
+	margin: 0 0 0 3px;
+}
+.comp-nav-list-group  li {
+	padding: 0 0 0 0;
+    border-bottom: 1px solid #ddd;
+    margin-left: 0 !important;
+    
+    
+}
+.comp-nav-list-group  .comp-nav-record {
+	opacity: 1;
+	background: gray;
+	padding-top: 8px;
+	padding-bottom: 4px;
+
+}
+
+.comp-nav-list-group .comp-nav-comps {
+	opacity: 1;
+	background: #222;
+	padding-top: 8px;
+	padding-bottom: 4px;
+
+}
+
+.comp-nav-list-group  li:last-child {
+
+border-bottom:none;
+
+
+}
+.ure-dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.ure-dropdown-content {
+	display: none;
+	position: absolute;
+	// background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	padding: 12px 16px;
+	top: -50px;
+	left: -120px;
+	z-index: 1;
+}
+
+.ure-dropdown:hover .ure-dropdown-content {
+	display: block;
+	
+}
+
+._________________________ Europeana Widget _________________________ {
+	
+}
+/** 
+* Europeana Widget
+* 
+*/
+#pagination-widget {
+	display: inline;
+	padding-left: 12px;
+}
+
+#pagination-widget .incrementer {
+//	text-decoration: underline;
+	cursor: pointer;
+	"
+}
+
+#pagination-widget .incrementer:hover {
+	color: aqua;
+	
+} 
+
+#relevance-vote {
+	padding-left: 20px;
+}
+
+.voterbtn {
+	position: absolute;
+	bottom: 0;
+}
+
+.eu-grid .cell {
+	background-size: cover;
+	border: 2px solid gray;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	color: #000;
+}
+
+
+.eu-grid .cell.bs-cell {
+	margin: 5px 5px 5px 5px;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.eu-grid .image-infobox {
+	background: black;
+	color: white;
+	opacity: 0.6;
+	padding-left: 3px;
+	font-size: 8px;
+}
+
+.eu-grid  .image-infobox div {
+	line-height: normal;
+	padding-bottom: 10px;
+}
+
+.eu-grid .image-infobox  .short_title {
+	font-style: italic;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow-multiline: ellipsis;
+	height: 19px;
+}
+
+.eu-grid .image-infobox .desc {
+	line-height: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.eu-grid  .hide-infodiv {
+	display: none;
+}
+
+.fieldlist-img {
+	height: 40px;
+}
+/** END  Europeana Widget */
+
+/** MEDIA */
+@media ( min-width : 768px) {
+	.navbar-nav>li>a {
+		padding-top: 10px !important;
+	}
+}
+}

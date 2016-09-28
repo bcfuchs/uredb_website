@@ -1,7 +1,7 @@
 package org.ac.uk.reading.ure.uredb
 import java.util.List;
 
-import org.codehaus.groovy.grails.commons.*;
+import org.grails.core.*
 import org.springframework.context.ApplicationContext
 import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
@@ -83,7 +83,14 @@ class RecordService {
         }
     return gn(rid);
      }
-
+    /**
+     * Get the raw tokens for the field -- 
+     * @param prop
+     * @return
+     */
+    def getRawTokensForField(String prop) {
+   
+    }
     /**
      * Get the tokens from  the records for field $prop 
      * @param prop
@@ -154,8 +161,7 @@ class RecordService {
                 else {
                     wc[w] = 1
                 }
-                
-                
+
             }
             
             rlist2['wc'] = wc

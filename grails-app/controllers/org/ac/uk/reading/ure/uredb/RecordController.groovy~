@@ -1,0 +1,360 @@
+package org.ac.uk.reading.ure.uredb
+import java.lang.reflect.Type;
+import java.sql.*;
+import grails.plugin.cache.CacheEvict
+import grails.plugin.cache.Cacheable
+
+
+import org.codehaus.groovy.grails.commons.*;
+
+
+/**
+ * RecordController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+class RecordController {
+    
+    //TODO get this from options.
+    def propNoSplitList = [
+        'period',
+        'accession_number',
+        'date_edited',
+        'munsell_color',
+     'technique',
+        'location'
+    ];
+
+    //	def index = { }
+
+
+    def getRecordByAccNum() {
+        //TODO flash message should handle info from previous requeest
+        return getRecordByAccNum2(params.acc);
+ 
+
+    }
+    /**
+     * send a model for $acc to /ure/record.gsp for display
+     * record.gsp uses template /ure/share/meta to display the data
+     * @return
+     */
+    def getRecordByAccNum2(acc) {
+
+
+        //		log.info("getRecordByAccNum $nacc")
+        //		log.info nacc;
+
+
+        //				def rec =  Uremeta.get(attrs.id);
+        def rec =  Uremeta.findAll('from Uremeta as u where u.accession_number like ?', [acc]);
+        //EXCEPTION:  no such object
+        assert rec[0] != null;
+
+        def record = [];
+        def rlist = [];
+
+        rec[0].properties.sort().each {k,v->rlist << k}
+        def out = makeLabels(rlist);
+        rec.each {r->
+            r.properties.sort().each {k,v->
+                def img =[];
+                if (k == 'media') {
+                    v.each { image ->
+                        img << [base:image.uri_local,filename:image.uri,caption:image.caption,id:image.id];
+                    }
+                }
+                record  << ['field':k,'content':v,'image':img, 'label':out[k]]
+            }
+        }
+        render(view:"/ure/record", model:[record:record,accnum:acc,id:rec[0].id]);
+    }
+
+
+
+    def getRecordAccnumsForField = {
+
+        def prop = params.prop;
+
+        // if we find it, return a rendered version
+
+        // if we don't, return a not found
+
+
+        //				def rec =  Uremeta.get(attrs.id);
+        def recs =  Uremeta.list();
+        //TODO should be an error if more than one
+        def rlist = [];
+
+        recs.each {r->
+            def p = r[prop];
+            // dont list fields w no content
+            if (p != null ) {
+                p.split(" ").each { w->
+                    rlist << [acc:r.accession_number,word:w];
+                }
+            }
+
+
+        }
+        render (view:"/ure/reclist",model:[rlist:rlist]);
+    }
+
+    def getTokensForField = {
+
+        def prop = params.prop;
+//        def propNoSplitList = [
+//            'period',
+//            'accession_number',
+//            'date_edited',
+//            'location'
+//        ];
+        // if we find it, return a 	rendered version
+
+        // if we don't, return a not found
+
+
+        //				def rec =  Uremeta.get(attrs.id);
+        def recs =  Uremeta.list();
+        //TODO should be an error if more than one
+        def rlist = [];
+        def coll = {p->
+            
+        }
+        if (!recs[0][prop]) {
+
+
+            render(view: 404)
+
+        }
+        else {
+            recs.each {r->
+                def p;
+                //Exception -- no such prop
+                try {p  = r[prop]} catch(e){}
+
+
+                // dont list fields w no content
+
+                if (p != null ) {
+                    if (propNoSplitList.contains(prop)) {
+                        rlist << p;
+                    }
+                    // foreign keys
+                    else if (prop == 'media') {
+                        p.each {
+                            rlist << it.uri_local + "/thumb/" + it.uri;
+                        }
+                    }
+                  
+                    else {
+                        if (p instanceof String) {
+                        rlist << p.split(/[\s\,\)\(\;\.\/\\\:\"\'\!]+/)
+                        }
+                        else {
+                            rlist << p.toString();
+                        }
+                    }
+                }
+
+
+            }
+            def rlist2 = [:]
+            rlist2['words'] = rlist.flatten().unique().sort();
+            rlist2['f'] = prop;
+            render (view:"/ure/fieldlist",model:[rlist:rlist2]);
+        }
+    }
+
+    def getTokensForFieldImage = {
+
+        def prop = params.prop;
+
+        // if we find it, return a 	rendered version
+
+        // if we don't, return a not found
+
+
+        //				def rec =  Uremeta.get(attrs.id);
+        def recs =  Uremeta.list();
+        //TODO should be an error if more than one
+
+        def rlist = [];
+
+        if (!recs[0][prop]) {
+
+            render(view: 404)
+
+        }
+        else {
+            recs.each {r->
+                def p;
+                //Exception -- no such prop
+                try {p  = r[prop]} catch(e){}
+
+
+                // dont list fields w/o content
+
+
+                if (p != null  && r.media.size() > 0) {
+                    if (propNoSplitList.contains(prop)) {
+                        rlist << p;
+                    }
+                    // foreign keys
+                    else if (prop == 'media') {
+                        p.each {
+                            rlist << it.uri_local + "/thumb/" + it.uri;
+                        }
+                    }
+                    else {
+                        rlist << p.split(/[\s\,\)\(\;\.\/\\\:\"\'\!]+/)
+                    }
+                }
+
+
+            }
+            def rlist2 = [:]
+            rlist2['words'] = rlist.flatten().unique().sort();
+            rlist2['f'] = prop;
+            flash.ure_message = "ok";
+            render (view:"/ure/fieldlist",model:[rlist:rlist2,type:"image"]);
+        }
+    }
+
+    // /recordlist/$field/$val
+    def getRecordByProperty() {
+
+        def recs = _getRecordsByProperty(params.f,params.val);
+        def rlist = [];
+        recs.each { rlist << it.accession_number };
+        flash.message = params.f;
+        render(view:"/ure/reclist2",model:[rlist:rlist,f:params.f,val:params.val]);
+    }
+
+    /**
+     * return a list of images for records with val in field f
+     * render with reclist2
+     * @return
+     */
+
+    def getImageByProperty() {
+
+
+        // if we don't, return a not found
+        def recs =  _getRecordsByProperty(params.f,params.val)
+
+        recs = recs.findAll {it.media.size() > 0}
+        def out =[];
+        recs.each { r->
+
+            def image = r.media.toArray()[0];
+            def img_uri = image.uri_local + "/thumb/" + image.uri;
+
+            out << [img_uri: img_uri,
+                img: image,
+                images: r.media.toArray(),
+                accnum: r.accession_number,
+                record: r ]
+
+        }
+
+        render(view:"/ure/browseImageResult",model:[rlist:out,val:params.val,f:params.f]);
+
+
+    }
+
+    private List _getRecordsByProperty(String f,String val) {
+        // these exceptions happen only if wrong field is typed in manually
+        // possibly an argument for using session info
+        // exception no such field
+        // exception no records found
+        //TODO THIS WILL NOT BEHAVE CORRECTLY WITH no-split indices!
+        def recs;
+        def t;
+        def val2;
+       // timestamps are passed in as strings
+        // how to know that they are timestamps?
+        // need info about domain model!
+     //   def type = grailsApplication.getDomainClass('Uremeta).getPropertyByName(f);
+       def type =  GrailsClassUtils.getPropertyType(Uremeta,f);
+        if (type == java.util.Date) { 
+            
+            val2 = Timestamp.valueOf(val)
+            propNoSplitList << f;
+            
+            }
+        else {
+            val2 = val;
+        }
+      
+        
+        if (propNoSplitList.contains(f)) {
+            recs =  Uremeta.findAll('from Uremeta as u where u.'+f+' like ? ', [val2]);
+        }
+        else {
+            recs =  Uremeta.findAll('from Uremeta as u where u.'+f+' like ? ', ['%'+val2+'%']);
+
+        }
+
+
+        log.info recs.toArray().size();
+        def rlist = [];
+
+        return recs;
+    }
+
+    def private makeLabels(fields) {
+        def out = [:];
+        fields.each {
+            out[it] = (it =~ /_/).replaceAll(" ").capitalize();
+        }
+
+        return out;
+    }
+
+    def getFieldsImage_old() {
+
+        def recs =  Uremeta.getProperties();
+        def r1 = Uremeta.get(1);
+
+        //TODO should be an error if more than one
+        def rlist = [];
+        log.info(r1.domainClass.persistedProperties);
+        recs.sort().each {k,v->rlist << k}
+        def out = makeLabels(rlist);
+
+        render(view:"/ure/browseImages",model:[rlist:out]);
+
+    }
+
+    def getFieldsImage() {
+
+        def rlist = [];
+        // get domain fields from Uremeta
+        //TODO - - the media field is a relation
+        applicationContext.getBean("org.ac.uk.reading.ure.uredb.UremetaDomainClass")
+                .persistentProperties.sort{it.name}.each {k->rlist << k.name}
+        def out = makeLabels(rlist);
+
+        render(view:"/ure/browseImages",model:[rlist:out]);
+
+    }
+    
+    @Cacheable("pages")
+    def getFields() {
+
+        def rlist = [];
+        applicationContext.getBean("org.ac.uk.reading.ure.uredb.UremetaDomainClass")
+                .persistentProperties.sort{it.name}.each {k->rlist << k.name}
+        def out = makeLabels(rlist);
+        render(view:"/ure/browseRecords",model:[rlist:out]);
+
+    }
+    
+    def create() {
+        System.err.println "CREATE\n\n"
+        log.info params;  
+        render(view:"/admin/createRecord") 
+        
+    
+    }
+}

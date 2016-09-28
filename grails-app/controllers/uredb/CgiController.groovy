@@ -9,7 +9,7 @@ class CgiController {
 
     org.ac.uk.reading.ure.uredb.RecordService recordService
 
-    static scaffold = false;
+//    static scaffold = false;
 
     //	def index = { }
 
