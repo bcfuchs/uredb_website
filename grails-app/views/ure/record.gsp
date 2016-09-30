@@ -118,6 +118,7 @@
 					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
 				</g:render>
 			</div>
+		
 		</div>
 		<!-- #record-main -->
 	</div>

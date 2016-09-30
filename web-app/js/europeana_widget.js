@@ -66,388 +66,7 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-/**
- * 
- *  START doEuRelated 
- **/
-(function() {
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  var doEuRelated_retake;
 
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  var doEuRelated = function() {
-  };
-  
-  var doEuRelated_keywords = "";
-  var retakeButtonSel = "#retake-button";
-
-  doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-    console.log("doEuRelated...");
-  
-    doEuRelated_keywords = data.keywords;
-    window.europeanaWidget_keywords = data.keywords;
- 
-    var blank_image_100x100 = "/static/images/blank100x100.png";
-    var titleWordLength = 10;
-    var providerlist = {}; // provider list
-    var template = $($(templateSel + " .gridlist-cell")[0]).clone();
-    var retakeOnZero = true; // TODO move to top
-    var default_keywords = [ 'greek','black', 'figure'];
-    
-    /** 
-     * redo the query with default kws if the supplied kws return 0
-     * 
-     */
-    doEuRelated_retake = function(keywords) {
-      
-      window.europeanaWidget_keywords = keywords;
-
-      var d = JSON.parse(data); // original data
-      d.keywords = keywords;
-      d.startrec=1;
-      alert("doEuRelated_retake kws are: " + keywords);
-      data = d; // reset data
-      delete window.eu_cursor; // reset the cursor
-      doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
-    };
-    
-    
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     */
-    var search_redo_button = function(keywords) {
-      $("#retake-button-terms").val(keywords.join(" "));
-      $(retakeButtonSel).click(function() {
-        // get the terms from the input box
-        var terms = $("#retake-button-terms").val();
-        alert("querying Europeana for '" + terms + "'...");
-        var keywords = terms.split(" ");
-       
-        doEuRelated_retake(keywords); // function reference reset w/ new data on each call
-       
-      });
-    };
-    search_redo_button(data.keywords);
-    
-    //TODO -- is this still necessary? probably not!
-    data = JSON.stringify(data); 
-   
-
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     */
-    // make style for each element.
-    var makeStyle = function(w, h, thumburl) {
-      return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
-    };
-
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     * make a date for overlay from europeana metadata return null if metadata
-     * missing.
-     */
-    var getDate = function(item) {
-
-      var out = "";
-      if ('edmTimespanLabel' in item && item.edmTimespanLabel !== "")
-        out += item.edmTimespanLabel[0].def + " ";
-      if ('edmTimespanBroaderTerm' in item && item.edmTimespanBroaderTerm)
-        out += item.edmTimespanBroaderTerm;
-      return out;
-    };
-    
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     * NOT USED!!!
-     */
-    var getTitle = function(title) {
-      var out = title[0];
-      var t = out.split(" ");
-      if (t.length > titleWordLength)
-        out = t.splice(0, titleWordLength).join(" ");
-      return out;
-    };
-
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     */
-    var makeProviderlist = function(provs) {
-      console.log('makeng provider list... ');
-      var providers = Object.keys(provs);
-      console.log(providers.length);
-
-      for (var i = 0; i < providers.length; i++) {
-        var t = $($("#provider-label-template label")[0]).clone();
-
-        var provider = providers[i];
-        $(t).attr('data-eu-provider-list', provider);
-
-        $(t).find('input').val(provider);
-        $(t).append('<span class="provider">' + provider + '</span>');
-
-        $("#provider-filter").append(t);
-      }
-    };
-    
-    /**
-     * @memberOf europeana_widget.doEuRelated 
-     * fill the grid with items
-     * called from ajax success
-     */
-    
-    var fillGrid = function(items, width, height, displayInfobox) {
-
-      var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
-      for (var i = 0; i < items.length; i++) {
-
-        var item = items[i];
-        var provider = item.dataProvider;
-        if (!(provider in providerlist))
-          providerlist[provider] = provider;
-        // clone the template
-        var t = $(template).clone();
-        // put a blank image in if there isn't an image
-        if ('edmPreview' in item) {
-          item.thumb = item.edmPreview;
-        } else {
-          item.thumb = blank_image_100x100;
-        }
-
-        var style = makeStyle(width, height, item.thumb);
-        $(t).attr('data-ure-uri', item.edmPreview);
-        $(t).attr('data-eu-provider', item.dataProvider);
-        $(t).attr('data-eu-id', item.id);
-        $(t).attr('data-eu-guid', item.guid);
-        $(t).attr('data-eu-link', item.edmIsShownAt);
-        $(t).attr('data-ure-image-url', item.edmPreview);
-        if ("dcSubjectLangAware" in item)
-          $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware.def);
-        $(t).attr('style', style);
-        $(t).find(".short_title").html(item.title);
-        $(t).find(".caption").html(item.dataProvider);
-
-        $(t).find(".date").html(getDate(item));
-
-        $(t).addClass(hideInfodiv);
-
-        $(gridSel).append(t);
-      }
-
-    }; // fillGrid
-    
-    /**
-     * add a filter to skip providers. 
-     * 
-     * @memberOf europeana_widget.doEuRelated
-     */
-    var skiplist_filter = function(items) {
-      var skiplist_store = 'skiplist';
-      var skiplist = {};
-      var storage = $.localStorage;
-      var out = [];
-      // get providerBlacklist or start one if none
-      var doSkiplist = false;
-      if (storage.isSet(skiplist_store)) {
-        skiplist = storage.get(skiplist_store);
-        if (skiplist.data.length > 0)
-          doSkiplist = true;
-      }
-
-      if (doSkiplist === true) {
-        for (var i = 0; i < items.length; i++) {
-          var item = items[i];
-          if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
-            out.push(item);
-            console.log(item.dataProvider[0]);
-          }
-        }
-      } else {
-        out = items;
-      }
-      return out;
-    };
-    
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     */
-    var getSearchMode = function() {
-      return $.localStorage('search-mode');
-    };
-
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     */
-    var set_keywords_display = function(qs) {
-      $("#keywords-display").html(qs);
-    };
-    
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * display the query
-     */
-    var set_query_display = function(qs) {
-      $("#query-display").html(qs);
-    };
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * control pagination display based on state of pagination data
-     */
-    var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
-      paginationSize = 100;
-      $("#eumore").show();
-      $("#euless").show();  
-      // increment the cursor if there is one. 
-      
-      if ('eu_cursor' in window) {
-        if (incrementCursor === true) {
-          window.eu_cursor += itemsCount;
-      } 
-      else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
-         
-        window.eu_cursor -= itemsCount
-        }
-      }
-       else {
-        window.eu_cursor = itemsCount;
-        
-      }
-      
-      $("#itemsCount").html(window.eu_cursor);
-      
-      $("#total-results").html(totalResults);
-      // itemsCount = totalResults
-      // hide eumore
-      // if the cursor is at the end 
-      if (window.eu_cursor === totalResults) {
-          $("#eumore").hide();
-          $("#euless").show(); 
-          
-      }
-      // if the cursor is beyond end of data
-      if (window.eu_cursor > totalResults) {
-        $("#eumore").hide();
-        $("#euless").show();  
-        $("#itemsCount").html(totalResults);
-    }
-      // if the batch is <= paginationSize or we are on the first batch..
-      if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
-        $("#euless").hide();
-      
-      
-      
-      
-    }; // update_pagination. 
-    
-  
-   
-
-   
- 
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     */
-
-    var timeout_handler = function(xhr) {
-      console.log("timeout_handler");
-      alert("Europeana is not available at this time.");
-    };
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     * call if we get this far...
-     */
-
-    var default_handler = function(xhr) {
-
-      alert("a problem has occurred with your Europeana search");
-    };
-    /**
-     * @memberOf europeana_widget.doEuRelated
-     * 
-     */
-
-    var ajax_new = function() {
-      
-      var keywords = JSON.parse(data).keywords;
-      var startrec = JSON.parse(data).startrec;
-      
-      var fail = function(xhr, status, err) {
-        console.log("fail: " + err);
-        console.log(xhr);
-        switch (status) {
-        case "timeout":
-          timeout_handler(xhr);
-          break;
-        default:
-          default_handler(xhr);
-        }
-
-      }; // fail
-
-      var complete = function() {
-        console.log("complete!");
-      };
-      
-      // joins the keywords w/ and
-      var get_query = function(kw) {
-        // return kw.join("+AND+");
-        return kw.join("+");
-      };
-      
-      var extras = "";
-      extras = get_search_extras();
-
-      // make query from keywords
-      var qs = get_query(keywords);
-      // TODO -- fix fails if there isn't a thumbnail
-      var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
-          + '&profile=standard' + extras;
-      var url_base = 'https://www.europeana.eu/api/v2/search.json?';
-      var url_new = url_base + query;
-      // add data to success and get new callback. 
-      var done = success_new(url_new, qs);
-
-      var provs = prefs.data.whitelist.data;
-      var f = get_whitelist_providers_facet(provs);
-      out += f;
-    
-  }
-  return out;
-
-};
-
-window.get_search_extras = get_search_extras;
-/**
- * @memberOf europeana_widget.init_euRelated
- */
-var get_whitelist_providers_facet = function(providers) {
-
-  var provs = [];
-  // qf prov1 & qf prov2 is interpreted as an "AND" query
-  // so use +OR+
-  // http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
-  console.log(providers);
-  for (var i = 0; i < providers.length; i++) {
-    var provider = providers[i];
-    // provider = provider.replaceAll(/\s/,"%20")
-    var provider_enc = encodeURIComponent(provider);
-    var provf = "provider_aggregation_edm_dataProvider:%22" + provider_enc + "%22";
-    provs.push(provf);
-    console.log(provf);
-  }
-  var provider_facet = "&qf=" + provs.join("+OR+");
-
-  return provider_facet;
-};
-window.make_whitelist_providers_query = get_whitelist_providers_facet;
-})();
 
 /**
 * 
@@ -521,13 +140,33 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
   //TODO -- is this still necessary? probably not!
   data = JSON.stringify(data); 
  
-
+var image_preloader = function(url,sel) {
+  console.log('image_preloader')
+  var spin = '/static/images/giphy.gif';
+//  url = spin;
+//  $(sel).css('background-image', 'url('+spin+')');;
+  
+  var img =  $('<img/>');
+  img.attr('src',url);
+  img.on('load',function() { 
+    console.log("loaded");
+        $(this).remove();
+        $(sel).attr('style','width:100px; height:100px;cursor:pointer;background-image: url('+url+');')
+    //    $(sel).css('background-image', 'url('+url+')');
+        });
+  img.onerror =  function(){console.log("fail");};
+    
+  
+};
   /**
    * @memberOf europeana_widget.doEuRelated
    */
   // make style for each element.
   var makeStyle = function(w, h, thumburl) {
+    var spin = '/static/images/giphy.gif';
     return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
+
+    
   };
 
   /**
@@ -601,8 +240,11 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       } else {
         item.thumb = blank_image_100x100;
       }
-
-      var style = makeStyle(width, height, item.thumb);
+      var testpic = 'http://uredb.reading.ac.uk/ure/pixdir/2011.97g/sm/2011.97.0320.jpg'
+      var style = makeStyle(width, height,item.thumburl);
+     console.log(style); 
+       
+   //   image_preloader(testpic,t);
       $(t).attr('data-ure-uri', item.edmPreview);
       $(t).attr('data-eu-provider', item.dataProvider);
       $(t).attr('data-eu-id', item.id);

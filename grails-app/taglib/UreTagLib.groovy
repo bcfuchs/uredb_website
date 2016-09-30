@@ -56,10 +56,7 @@ class UreTagLib {
         def acc = "13.10.28"
 
         def rec =  Uremeta.get(attrs.id);
-
         rec.properties.sort().each {k,v->
-
-
             out  << body(("t"):['key':k,'value':v])
 
         }
