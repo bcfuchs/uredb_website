@@ -240,7 +240,7 @@ var image_preloader = function(url,sel) {
       } else {
         item.thumb = blank_image_100x100;
       }
-      var testpic = 'http://uredb.reading.ac.uk/ure/pixdir/2011.97g/sm/2011.97.0320.jpg'
+   
       var style = makeStyle(width, height,item.thumburl);
      console.log(style); 
        
