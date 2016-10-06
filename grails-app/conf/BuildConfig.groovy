@@ -7,6 +7,7 @@ grails.project.test.reports.dir = "target/test-reports"
 def webdriverVersion = "2.52.0"
 def gebVersion = "0.11.0"
 
+grails.enable.native2ascii = false
 grails.project.dependency.resolution = {
     legacyResolve false
     
