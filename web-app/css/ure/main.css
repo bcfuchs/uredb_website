@@ -405,10 +405,42 @@ border-bottom:none;
 }
 /** END  Europeana Widget */
 
-/** MEDIA */
+/** desktop */
 @media ( min-width : 768px) {
 	.navbar-nav>li>a {
 		padding-top: 10px !important;
 	}
+
 }
+
+
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+	.ure-record-col-left {
+	text-align: left;
+   	padding-right: 0
+}
+#ure-other-details .nav {
+	
+//	display:none;
+}
+
+#ure-other-details .tab-pane {
+//	display: block !important;
+	
+	
+}
+#record-images .cell {
+	height: 50px !important;
+	width: 50px !important;
+	
+	}
+}
+
+	
+	
 }

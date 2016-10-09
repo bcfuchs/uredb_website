@@ -19,7 +19,7 @@
   // reset the cache
   var eu_querycache_store = 'eu_querycache'; 
   if ( $.localStorage.isSet(eu_querycache_store))  {
-      $.localStorage.set(eu_querycache_store,{})
+      $.localStorage.set(eu_querycache_store,{});
   }
 
   /**
@@ -113,7 +113,6 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     var d = JSON.parse(data); // original data
     d.keywords = keywords;
     d.startrec=1;
-    alert("doEuRelated_retake kws are: " + keywords);
     data = d; // reset data
     delete window.eu_cursor; // reset the cursor
     doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
@@ -240,9 +239,8 @@ var image_preloader = function(url,sel) {
       } else {
         item.thumb = blank_image_100x100;
       }
-   
+      // set the background image
       var style = makeStyle(width, height,item.thumburl);
-     console.log(style); 
        
    //   image_preloader(testpic,t);
       $(t).attr('data-ure-uri', item.edmPreview);
@@ -256,9 +254,8 @@ var image_preloader = function(url,sel) {
       $(t).attr('style', style);
       $(t).find(".short_title").html(item.title);
       $(t).find(".caption").html(item.dataProvider);
-
       $(t).find(".date").html(getDate(item));
-
+      
       $(t).addClass(hideInfodiv);
 
       $(gridSel).append(t);

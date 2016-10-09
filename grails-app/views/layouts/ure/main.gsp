@@ -32,6 +32,7 @@ var uredb_wskey = "${uredb_wskey}";
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
 <script src="${resource(dir:'js',file:'messages.js')}"></script>
+<script src="${resource(dir:'js',file:'media.js')}"></script>
 <script>
 easterEgg('z',function(){
 	$(document).ready(function(){
@@ -45,7 +46,6 @@ easterEgg('z',function(){
 <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
@@ -53,16 +53,17 @@ easterEgg('z',function(){
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'main.css')}" />
 <r:layoutResources />
 </head>
-
 <body onload="${pageProperty(name:'body.onload')}">
-<div id="beta-warning">This is a beta trial version of the UreDB. 
-Go to <a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a> for the real thing.</div>
+	<div id="beta-warning">
+		This is a beta trial version of the UreDB. Go to
+		<a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a>
+		for the real thing.
+	</div>
 	<sec:ifLoggedIn>
 		<g:render template="/shared/ure/topnav"></g:render>
 	</sec:ifLoggedIn>
 	<div id="wrapper">
 		<g:render template="/ure/horiz"></g:render>
-		
 		<div id="blocky" class="container">
 			<div class="row">
 				<div id="left_nav" class="col-md-2">
@@ -78,7 +79,6 @@ Go to <a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a> 
 			The Ure Museum is part of<br>The University of Reading, Whiteknights, PO Box 217, Reading, RG6 6AH
 		</div>
 	</div>
-	
 	<g:render template="/ure/lighttable_widget"></g:render>
 	<r:layoutResources />
 	<script>
@@ -98,18 +98,24 @@ Go to <a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a> 
 println flash.lastURI
  %>
  -->
- <div class="alert" role="alert" id="alert-modal" style="display:none"> 
-
-	    <button type="button" class="close" id="alert-modal-close" aria-label="Close">
-		<span aria-hidden="true">&times;</span></button>
-	    <div class="alert-body"></div>
-</div>	
-<div id="templates-main" style="display:none">
-<div id="template-comp-dropdown" class="dropdown">
-
-</div>
-
-</div>
-</div>
+	<div class="alert" role="alert" id="alert-modal" style="display: none">
+		<button type="button" class="close" id="alert-modal-close" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div class="alert-body"></div>
+	</div>
+	<div id="templates-main" style="display: none">
+		<div id="template-comp-dropdown" class="dropdown"></div>
+	</div>
+	</div>
+	<%  
+		def ga_script = System.getenv("GA_SCRIPT").toBoolean();
+		if (ga_script == null) {
+		    ga_script = System.getProperty("GA_SCRIPT").toBoolean();
+		}
+	%>
+	<g:if test="${ga_script == true }">
+		<g:render template="/ure/ga"></g:render>
+	</g:if>
 </body>
 </html>
