@@ -9,7 +9,7 @@ $(document).ready(function(){
 		$(this).text(text)
 		})
     }
-  repair(".repair div.col-md-8,#ure-description")
+  repair(".repair div.col-md-8, .repairdiv");
 
   // set up image modal
   var get_caption = function(el) {
@@ -237,7 +237,7 @@ Dimensions:
 		</div>
 	</div>
 	<!--  Description -->
-	<div id="ure-description" class="row ure-description ure-record-data repair" data-ure-record-field="description">
+	<div id="ure-description" class="row ure-description ure-record-data repairdiv" data-ure-record-field="description">
 		<div class="col-md-12 ure-content">
 			${fields.description.content}
 		</div>
@@ -248,8 +248,8 @@ Dimensions:
 	
 	 -->
 	<div id="ure-other-details" class="row ure-other-details">
-		<div class="col-md-12">
-			<div class="container">
+		<div class="col-md-12" id="other-details-col-outer">
+			<div id="other-details-container" class="container">
 				
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#bibliography">Bibliography</a></li>

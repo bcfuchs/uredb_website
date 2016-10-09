@@ -424,6 +424,15 @@ and (max-device-width : 480px) {
 	text-align: left;
    	padding-right: 0
 }
+#other-details-container {
+	
+	padding-left: 0;
+}
+#other-details-col-outer {
+	padding-left: 0;
+	
+}
+
 #ure-other-details .nav {
 	
 //	display:none;
@@ -433,6 +442,19 @@ and (max-device-width : 480px) {
 //	display: block !important;
 	
 	
+}
+
+#ure-description div {
+	padding-left: 5px; 
+	
+}
+#ure-description .ure-record-col-left {
+	
+	    padding-left: 12px;
+	    padding-bottom: 5px;
+}
+#ure-description div.ure-decoration {
+	padding-left: 12px;
 }
 #record-images .cell {
 	height: 50px !important;

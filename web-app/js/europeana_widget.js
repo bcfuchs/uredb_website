@@ -240,7 +240,7 @@ var image_preloader = function(url,sel) {
         item.thumb = blank_image_100x100;
       }
       // set the background image
-      var style = makeStyle(width, height,item.thumburl);
+      var style = makeStyle(width, height,item.thumb);
        
    //   image_preloader(testpic,t);
       $(t).attr('data-ure-uri', item.edmPreview);
