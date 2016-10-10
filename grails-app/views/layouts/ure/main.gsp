@@ -49,7 +49,6 @@ easterEgg('z',function(){
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
-<link rel="stylesheet" href="${resource(dir:'css/ure',file:'earth.old.css')}" />
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'main.css')}" />
 <r:layoutResources />
 </head>

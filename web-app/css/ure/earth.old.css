@@ -1,4 +1,7 @@
 /* GENERAL PAGE STYLES */
+._________________________ General Page Styles _________________________ {
+	
+}
 
 html,.container,body {
 	 height: 100%;
@@ -159,7 +162,9 @@ a:hover          {
 
 
 /* END OF GENERAL PAGE STYLES */
-
+._________________________ Navigation Bar _________________________ {
+	
+}
 /* TOP NAVIGATION BARS - STYLES */
 
 
@@ -452,7 +457,9 @@ a:hover.reccellcontent          {
 
 
 /* END OF TOP NAVIGATION BARS */
-
+._________________________ Content _________________________ {
+	
+}
 
 #blocky   {
           min-height: 60%;
@@ -473,6 +480,9 @@ a:hover.reccellcontent          {
 }
 
 /* LEFT HAND NAVIGATION STYLE */
+._________________________ Left  panel _________________________ {
+	
+}
 #left_nav     {
 //            float: left;
             padding: 0em 0em 0em 0em;
@@ -609,7 +619,9 @@ div#comparanda {
 }
 
 /* END OF LEFT HAND NAVIGATION STYLE */
-
+._________________________ Main panel _________________________ {
+	
+}
 
 /* MAIN SECTION STYLES */
 
@@ -726,7 +738,9 @@ a.white {
         }
 
 /* END OF QUIZ ANSWERS */
-
+._________________________ Footer _________________________ {
+	
+}
 /* BOTTOM OF PAGE GRAPHICS BARS */
 
 
@@ -765,7 +779,9 @@ a.white {
              }
 
  /* END OF BOTTOM OF PAGE GRAPHICS BARS */
-
+._________________________ Record page _________________________ {
+	
+}
 
 .reccellhead { 
 				padding-top: 5px; 
@@ -815,6 +831,9 @@ div:hover.left_nav1 a.left1
 
 
 /** search page */
+._________________________ Search page _________________________ {
+	
+}
 
 /** align the search bar right */
 #search-top-row .searchbar-col {
@@ -886,7 +905,9 @@ button#qs-search-old {
 	
 }
 
-
+._________________________ Browse lists _________________________ {
+	
+}
 /** GRID widget styles */
 
 /** reclist2.gsp */	
@@ -918,6 +939,7 @@ button#qs-search-old {
 	text-overflow: ellipsis;
 	display: none;
 }
+
 #mobile-grid {
 	display:none;
 }
@@ -940,7 +962,9 @@ button#qs-search-old {
 	background: #99CCEE;
 	color: black;
 }
-
+._________________________ Record  metadata _________________________ {
+	
+}
 /** --Metadata record.gsp -- */
 
 #ure-description a {
@@ -992,9 +1016,12 @@ ure-record-col-left:after {
 }
 /** --END Metadata record.gsp -- */
 
-
+._________________________ Browse images _________________________ {
+	
+}
 
 /** --Browseimageresult.gsp -- */
+
 
 #browse_image_list .show_more {
 float:right;
@@ -1059,66 +1086,10 @@ cursor: pointer;
 
 /** -- END Browseimageresult.gsp -- */
 
-
-
-
-
-/* --- Desktop --- */
-@media screen and (max-width: 1140px) {
-	#wrapper {
-		max-width: 980px;
-	}
-}
-
-/* --- Tablet --- */
-@media screen and (max-width: 768px) {
-}
-/* --- Mobile --- */
-@media screen and (max-width: 488px) {
-	#main {
-	 width: 100%;
-	 max-width:400px;
+._________________________ Comparanda _________________________ {
 	
-	}
-	/**
-	* -hide the sidebar
-	*/
-	#left_nav {
-		display: none;
-	}
-	
-	.cell {
-	//	width: 50px !important;
-	//	height: 50px !important;
-	}
-
-	#big-grid {
-	display:none;
-	}
-	
-	#mobile-grid {
-	display: block;
-	}
-	
-	#record-table {
-	max-width: 100%;
-	}
-}
-
-
-/** lighttable */
-.lighttable-controls2 {
-	padding: 0 !important;
-}
-.lighttable-controls2 > span {
-	
-	margin-left: 5px;
-	
-}
-img.lighttable        {
-           margin: 5px 3px 5px 3px;
-           }
-           
+}     
+      
 /** comparanda */
 
 #comparanda-thumbs img        {
@@ -1133,7 +1104,9 @@ span.glyphicon.ure-control-btn:hover {
 	
 	
 }
-
+._________________________ Record image strip _________________________ {
+	
+}
 /** record image strip */
 
 	#record-images .image-infobox {

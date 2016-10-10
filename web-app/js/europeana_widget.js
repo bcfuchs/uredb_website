@@ -163,7 +163,8 @@ var image_preloader = function(url,sel) {
   // make style for each element.
   var makeStyle = function(w, h, thumburl) {
     var spin = '/static/images/giphy.gif';
-    return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
+    // return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
+    return 'background-image: url(' + thumburl + ')';
 
     
   };
@@ -571,7 +572,7 @@ var image_preloader = function(url,sel) {
   var success_new = function(query_url, query_string) {
     var min_items = 1;
     return function(info) {
-
+      
       console.log('success_new');
       // quit function and rerun query with safe keywords if items.length ===
       // 0
@@ -739,12 +740,14 @@ var image_preloader = function(url,sel) {
   
   var format_bootstrap = function(gridid,options) { 
     console.log("format_bootstrap " +gridid);
-    var cols = 9;
+    var cols_default = 9;
+    var cols = options.cols || cols_default;
     var row = $('<div class="row"></div>');
     var cont = $('<div class="container-fluid"></div>');
+    
     $(gridid + " .cell").each(function(i,v){
       var cell = $(v).clone();
-      row.append($(cell).addClass("col-md-2").addClass("col-sm-3").addClass("bs-cell"))
+      row.append($(cell).addClass("col-md-2").addClass("col-sm-5").addClass("bs-cell"));
      // every $cols add to row
       if ((i + 1) % cols === 0 ) {
         cont.append(row);
@@ -832,6 +835,10 @@ var image_preloader = function(url,sel) {
     var gridtype = "bootstrap"; 
   //   var gridtype = "freewall"; 
     var formatGrid_options = {type:gridtype,width:width,height:height,wallWidth:wallWidth};
+    // need a better way of doing this!
+    if (window.matchMedia("(max-width: 488px)").matches === true) { 
+      formatGrid_options.cols = 2;
+    }
     formatGrid(gridid,formatGrid_options);
   
     // for scroll bar appear;
