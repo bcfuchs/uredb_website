@@ -1,9 +1,11 @@
 Ure Museum online DB
 ====================
 
-grails app for web access to  the [Ure Museum Collections](http://ure.mobilecollective.co.uk)
+grails app for web access to  the [Ure Museum Collections](http://beta.uremusem.org)
 
 Running the demo
+
+(Note: the demo only supports anonymous user access)
 ------
 
 First, install Docker from https://www.docker.com/ if you don't have it. 
