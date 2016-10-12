@@ -15,6 +15,23 @@
 	text-align: center;
 }
 
+#versioninfo {
+
+    position: absolute;
+    font-family: "Times New Roman"
+    z-index: 999;
+    top: 40%;
+    left: 40%;
+    height: 100px;
+    width: 300px;
+    background: #b75763;
+    font-size: 12pt;
+    color: bisque;
+    padding: 10px;
+    text-align: center;
+
+}
+
 /* GENERAL PAGE STYLES */
 ._________________________ General Page Styles _________________________ {
 	

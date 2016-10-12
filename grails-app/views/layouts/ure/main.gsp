@@ -38,7 +38,13 @@ easterEgg('z',function(){
 	$(document).ready(function(){
 		$(".dev-features").toggle();
 	});
-	})
+	});
+
+easterEgg('v',function(){
+	$(document).ready(function(){
+		$("#versioninfo").toggle();
+	});
+	});
 	
 
 </script>
@@ -78,6 +84,11 @@ easterEgg('z',function(){
 			The Ure Museum is part of<br>The University of Reading, Whiteknights, PO Box 217, Reading, RG6 6AH
 		</div>
 	</div>
+	 <div id="versioninfo" style="display:none">
+ version: <g:meta name="app.version"/><br/>
+ grails: <g:meta name="app.grails.version"/>
+ </div>
+ 
 	<g:render template="/ure/lighttable_widget"></g:render>
 	<r:layoutResources />
 	<script>
@@ -96,6 +107,7 @@ easterEgg('z',function(){
  flash.lastQuerystring =  request.getQueryString();
 println flash.lastURI
  %>
+
  -->
 	<div class="alert" role="alert" id="alert-modal" style="display: none">
 		<button type="button" class="close" id="alert-modal-close" aria-label="Close">

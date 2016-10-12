@@ -79,7 +79,7 @@ class UrlMappings {
             action= [GET:"getRecordByProperty"];
         }
         // reclist2 -> _reclist
-
+     
         "/record"        (view:"/ure/record")
 
 
@@ -122,6 +122,10 @@ class UrlMappings {
         "/logout/$action?"(controller: "logout")
 
         "/admin"(view:"/admin/index")
+        /*****
+         * SM login
+         */
+        "/userlogin"(view:"/ure/userlogin")
         /************
          *
          * ADMIN: Editor
