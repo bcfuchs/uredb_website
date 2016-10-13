@@ -28,7 +28,8 @@
 <%-- For Javascript see end of body --%>
 </head>
 <body>
-
+<section class="content">
+</section>
 	<%
 def layout_nomainmenu = true;
 
@@ -66,5 +67,6 @@ def layout_nomainmenu = true;
 	
 	<!-- Included Javascript files and other resources -->
 	<r:layoutResources />
+	
 </body>
 </html>

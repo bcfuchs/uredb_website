@@ -1,3 +1,44 @@
+/** splash image */
+.content:before {
+	content: "";
+	position: fixed;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	display: block; 
+	
+	//	http: //uredb.reading.ac.uk/ure/pixdir/2006.20h/inbox/2006.20 .0318 .jpg
+	//   background-image: url('http://uredb.reading.ac.uk/ure/pixdir/2008.99g/xlarge/2008.99.0325.jpg');
+	
+	background-image:
+		url('http://uredb.reading.ac.uk/ure/pixdir/2007.99c/inbox/2007.99.0096.jpg');
+	background-position: 52% 48%;
+	width: 1300px;
+	height: 800px;
+	/** 
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px);
+ opacity: 0.4;
+ */
+}
+
+.content {
+	position: fixed;
+	left: 0;
+	right: 0;
+	z-index: 0;
+	margin-left: 20px;
+	margin-right: 20px;
+	width: 1300px;
+	height: 800px;
+	background: black;
+}
+
+
+
 #edit-uremeta input {
 	
 	
@@ -38,6 +79,14 @@
 .first {
 	
 	padding: 10px 10px 40px 20px;
+	z-index:10;
+	width: 80%;
+	background: #222;	
+//	position: fixed;
+    color: white;
+ //   left: 10%;
+ //   top: 15%;
+    height: 1800px;
 	
 }
 

@@ -44,7 +44,7 @@
             if (a.length() > 10) {a = a[1..10]}
             
              %>
-				<td class="accnum"><g:link action="show" id="${uremetaInstance.id}">${fieldValue(bean: uremetaInstance, field: "accession_number")}</g:link></td>
+				<td class="accnum"><g:link action="edit" id="${uremetaInstance.id}">${fieldValue(bean: uremetaInstance, field: "accession_number")}</g:link></td>
 				<td>${fieldValue(bean: uremetaInstance, field: "description")}</td>
 				<td>${fieldValue(bean: uremetaInstance, field: "shape")}</td>
 			

@@ -20,7 +20,7 @@
 			<span class="glyphicon glyphicon-circle-arrow-right glyph-hide" style=""></span>
 		</li>
 		<li class="list-group-item">
-			<a class="button btn" href="/uremeta/create">Create a new record</a>
+			<a class="button btn" href="/uremeta/create">Add an object</a>
 			<span class="glyphicon glyphicon-circle-arrow-right glyph-hide" style=""></span>
 		</li>
 		<!-- 

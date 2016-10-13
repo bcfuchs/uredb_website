@@ -5,12 +5,11 @@
 	left: 0;
 	right: 0;
 	z-index: -1;
-	display: block; //
-	http: //uredb.reading.ac.uk/ure/pixdir/2006.20h/inbox/2006.20 .0318 .jpg//background-image:
-		
-		
-		
-		 url('http://uredb.reading.ac.uk/ure/pixdir/2008.99g/xlarge/2008.99.0325.jpg');
+	display: block; 
+	
+	//	http: //uredb.reading.ac.uk/ure/pixdir/2006.20h/inbox/2006.20 .0318 .jpg
+	//   background-image: url('http://uredb.reading.ac.uk/ure/pixdir/2008.99g/xlarge/2008.99.0325.jpg');
+	
 	background-image:
 		url('http://uredb.reading.ac.uk/ure/pixdir/2004.13/xlarge/2004.13.0032.jpg');
 	background-image:
