@@ -1,9 +1,13 @@
 
+body:after{
+    position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
+    content: url('/images/edit_background.png');
+}
 body.custom-background{
    background-image:
 		url('/images/edit_background.png');
-	background-position: 50% 110%;
-	background-size: 250%;	
+//	background-position: 50% 110%;
+	background-size: 100%;	
 //	background-repeat: no-repeat;
 	background-color: white;
 	
