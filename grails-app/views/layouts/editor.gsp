@@ -27,9 +27,8 @@
 	<![endif]-->
 <%-- For Javascript see end of body --%>
 </head>
-<body>
-<section class="content">
-</section>
+<body class="custom-background">
+<div id="background-wrap">
 	<%
 def layout_nomainmenu = true;
 
@@ -67,6 +66,6 @@ def layout_nomainmenu = true;
 	
 	<!-- Included Javascript files and other resources -->
 	<r:layoutResources />
-	
+</div>	
 </body>
 </html>
