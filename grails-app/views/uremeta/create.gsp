@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="layout" content="editor"/>
 	<g:set var="entityName" value="${message(code: 'uremeta.label', default: 'Record')}" />
-	<title><g:message code="default.create.label" args="[entityName]" /></title>
+	<title>UreDB: Add an Object</title>
 </head>
 
 <body>

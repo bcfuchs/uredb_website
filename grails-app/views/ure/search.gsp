@@ -30,7 +30,7 @@ var doMap = function() {
 })
 }
 
-  $( "#thumb-data" ).load( "${resource(dir:'html',file:'thumb_image_map.html')}",doMap );
+  $( "#thumb-data" ).load( "${resource(dir:'html',file:'thumb_image_map.html	')}",doMap );
 // get an index jpg -> record
 // make the search bar draggable
 var draggableSearchbar = function() {
