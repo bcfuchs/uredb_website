@@ -76,11 +76,16 @@ class RecordController  {
         def model = recordService.getTokensForField(prop);
   
         if (model) {
-            render (view:"/ure/fieldlist",model:model);
-        }
+            if (params.format && params.format == 'json') {
+                render model as JSON;
+            }
+            else {
+                render (view:"/ure/fieldlist",model:model);
+            }
+            }
         else {
             render(view: 404,model:[
-                      'error404callout':["couldn't find token"]]);
+                      'error404callout':["couldn't find field"]]);
        }
     }
 

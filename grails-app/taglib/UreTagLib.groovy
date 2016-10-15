@@ -122,6 +122,8 @@ class UreTagLib {
     }
     // print warning if:
     // the record id from this session is the same as the record id from application c
+    // otherwise do nothing
+    
     def isSimulEdit = { attr, body ->
         //        if (servletContext.currentEditPage == servletContext.currentEditPage) {
         //        out << body() << servletContext.currentEditPage;
@@ -136,7 +138,7 @@ class UreTagLib {
             //            servletContext.currentEditor=pageScope.currentUser;
             //            servletContext.currentEditPage=pageScope.uremetaInstance.id;
 
-            out << 0;
+            out << "";
 
         }
 

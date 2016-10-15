@@ -61,7 +61,8 @@ class UrlMappings {
             action= [GET:"getFieldsImage"];
         }
 
-        // list all the items in a field by record
+       
+         // list all the items in a field by record
         "/imagelist/$prop"(controller:"record"){
             action= [GET:"getTokensForFieldImage"];
 
@@ -70,9 +71,17 @@ class UrlMappings {
             action= [GET:"getImageByProperty"];
         }
         // list all the items in a field by record
+//        "/fieldlist/$prop(.json)"(controller:"record"){
+//            isJson = true;
+//          
+//            action= [GET:"getTokensForField"];
+//        }
+        
         "/fieldlist/$prop"(controller:"record"){
-            action= [GET:"getTokensForField"];
-        }
+            
+              action= [GET:"getTokensForField"];
+          }
+       
         // List all the words $val in a field $f by record and context
         // /ure/reclist2.gsp
         "/recordlist/$f/$val"(controller:"record"){

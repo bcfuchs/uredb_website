@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%-- <html lang="${org.springframework.web.servlet.support.RequestContextUtils.getLocale(request).toString().replace('_', '-')}"> --%>
+
 <html lang="${session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'}">
 <head>
 <title><g:layoutTitle default="${meta(name:'app.name')}" /></title>
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="shortcut icon" href=""
+<link rel="shortcut icon" href="/images/edit_ico.ico?v=2"
 	type="image/x-icon" />
 <link rel="apple-touch-icon" href="assets/ico/apple-touch-icon.png">
 <link rel="apple-touch-icon" href="assets/ico/apple-touch-icon-72x72.png" sizes="72x72">
@@ -53,14 +53,11 @@ def layout_nomainmenu = true;
 															
 	</g:else>
 
-
-	
 	<g:if test="${ pageProperty(name:'page.include.bottom') }">
 		<g:pageProperty name="page.include.bottom" />
 	</g:if>
 	<g:else>
 
-	
 	</g:else>
 	
 	

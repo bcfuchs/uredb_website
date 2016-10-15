@@ -1062,9 +1062,12 @@ var image_preloader = function(url,sel) {
       // TODO needs to be configureable!!!
       var kw = [];
       var title = ure_item.title;
+      var artist = ure_item.artist;
+      var shape = ure_item.shape;
       var fabric = ure_item.fabric;
       var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").replace(/^\s+/g, "").replace(/\s$/g, "")
           .split(" ");
+      
       if (title.match(/red figure/)) {
         // kw.push('where:(red+figure)');
         kw.push('red')
@@ -1073,17 +1076,22 @@ var image_preloader = function(url,sel) {
       if (title.match(/black figure/)) {
         kw.push('where:(black+AND+figure)');
       }
-
       if (fabric !== "") {
         var fabric_kw = fabric.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").replace(/^\s+/g, "")
             .replace(/\s$/g, "").split(" ")
         kw = kw.concat(fabric_kw);
       }
+      
+      if (shape.toLowerCase().match(/lekythos/)) {
+        kw = ['lekythos'];
+      
+        console.log(kw)
+      }
 
       // var keywords = [ 'where(greece+AND+black+AND+figure)' ];
       var keywords = [ 'greece', 'black', 'figure' ];
 
-      if (kw.length > 1) {
+      if (kw.length > 0) {
         keywords = kw;
       } else {
         if (title_kw.length > 1) {
@@ -1120,13 +1128,17 @@ var image_preloader = function(url,sel) {
   
       var title = $('.ure-title').text();
       var fabric = $('.ure-fabric').text();
+      var shape = $('.ure-shape').text();
+      var artist = $('.ure-artist').text();
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
  
       var kw_json = make_keywords({
         title : title,
-        fabric : fabric
+        fabric : fabric,
+        shape: shape,
+        artist:artist
       });
 
       /**

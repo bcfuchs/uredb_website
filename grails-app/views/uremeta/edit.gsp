@@ -34,17 +34,17 @@
 </head>
 <body>
 	<section id="edit-uremeta" class="first">
+	
 	<ure:isSimulEdit>
 			<div id="editor-msg">
 				Warning!  
 				<span class="username">
-					${application.currentEditor}
+					${application.currentEditor} 
 				</span>
 				is editing this record right now. 
 			</div>
-			
+	
 		</ure:isSimulEdit>
-		
 		<g:hasErrors bean="${uremetaInstance}">
 			<div class="alert alert-error">
 				<g:renderErrors bean="${uremetaInstance}" as="list" />
@@ -52,6 +52,16 @@
 		</g:hasErrors>
 	
 		<g:form method="post" class="form-horizontal">
+		<div class="form-actions">
+				<g:actionSubmit class="btn btn-sm btn-primary" action="update"
+					value="${message(code: 'default.button.update.label', default: 'Update')}" />
+				<g:actionSubmit class="btn btn-sm btn-danger" action="delete"
+					value="${message(code: 'default.button.delete.label', default: 'Delete')}"
+					onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				<button class="btn btn-sm" type="reset">
+					<g:message code="default.button.reset.label" default="Reset" />
+				</button>
+			</div>
 			<g:hiddenField name="id" value="${uremetaInstance?.id}" />
 			<g:hiddenField name="version" value="${uremetaInstance?.version}" />
 			<fieldset id="uremeta-form" class="form">

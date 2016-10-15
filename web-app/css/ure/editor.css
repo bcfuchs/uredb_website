@@ -55,11 +55,10 @@ body.custom-background{
 
 .first {
 	
-	padding: 10px 10px 40px 20px;
+	padding: 10px 10px 10px 10px;
 	z-index:10;
-	width: 80%;
-	background: #222;	
-
+	width: 90%;
+	background: black;	
     color: white;
 
 	
@@ -67,8 +66,8 @@ body.custom-background{
 
 #Content {
 	//color: #FFFFCC;
-	color: black;
-	background: silver;
+	color: white;
+	background: black;
 	//background: #660000
 	
 	
@@ -101,17 +100,22 @@ body {
 	}
 .pagination {
 	border: 1px solid gray;
-	width: 100%;
+	width: 90%;
 }
 
 /** table  list.gsp */
 td.accnum {
 	width: 12px;
 }
+#uremeta-table  {
+ background-color: #eee;
+ color: black;
+}
+	
 #uremeta-table td {
 	max-width: 15%;
-	
-	
+	color: black;
+   
 	
 }
 #editor-greeting {

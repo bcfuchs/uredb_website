@@ -36,10 +36,10 @@
 	</script>
 <style>
 /** hide left nav on param s */
-#left_nav { <
-	g: if test="${params.s == 'noleftnav'}">   
-			display:none; </
-	g: if>
+#left_nav { 
+	<g:if test="${params.s == 'noleftnav'}">   
+			display:none; 
+	</g:if>
 }
 
 #left-nav-search {
@@ -51,7 +51,6 @@
 <g:set var="isRecordPage" value="true" scope="request" />
 </head>
 <body>
-
 	<span>
 		<%
     if (flash.lastURI =~ /searchable/) {
@@ -67,6 +66,9 @@
     
  %>
 	</span>
+<sec:ifAnyGranted roles='ROLE_CURATOR'>
+<a style="text-decoration: none" href="/uremeta/edit/${id}"><i class="icon-pencil"></i> Edit</a>
+</sec:ifAnyGranted>
 	<div id="record-page-wrapper" class="record-page-wrapper">
 		<script src="${resource(dir:'js',file:'record.js')}"></script>
 		<g:if test="${flash.fromSearch == true}">
@@ -74,24 +76,23 @@
 				<a href="${flash.searchUrl}">back to search</a>
 			</span>
 		</g:if>
-		<!--  #switcher -->
+
 		<h2>
 			${accnum}:
 			${short_title}-
 			${nextid}
 		</h2>
 		<div id="record-main">
+	
 			<div id="meta2">
 				<g:render template="/shared/ure/meta2" var="t" model="[record:record]" />
 			</div>
 			<!--  #meta2 -->
 			<g:render template="/ure/citationWidget" />
-			
-			<h2>Related content from Europeana</h2></html>
+			<h2>Related content from Europeana</h2>
 			<span style="padding-right: 5px">Europeana query: </span>
 			
 			<span id="keywords-display"></span>
-		
 			<span id="query-display" style="display: none;"></span>
 			<g:render template="/ure/queryRetakeWidget" />
 			
@@ -120,6 +121,7 @@
 			</div>
 		
 		</div>
+		
 		<!-- #record-main -->
 	</div>
 	<!--  #record-page-wrapper -->
@@ -131,7 +133,7 @@
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
 	<script>
 		// set up the eucomparanda collection system
-		// this can only be called after grid has finished build!!!
+		// this can only be called after grid has finished building!!!
 		var signal = "doEuRelated_complete" // fired in europeana_widget.js
 		$(window).on(signal, function (e, data) {
 		   	EuComparanda("${accnum}");

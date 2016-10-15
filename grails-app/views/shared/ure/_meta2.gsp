@@ -157,7 +157,8 @@ Dimensions:
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4 ure-record-col-left ">Artist</div>
+				<div class="col-md-4 ure-record-col-left ">
+				<a href="/fieldlist/artist">Artist</a></div>
 				<div class="col-md-8 ure-artist">
 					${fields.artist.content}
 				</div>
