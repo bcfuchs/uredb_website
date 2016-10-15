@@ -1082,23 +1082,39 @@ var image_preloader = function(url,sel) {
         kw = kw.concat(fabric_kw);
       }
       
-      if (shape.toLowerCase().match(/lekythos/)) {
-        kw = ['lekythos'];
+      // make a canonical form of the shape the kw if something in the  list matches. 
+      var get_shape_kw = function(shape,use_shapes) {
+     
+        var out = [];
+        // can't use indexOf since it's sometimes just part of a string.
+        use_shapes.forEach(function(item){
+          if (shape.toLowerCase().match(new RegExp(item))) {
+            out = [item];
+          } 
+          
+        });
+      return out;
+      };
       
-        console.log(kw)
-      }
+      var canonical_shapes = ['lekythos','aryballos','skyphos','oinochoe','kylix','amphora','krater','pyxis','lekanis'];
 
-      // var keywords = [ 'where(greece+AND+black+AND+figure)' ];
+      kw = get_shape_kw(shape,canonical_shapes);
+      
+      // var keywords is the default qstring
+      // var keywords = [ 'where(greece)+AND+black+AND+figure' ];
       var keywords = [ 'greece', 'black', 'figure' ];
-
+     // if kw has content use that
       if (kw.length > 0) {
         keywords = kw;
       } else {
+      // if not, then if title has content, use that. 
         if (title_kw.length > 1) {
 
           keywords = title_kw;
         }
+        // otherwise use the default.
       }
+      
       return keywords;
     };
 

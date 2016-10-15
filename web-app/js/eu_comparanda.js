@@ -13,12 +13,102 @@
         .ready(
             function() {
 
-              var storage, eu_items, this_accnum, eu_draggable_sel;
+              var storage, eu_items, this_accnum, eu_draggable_sel, projects;
               storage = $.localStorage;
               eu_draggable_sel = "#euwidget .cell"
               eu_items = 'eu_items'
               this_accnum = accnum;
+              /*****************************************************************
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               * class for handling project tags.
+               */
+              var projects = (function() {
+                var get_all, get, projects, put,save, test,project_store;
+                project_store = 'projects';
 
+                // class functions
+                function projectObj() {}
+                
+                projectObj.prototype.clone = function() {
+                  return JSON.parse(JSON.stringify(projects['projects']));
+                }
+                
+                projects = new projectObj();
+            
+               
+                projects['projects'] = {} // add project data
+                projects['projects']['_old'] = [];     // add trash
+
+                // initialize storage
+                if (!storage.isSet(project_store))
+                  storage.set(project_store, projects);
+                // load from storage -- only projects['projects'] is stored
+                projects['projects'] = storage.get(project_store);
+                
+          
+                
+                // save projects['projects'] to localstorage 
+                save = function(){
+                  storage.set(project_store,projects['projects']);
+                };
+                
+                // add a new item to a project
+                // tagging the item creates the project
+                put = function(proj, accnum, item) {
+                  
+                  if (!(proj in  projects['projects'])) {
+                    projects['projects'][proj] = {};
+
+                  }
+                  if (!(accnum in  projects['projects'][proj])) {
+                    projects['projects'][proj][accnum] = {};
+                  }
+                  if (!(item in  projects['projects'][proj][accnum])) {
+                    projects['projects'][proj][accnum][item] = 1;
+                  }
+                  
+                  
+                  // sync to storage
+                  save();
+                  
+                };
+                // get all the items for this accnum
+                get_by_accnum = function(proj, accnum) {
+
+                  if (proj in projects['projects'] && accnum in projects['projects'][proj]) {
+                    return projects['projects'][proj][accnum];
+                  }
+                  return null;
+                };
+             
+                get_all = function() {
+                 return projects.clone();
+                };
+                // delete a project put it in _old
+                delete_project = function(proj) {
+                  if (proj in projects['projects']) {
+                    
+                    projects['projects']['_old'].push(JSON.stringify(projects['projects'][proj]));
+                    delete projects['projects'][proj];
+                  }
+                  
+                };
+                
+                return {
+                  get_all: get_all,
+                  get_by_accnum: get_by_accnum,
+                  put: put,
+                  'delete':delete_project,
+                  proj:projects
+                  
+                 
+                };
+              })();
+              
+              window.ure_projects = projects;
+            
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
@@ -250,7 +340,7 @@
 
                 // add this eu item to the accnum array
                 if (!eu_items_ls[this_accnum][thumb]) {
-                  eu_items_ls[this_accnum][thumb] = eu_item
+                  eu_items_ls[this_accnum][thumb] = eu_item;
                   // store it
                   storage.set(eu_items, JSON.stringify(eu_items_ls));
                 }
@@ -367,7 +457,7 @@
                * @param {Object}
                *          eu -- the eu_items hash from localstorage
                * 
-               * load existing comparanda into comp div
+               * load existing comparanda into DOM
                * 
                * 
                */
@@ -570,9 +660,9 @@
                 return '<div class="eu-items">' + out.join("") + '</div>';
               }
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda return a hash of form
+               * @memberOf eu_comparanda.EuComparanda 
                * 
-               * assume for now we have more than one comparand.
+               * get object containing collected items
                * 
                */
 
@@ -692,3 +782,41 @@
 })
 
 }();
+
+/*** 
+ * Tests
+ */
+
+// don't evaluate except by calling from cli
+var project_tests = function() {
+  console.log("loading tets");
+  var tests = [];  
+  var project = window.ure_projects;
+  console.log(project);
+// add lots of projects
+  tests.push(
+    function(){
+      var projects = [];
+      for (var i = 1; i < 10; i++) {
+        var name = 'project_'+i;
+        projects.push(name);
+        for (var j = 1; j < 10; j++) {
+          var accnum = "A_"+j;
+          for (var k = 1; k < 10; k++) {
+            project.put(name,accnum,'pic'+k);
+          }
+        }
+      }
+  
+    });
+
+  
+  return {
+    tests:tests
+  }
+} 
+
+
+window.project_tests = project_tests
+
+

@@ -25,7 +25,6 @@
 		// initialize the grid, using values supplied to the template	
 		if (! $("#europeanaWidget").attr('data-didStash'))
 			 init_euRelated("${accnum}","${gridid}","${width}","${height}", true);
-
 	      });
     })();
   </script>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <%@ page import="java.util.Properties"%>
-<html>
+<html lang="en">
 <!-- main.tmpl -->
 <head>
 <title>Ure Museum | Collection</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <!-- 
                          .-.                                       
@@ -33,7 +33,7 @@ if (gapi_client_id == null) {
     gapi_client_id = System.getProperty("GAPI_CLIENT_ID");
 }
 %>
-<meta name="google-signin-client_id" content="${gapi_client_id}"></meta>
+<meta name="google-signin-client_id" content="${gapi_client_id}"/>
 
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>

@@ -91,11 +91,9 @@
 			<g:render template="/ure/citationWidget" />
 			<h2>Related content from Europeana</h2>
 			<span style="padding-right: 5px">Europeana query: </span>
-			
 			<span id="keywords-display"></span>
 			<span id="query-display" style="display: none;"></span>
 			<g:render template="/ure/queryRetakeWidget" />
-			
 			<!-- 
 			<%
             def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);
@@ -114,6 +112,7 @@
 				  
 				}()
 			</script>
+			
 			<div id="europeana-section" style="display: none;">
 				<g:render template="/taglibTemplates/europeanaWidget"
 					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>

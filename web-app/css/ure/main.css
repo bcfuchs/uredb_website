@@ -863,11 +863,25 @@ div:hover.left_nav1 a.left1
 
 }
 
-
-/** search page */
-._________________________ Search page _________________________ {
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+/** searchbar2 */
+._________________________ Search bar _________________________ {
 	
 }
+
+.stylish-input-group .form-control{
+	border-right:0; 
+	box-shadow:0 0 0; 
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+
 
 /** align the search bar right */
 #search-top-row .searchbar-col {
