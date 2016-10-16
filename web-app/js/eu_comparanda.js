@@ -38,8 +38,8 @@
                 projects = new projectObj();
             
                
-                projects['projects'] = {} // add project data
-                projects['projects']['_old'] = [];     // add trash
+                projects['projects'] = {} // add project data 
+                
 
                 // initialize storage
                 if (!storage.isSet(project_store))
@@ -89,10 +89,13 @@
                 // delete a project put it in _old
                 delete_project = function(proj) {
                   if (proj in projects['projects']) {
-                    
+                    if (!('_old' in projects['projects'])) {
+                      projects['projects']['_old'] = []
+                    }
                     projects['projects']['_old'].push(JSON.stringify(projects['projects'][proj]));
                     delete projects['projects'][proj];
                   }
+                  save();
                   
                 };
                 
@@ -807,7 +810,12 @@ var project_tests = function() {
           }
         }
       }
-  
+      console.log(JSON.stringify(project.get_all));
+      projects.forEach(function(proj){
+        project['delete'](proj);
+        
+      })
+      console.log(JSON.stringify(project.get_all()  ));
     });
 
   
