@@ -24,49 +24,69 @@
                * 
                * class for handling project tags.
                */
-              var projects = (function() {
-                var get_all, get, projects, put,save, test,project_store;
+              var myprojects = (function() {
+                var init, get_all, get, projects,create, put,save,project_store;
                 project_store = 'projects';
 
                 // class functions
                 function projectObj() {}
                 
                 projectObj.prototype.clone = function() {
-                  return JSON.parse(JSON.stringify(projects['projects']));
+                  return JSON.parse(JSON.stringify(projects['projs']));
+                }
+                init = function() {
+                  projects = new projectObj();
+                  projects['projs'] = {} // add project data 
+                
+  
+                  // initialize storage
+                  if (!storage.isSet(project_store))
+                    storage.set(project_store, projects);
+                    // load from storage -- only projects['projs'] is stored
+                    projects['projs'] = storage.get(project_store);
+                }
+                init();
+          
+                reset = function() {
+                  projects = null;
+                  storage.remove(project_store);
+                  init();
                 }
                 
-                projects = new projectObj();
-            
-               
-                projects['projects'] = {} // add project data 
-                
-
-                // initialize storage
-                if (!storage.isSet(project_store))
-                  storage.set(project_store, projects);
-                // load from storage -- only projects['projects'] is stored
-                projects['projects'] = storage.get(project_store);
-                
-          
-                
-                // save projects['projects'] to localstorage 
+                // save projects['projs'] to localstorage 
                 save = function(){
-                  storage.set(project_store,projects['projects']);
+                  storage.set(project_store,projects['projs']);
                 };
-                
+                // create an empty project
+                // exception: proj name already exists
+                // called only from admin? 
+                create = function(proj) {
+                  out = null;
+                  if (proj === '' || proj === undefined) {
+                    throw "no project specified";
+                  }
+                  if (!(proj in  projects['projs'])) {
+                    projects['projs'][proj] = {};
+                    return proj;
+                  }
+                  else {
+                    throw 'project already exists';
+                  }
+                  save();
+                }
                 // add a new item to a project
                 // tagging the item creates the project
                 put = function(proj, accnum, item) {
                   
-                  if (!(proj in  projects['projects'])) {
-                    projects['projects'][proj] = {};
+                  if (!(proj in  projects['projs'])) {
+                    projects['projs'][proj] = {};
 
                   }
-                  if (!(accnum in  projects['projects'][proj])) {
-                    projects['projects'][proj][accnum] = {};
+                  if (!(accnum in  projects['projs'][proj])) {
+                    projects['projs'][proj][accnum] = {};
                   }
-                  if (!(item in  projects['projects'][proj][accnum])) {
-                    projects['projects'][proj][accnum][item] = 1;
+                  if (!(item in  projects['projs'][proj][accnum])) {
+                    projects['projs'][proj][accnum][item] = 1;
                   }
                   
                   
@@ -77,40 +97,45 @@
                 // get all the items for this accnum
                 get_by_accnum = function(proj, accnum) {
 
-                  if (proj in projects['projects'] && accnum in projects['projects'][proj]) {
-                    return projects['projects'][proj][accnum];
+                  if (proj in projects['projs'] && accnum in projects['projs'][proj]) {
+                    return projects['projs'][proj][accnum];
                   }
                   return null;
                 };
-             
+                
                 get_all = function() {
                  return projects.clone();
                 };
                 // delete a project put it in _old
                 delete_project = function(proj) {
-                  if (proj in projects['projects']) {
-                    if (!('_old' in projects['projects'])) {
-                      projects['projects']['_old'] = []
+                  if (proj in projects['projs']) {
+                    if (!('_old' in projects['projs'])) {
+                      projects['projs']['_old'] = []
                     }
-                    projects['projects']['_old'].push(JSON.stringify(projects['projects'][proj]));
-                    delete projects['projects'][proj];
+                    var old = {};
+                    old[proj]  = projects['projs'][proj];
+                    projects['projs']['_old'].push(JSON.stringify(old));
+                    delete projects['projs'][proj];
+                    old = null;
                   }
                   save();
                   
                 };
                 
                 return {
+                  create: create,
                   get_all: get_all,
                   get_by_accnum: get_by_accnum,
                   put: put,
                   'delete':delete_project,
-                  proj:projects
+                  proj:projects,
+                  reset:reset
                   
                  
                 };
               })();
               
-              window.ure_projects = projects;
+              window.ure_projects = myprojects;
             
               /*****************************************************************
                * 
@@ -792,12 +817,12 @@
 
 // don't evaluate except by calling from cli
 var project_tests = function() {
-  console.log("loading tets");
+  console.log("loading tests");
   var tests = [];  
   var project = window.ure_projects;
   console.log(project);
 // add lots of projects
-  tests.push(
+  tests.push({"add projects then delete":
     function(){
       var projects = [];
       for (var i = 1; i < 10; i++) {
@@ -814,17 +839,35 @@ var project_tests = function() {
       projects.forEach(function(proj){
         project['delete'](proj);
         
-      })
+      });
       console.log(JSON.stringify(project.get_all()  ));
+    }
+  });
+  tests.push({"create empty projects then delete":
+    function(){
+    var projects = [];
+    for (var i = 1; i < 10; i++) {
+      var name = 'project_'+i;
+      projects.push(name);
+      project.create(name);
+    }
+    console.log(JSON.stringify(project.get_all()  ));
+    projects.forEach(function(proj){
+      project['delete'](proj);
+      
     });
+    console.log(JSON.stringify(project.get_all()  ));
+    
+  }
+  });
 
   
   return {
     tests:tests
-  }
-} 
+  };
+} ;
 
 
-window.project_tests = project_tests
+window.project_tests = project_tests;
 
 
