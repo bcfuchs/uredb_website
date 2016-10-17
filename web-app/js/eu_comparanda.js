@@ -39,11 +39,13 @@
                   projects['projs'] = {} // add project data 
                 
   
+         
                   // initialize storage
                   if (!storage.isSet(project_store))
-                    storage.set(project_store, projects);
+                    storage.set(project_store, JSON.stringify(projects['projs']));
                     // load from storage -- only projects['projs'] is stored
-                    projects['projs'] = storage.get(project_store);
+                   var data = storage.get(project_store)
+                   projects['projs'] = data;
                 }
                 init();
           
@@ -55,18 +57,21 @@
                 
                 // save projects['projs'] to localstorage 
                 save = function(){
-                  storage.set(project_store,projects['projs']);
+                  storage.set(project_store,JSON.stringify(projects['projs']));
                 };
                 // create an empty project
                 // exception: proj name already exists
                 // called only from admin? 
                 create = function(proj) {
+                console.log('roject.create ' + proj)
                   out = null;
                   if (proj === '' || proj === undefined) {
                     throw "no project specified";
                   }
                   if (!(proj in  projects['projs'])) {
                     projects['projs'][proj] = {};
+                    console.log("creating..."+proj)
+                     console.log(projects['projs'])
                     return proj;
                   }
                   else {
@@ -102,7 +107,14 @@
                   }
                   return null;
                 };
-                
+                get_by_project = function(proj) {
+                 if (proj in projects['projs']) {
+                  return projects['projs'][proj]
+                 }
+                 else {
+                  return null;
+                 }
+                } 
                 get_all = function() {
                  return projects.clone();
                 };
@@ -125,6 +137,7 @@
                 return {
                   create: create,
                   get_all: get_all,
+                  get: get_by_project,
                   get_by_accnum: get_by_accnum,
                   put: put,
                   'delete':delete_project,
@@ -135,7 +148,8 @@
                 };
               })();
               
-              window.ure_projects = myprojects;
+    window.ure_projects = myprojects;
+    
             
               /*****************************************************************
                * 
