@@ -28,7 +28,37 @@
 
       }
       $("#comparanda-list").append(div)
+     
     }
+    
+    var make_projects_list = function(){
+      var myprojects = window.ure_projects;
+      var projects = myprojects.list();
+      console.log(projects)
+     for (var i = 0; i < projects.length; i++) {
+       var project = projects[i];
+        console.log(projects[i])
+        var link = "#"
+          var div = '<div class="row"><a href="' + link + '"><span>' + project+ '</span></a></div>';
+        $("#projects-list").append(div);
+        var accs = myprojects.get(project);
+        console.log(accs);
+        for (acc in accs) {
+          var accdiv = '<div class="row"><a href="/record/' + acc + '"><span>' + acc+ '</span></a></div>';
+          $("#projects-list").append(accdiv);
+          var pix = myprojects.get_by_accnum(project, acc)
+          for (var pic in pix) {
+            var picdiv = '<div class="row"><a href="/record/' + acc + '"><span>' + pic+ '</span></a></div>';
+            $("#projects-list").append(picdiv);
+          }
+        }
+       
+        
+      }
+      
+    }
+    
+    make_projects_list();
   };
   
   $(document).ready(function() {

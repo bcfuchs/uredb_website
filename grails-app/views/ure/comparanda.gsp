@@ -20,10 +20,19 @@
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="comparanda-list"></div>
 		</div>
+		<div id="projects-main">
+			<h2>Projects</h2>
+			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
+			<div id="projects-list"></div>
+		</div>
 	</div>
 	<style>
 #comparanda-list img {
 	max-height: 100px;
+}
+
+#projects-main1 {
+	display:none;
 }
 </style>
 	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>

@@ -140,5 +140,6 @@
     });
 		
      </script>
+     <script src="${resource(dir:'js',file:'tests/comparanda_tests.js?v=2')}"></script>
 </body>
 <html>

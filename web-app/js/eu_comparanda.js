@@ -149,11 +149,12 @@
                 } 
                 /***************************************************************** 
                  * @memberOf eu_comparanda.EuComparanda.projects
-                 * return a list of project names
+                 * return a list of project names, minus the archive
                  */
                 function list() {
-
-                  return Object.keys(projects['projs']);
+                 var projs = projects.clone();
+                 if ("_old" in projs) { delete projs['_old'];}
+                  return Object.keys(projs);
                
                 } 
                 /***************************************************************** 
