@@ -14,6 +14,7 @@
             function() {
 
               var storage, eu_items, this_accnum, eu_draggable_sel, projects;
+              projects = {}
               storage = $.localStorage;
               eu_draggable_sel = "#euwidget .cell"
               eu_items = 'eu_items'
@@ -24,8 +25,9 @@
                * 
                * class for handling project tags.
                */
-              var myprojects = (function() {
-                var init, get_all, get, projects,create, put,save,project_store;
+              
+             var myprojects = (function() {
+                var   projects ,project_store;
                 project_store = 'projects';
 
                 // class functions
@@ -34,9 +36,12 @@
                 projectObj.prototype.clone = function() {
                   return JSON.parse(JSON.stringify(projects['projs']));
                 }
-                init = function() {
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+                function init () {
                   projects = new projectObj();
-                  projects['projs'] = {} // add project data 
+                  projects['projs'] = {}; // add project data 
                 
   
          
@@ -48,40 +53,61 @@
                    projects['projs'] = data;
                 }
                 init();
-          
-                reset = function() {
+                /*****************************************************************
+                 * 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 * 
+                 * 
+                 */
+               function reset() {
                   projects = null;
                   storage.remove(project_store);
                   init();
                 }
                 
-                // save projects['projs'] to localstorage 
-                save = function(){
+               
+                
+                /*****************************************************************
+                 * 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 * 
+                 * 
+                 */
+               function save(){
                   storage.set(project_store,JSON.stringify(projects['projs']));
                 };
                 // create an empty project
                 // exception: proj name already exists
                 // called only from admin? 
-                create = function(proj) {
-                console.log('roject.create ' + proj)
+                /*****************************************************************
+                 * 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 * 
+                 * 
+                 */
+              function create(proj) {
+                  
                   out = null;
                   if (proj === '' || proj === undefined) {
                     throw "no project specified";
                   }
                   if (!(proj in  projects['projs'])) {
                     projects['projs'][proj] = {};
-                    console.log("creating..."+proj)
-                     console.log(projects['projs'])
+                    save();
+                    // return the name of the created project
                     return proj;
                   }
                   else {
                     throw 'project already exists';
                   }
-                  save();
+                
                 }
                 // add a new item to a project
                 // tagging the item creates the project
-                put = function(proj, accnum, item) {
+              /***************************************************************** 
+               * @memberOf eu_comparanda.EuComparanda.projects
+               */
+              function put(proj, accnum, item) {
                   
                   if (!(proj in  projects['projs'])) {
                     projects['projs'][proj] = {};
@@ -100,14 +126,20 @@
                   
                 };
                 // get all the items for this accnum
-                get_by_accnum = function(proj, accnum) {
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+                 function get_by_accnum(proj, accnum) {
 
                   if (proj in projects['projs'] && accnum in projects['projs'][proj]) {
                     return projects['projs'][proj][accnum];
                   }
                   return null;
                 };
-                get_by_project = function(proj) {
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+                function get(proj) {
                  if (proj in projects['projs']) {
                   return projects['projs'][proj]
                  }
@@ -115,18 +147,33 @@
                   return null;
                  }
                 } 
-                get_all = function() {
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 * return a list of project names
+                 */
+                function list() {
+
+                  return Object.keys(projects['projs']);
+               
+                } 
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+               function get_all() {
                  return projects.clone();
                 };
                 // delete a project put it in _old
-                delete_project = function(proj) {
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+               function delete_project(proj) {
                   if (proj in projects['projs']) {
                     if (!('_old' in projects['projs'])) {
                       projects['projs']['_old'] = []
                     }
                     var old = {};
                     old[proj]  = projects['projs'][proj];
-                    projects['projs']['_old'].push(JSON.stringify(old));
+                    projects['projs']['_old'].push(old);
                     delete projects['projs'][proj];
                     old = null;
                   }
@@ -137,7 +184,8 @@
                 return {
                   create: create,
                   get_all: get_all,
-                  get: get_by_project,
+                  list: list,
+                  get: get,
                   get_by_accnum: get_by_accnum,
                   put: put,
                   'delete':delete_project,
@@ -825,63 +873,5 @@
 
 }();
 
-/*** 
- * Tests
- */
-
-// don't evaluate except by calling from cli
-var project_tests = function() {
-  console.log("loading tests");
-  var tests = [];  
-  var project = window.ure_projects;
-  console.log(project);
-// add lots of projects
-  tests.push({"add projects then delete":
-    function(){
-      var projects = [];
-      for (var i = 1; i < 10; i++) {
-        var name = 'project_'+i;
-        projects.push(name);
-        for (var j = 1; j < 10; j++) {
-          var accnum = "A_"+j;
-          for (var k = 1; k < 10; k++) {
-            project.put(name,accnum,'pic'+k);
-          }
-        }
-      }
-      console.log(JSON.stringify(project.get_all));
-      projects.forEach(function(proj){
-        project['delete'](proj);
-        
-      });
-      console.log(JSON.stringify(project.get_all()  ));
-    }
-  });
-  tests.push({"create empty projects then delete":
-    function(){
-    var projects = [];
-    for (var i = 1; i < 10; i++) {
-      var name = 'project_'+i;
-      projects.push(name);
-      project.create(name);
-    }
-    console.log(JSON.stringify(project.get_all()  ));
-    projects.forEach(function(proj){
-      project['delete'](proj);
-      
-    });
-    console.log(JSON.stringify(project.get_all()  ));
-    
-  }
-  });
-
-  
-  return {
-    tests:tests
-  };
-} ;
-
-
-window.project_tests = project_tests;
 
 
