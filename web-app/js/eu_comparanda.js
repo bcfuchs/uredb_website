@@ -27,7 +27,7 @@
                */
               
              var myprojects = (function() {
-                var   projects ,project_store;
+                var   projects, project_store;
                 project_store = 'projects';
 
                 // class functions
