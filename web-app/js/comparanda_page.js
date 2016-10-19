@@ -10,9 +10,10 @@
     for ( var k in eu) {
       var div = document.createElement('div')
       $(div).addClass("comparanda-target-container")
-      $(div).append("<div style='clear:both;'></div><hr></hr>")
-      $(div).append('<a href="/record/' + k + '">' + "<h2>" + k + "</h2></a>")
-      $(div).append('<img src="' + eu[k]['thumb'] + '"/><br/>');
+      $(div).attr("data-ure-accnum",k);
+      $(div).append("<div style='clear:both;'></div><hr></hr>");
+      $(div).append('<a href="/record/' + k + '">' + "<h2>" + k + "</h2></a>");
+      $(div).append('<img src="' + eu[k][thumb] + '"/><br/>');
 
       for ( var i in eu[k]) {
         if (i === 'thumb') {
@@ -172,7 +173,7 @@
          };
          
        }
-       console.log("pic_index DONE")
+   
      }
      /*****************************************************************
       * 
@@ -250,6 +251,46 @@
     
     };
     window. make_dummy_projects2 =  make_dummy_projects2;
+    
+
+    var make_project_toggle_impl = function(sel) {
+      var  pr = window.ure_projects;
+      console.log("making project toggle...")
+      var projects = pr.list();
+      projects.forEach(function(project){
+        $(sel).append('<option value="'+project+'">'+project+"</option>");
+      
+      });
+      var show_project_items = function(project) {
+        // get all the accnums for this project. 
+        var accnums = pr.get_accnums(project);
+        $(".comparanda-target-container").show();
+        if (project === "--all--") 
+          return 0;
+        $(".comparanda-target-container").each(function(){
+          var accnum = $(this).data('ure-accnum');
+          if (accnums.indexOf(accnum) < 0 ) {
+            $(this).hide();
+          }
+          
+        })
+        
+      } 
+      $(sel).change(function(){
+        var project = $(this).val();
+        //alert("new selector: " + $(this).val());
+        //console.log($(this).val());
+         show_project_items(project);
+         
+      })
+    };
+    
+    var make_project_toggle = function(sel) {
+      $(document).ready(function(){
+        make_project_toggle_impl(sel);
+      })
+      }
+    make_project_toggle("#project-selector")
   };
 
   

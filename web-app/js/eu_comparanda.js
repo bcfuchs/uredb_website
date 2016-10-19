@@ -157,6 +157,16 @@
                   return Object.keys(projs);
                
                 } 
+
+                /***************************************************************** 
+                 * @memberOf eu_comparanda.EuComparanda.projects
+                 */
+                function get_accnums(proj) {
+                  if (proj in projects['projs']) {
+                    return Object.keys(projects['projs'][proj]);
+                  }
+                  return null
+                }
                 /***************************************************************** 
                  * @memberOf eu_comparanda.EuComparanda.projects
                  */
@@ -187,6 +197,7 @@
                   get_all: get_all,
                   list: list,
                   get: get,
+                  get_accnums: get_accnums,
                   get_by_accnum: get_by_accnum,
                   put: put,
                   'delete':delete_project,

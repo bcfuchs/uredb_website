@@ -14,6 +14,7 @@
 	width: 20%;
 }
 </style>
+<g:render template="/ure/projects_widget"></g:render>
 	<div id="comparanda-page-wrapper">
 
 		<div id="comparanda-main" class="comp-toggle">
