@@ -35,6 +35,7 @@
       var myprojects = window.ure_projects;
       var projects = myprojects.list();
       console.log(projects)
+       $("#projects-list").html("");
      for (var i = 0; i < projects.length; i++) {
        var project = projects[i];
         console.log(projects[i])
@@ -59,6 +60,18 @@
     }
     
     make_projects_list();
+    window.make_projects_list = make_projects_list;
+    var make_dummy_projects = function() {
+      pr = window.ure_projects;
+      pr.reset();
+      pr.put('Dionysus','13.10.25','pic2');
+      pr.put('Dionysus','13.10.22','pic2');
+      pr.put('skyphos','13.10.25','pic2');
+      pr.put('skyphos','13.10.24','pic2');
+      pr.put('skyphos','13.10.25','pic2');
+      pr.put('skyphos','13.10.25','pic2');
+    }
+    window. make_dummy_projects =  make_dummy_projects
   };
   
   $(document).ready(function() {

@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:7-jdk-alpine
 # modified from https://github.com/mozart-analytics/grails-docker
 
 ENV GRAILS_VERSION 2.3.6
