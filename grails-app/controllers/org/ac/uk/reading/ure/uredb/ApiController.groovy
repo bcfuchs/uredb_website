@@ -28,7 +28,7 @@ class ApiController {
     def accnum2thumb() {
         def out = [:];
         def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
-        if (u.media) {
+        if (u && u.media) {
 
             def m = u.media[0];
             log.warn m.uri_local;

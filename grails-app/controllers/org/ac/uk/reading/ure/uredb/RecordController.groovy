@@ -37,7 +37,7 @@ class RecordController  {
      * record.gsp uses template /ure/share/meta to display the data
      * @return
      */
-    def _getRecordByAccNum(acc) {
+    def _getRecordByAccNum(acc) {   
        
        
       def model = recordService.getRecordModel(acc);  

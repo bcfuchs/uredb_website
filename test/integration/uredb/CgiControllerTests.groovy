@@ -33,11 +33,6 @@ class CgiControllerTests extends IntegrationSpec {
         cgi.response.getStatus() == 200
      //   cgi.modelAndView.model.record != null
      //   cgi.modelAndView.model.record[0]['field'] == "accession_number"
-    
-    
-    
-
-    
  
     }
     

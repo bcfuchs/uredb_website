@@ -4,12 +4,12 @@ import org.springframework.dao.DataIntegrityViolationException
 
 /**
  * LabelsController
- * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+
  */
 class LabelsController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    
     def index() {
         redirect(action: "list", params: params)
     }

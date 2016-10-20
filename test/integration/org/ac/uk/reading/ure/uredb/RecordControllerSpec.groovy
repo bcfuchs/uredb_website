@@ -10,10 +10,11 @@ import grails.converters.*;
 
 import grails.test.spock.*;
 
+
 /**
  *
  */
-@TestFor(RecordController)
+
 class RecordControllerSpec extends IntegrationSpec {
     def "field string not found"() {
         setup:
@@ -28,26 +29,29 @@ class RecordControllerSpec extends IntegrationSpec {
     }
     def "test test "(){
         setup:
+            System.err.println "OK 1"
             def recC = new RecordController();
-             def a = 1;
+            def a = 1;
         when:
             recC.getFields();
         then:
             recC.response != null
-            System.err.println recC.response as JSON;
+            System.err.println "OK"
+            System.err.println recC.response
     }
     
-//    def "test test2 "(){
-//        setup:
-//               def recordService = Mock(recordController){
-//                   
-//               }
-//               
-//        when:
-//          def b = 1;
-//        then:
-//            def a = 1;
-//        //    System.err.println recC.response.toString();
-//    }
+    def "test getRecordAccnumsForField"(){
+        setup:
+            def rec = new RecordController();
+            rec.params.prop = "artist";
+            
+        when:
+            rec.getRecordAccnumsForField();
+            
+        then:
+            rec.response != null
+            System.err.println "gra!!!"
+            System.err.println rec.response.getContentAsString();
+    }
 }
     

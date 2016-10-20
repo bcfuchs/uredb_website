@@ -43,7 +43,7 @@ class UreTagLibTests {
         uretags.servletContext.currentEditor = 'acsmith';
         uretags.servletContext.currentEditPage = 22;
 
-        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "0";
+        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "";
 
     }
     void testDiffUserOK2Edit() {
@@ -56,7 +56,7 @@ class UreTagLibTests {
         uretags.servletContext.currentEditor = 'joebloggs';
         uretags.servletContext.currentEditPage = 22;
 
-        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "0";
+        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "";
 
     }
     //
@@ -70,7 +70,7 @@ class UreTagLibTests {
         uretags.servletContext.currentEditor = 'joebloggs';
         //     uretags.servletContext.currentEditPage = 22;
 
-        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "0";
+        assert applyTemplate('<ure:isSimulEdit>3</ure:isSimulEdit>') == "";
 
     }
 }
