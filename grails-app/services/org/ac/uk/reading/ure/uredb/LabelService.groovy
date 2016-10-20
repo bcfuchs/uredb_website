@@ -2,7 +2,7 @@ package org.ac.uk.reading.ure.uredb
 
 /**
  * LabelService
- * A service class encapsulates the core business logic of a Grails application
+ * 
  */
 class LabelService {
 /**	
@@ -21,12 +21,24 @@ class LabelService {
 	Period	Late Archaic / Early Classical / High Classical
 	Date	500-450
 	Dating_details
-	Artist
+	Artis
 	Attribution
   */
     static transactional = true
-
-    def serviceMethod() {
-
+    /**
+     * This class is no longer used. Instead, labels are handled via preset javascript. 
+     */
+   /**
+    * getLabel
+    * get the label for a field
+    * @param field
+    * @return String label 
+    */
+    def getLabel(field) {
+           def LabelsInstance =  Labels.findByField(field);
+           if (LabelsInstance) {
+               return LabelsInstance.label;
+           }
+           return null;
     }
 }

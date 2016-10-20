@@ -51,8 +51,7 @@ class ApiControllerSpec  extends Specification {
             def media = new Media(m);
             def meta = new Uremeta(accession_number:'38.4.3',media:[media]);
             meta.save();
-            System.err.println "APICONTROLLER"
-            System.err.println meta.accession_number;
+          
             controller.params.acc = '38.4.3'
             
         when:
