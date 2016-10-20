@@ -1,10 +1,11 @@
 package org.ac.uk.reading.ure.uredb
+import  org.ac.uk.reading.ure.sec.*;
 
-@TestMixin(GrailsUnitTestMixin)
-import org.junit.*
+import grails.plugins.springsecurity.SpringSecurityService
+import grails.converters.JSON
+import spock.lang.*;
 import grails.test.mixin.*
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
+import grails.test.GrailsMock
 
 /**
  * UremetaControllerTests
@@ -12,155 +13,112 @@ import grails.test.mixin.TestFor
  */
 
 @TestFor(UremetaController)
-@Mock([Uremeta])
-class UremetaControllerTests {
+@Mock([Uremeta,User,Media,RecordController,RecordService])
 
+class UremetaControllerTests extends Specification {
+    def getValidParams =  {
+        def m =[:]
+         m['accession_number'] = '34.1.1'
+        m['description'] = 'a'
+        m['fabric'] = 'a'
+        m['artist'] = 'a'
+        return m
+    }
+        def makeData = {num->
+            num.times {n->
+                def accnum = '38.4.3'+n;
+                def m = [type:'image',
+                    resource_id:accnum,
+                    caption:"bla bla bla",
+                    uri_local:"http://uredb.reading.ac.uk/ure/pixdir/2007.56c"+n,
+                    uri:"2007.56.0119"+n+".jpg"]
+                def media = new Media(m);
+                media.save();
+                def meta = new Uremeta(accession_number:accnum,media:[media]);
+                meta.save();
+            }
+        }
 
-    def populateValidParams(params) {
-      assert params != null
-      // TODO: Populate valid properties like...
-      //params["name"] = 'someValidName'
+   
+    void "test index"() {
+        when:
+            controller.index()
+            
+        then:
+            assert "/uremeta/list" == response.redirectedUrl
+    }
+   
+    void "test list"() {
+
+        given:
+            makeData(100)
+        when:
+             def res = controller.list()
+        then:
+
+            res.uremetaInstanceList.size() == 100
+            res.uremetaInstanceTotal == 100
     }
 
-    void testIndex() {
-        controller.index()
-        assert "/uremeta/list" == response.redirectedUrl
+    void "test create no params"() {
+        when:
+            def res = controller.create()
+        then:
+            
+            res.uremetaInstance != null
+    }
+    void "test create with params"() {
+        given:
+            def params = getValidParams();
+        when:
+            def res = controller.create()
+        then:
+          
+            res.uremetaInstance != null
+    }
+    
+    void "test create with params and save"() {
+        given:
+            def params = getValidParams();
+           
+        when:
+            def res = controller.create()
+            def val = res.uremetaInstance.validate();
+   //         request.method = 'POST'
+   //         def res2 = controller.save()
+        then:
+            System.println response.status
+            res.uremetaInstance != null
     }
 
-    void testList() {
+  
+    void "test show"() {
+        when: "show without id"
+        //show without id --> list
+            controller.show()
+        then: 
+            flash.message != null
+            response.redirectedUrl == '/record/list'
 
-        def model = controller.list()
+    }
+    
+        void "test show with id"() {
+       
+            given: "list of uremeta and one id"
+                makeData(100)
+                def u = Uremeta.list();
+                def id = u[0].id
+                def uremeta = u[0]
+            when: "show with id"
+                params.id = id
+                
+                controller.show()
+            then: "return right view and model"
+                view == '/ure/record'
+               
+                model.record.size() == 41
 
-        assert model.uremetaInstanceList.size() == 0
-        assert model.uremetaInstanceTotal == 0
     }
 
-    void testCreate() {
-       def model = controller.create()
 
-       assert model.uremetaInstance != null
-    }
-
-    void testSave() {
-        controller.save()
-
-        assert model.uremetaInstance != null
-        assert view == '/uremeta/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
-
-        assert response.redirectedUrl == '/uremeta/show/1'
-        assert controller.flash.message != null
-        assert Uremeta.count() == 1
-    }
-
-    void testShow() {
-        controller.show()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/uremeta/list'
-
-
-        populateValidParams(params)
-        def uremeta = new Uremeta(params)
-
-        assert uremeta.save() != null
-
-        params.id = uremeta.id
-
-        def model = controller.show()
-
-        assert model.uremetaInstance == uremeta
-    }
-
-    void testEdit() {
-        
-        controller.edit()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/uremeta/list'
-
-
-        populateValidParams(params)
-        def uremeta = new Uremeta(params)
-
-        assert uremeta.save() != null
-
-        params.id = uremeta.id
-
-        def model = controller.edit()
-
-        assert model.uremetaInstance == uremeta
-    }
-
-    void testUpdate() {
-        controller.update()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/uremeta/list'
-
-        response.reset()
-
-
-        populateValidParams(params)
-        def uremeta = new Uremeta(params)
-
-        assert uremeta.save() != null
-
-        // test invalid parameters in update
-        params.id = uremeta.id
-        //TODO: add invalid values to params object
-
-        controller.update()
-
-        assert view == "/uremeta/edit"
-        assert model.uremetaInstance != null
-
-        uremeta.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/uremeta/show/$uremeta.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        uremeta.clearErrors()
-
-        populateValidParams(params)
-        params.id = uremeta.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/uremeta/edit"
-        assert model.uremetaInstance != null
-        assert model.uremetaInstance.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
-        controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/uremeta/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def uremeta = new Uremeta(params)
-
-        assert uremeta.save() != null
-        assert Uremeta.count() == 1
-
-        params.id = uremeta.id
-
-        controller.delete()
-
-        assert Uremeta.count() == 0
-        assert Uremeta.get(uremeta.id) == null
-        assert response.redirectedUrl == '/uremeta/list'
-    }
 }

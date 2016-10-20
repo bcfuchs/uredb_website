@@ -79,8 +79,8 @@ class LabelsControllerTests {
     }
 
     void testEdit() {
+        
         controller.edit()
-
         assert flash.message != null
       //  assert response.redirectedUrl == '/labels/list'
 

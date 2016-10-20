@@ -45,6 +45,7 @@ class RecordController  {
       header('Ure-DB', 'dev')
       response.status = 200;
       render(view:"/ure/record", model:model)
+     
     }
 
 

@@ -53,6 +53,7 @@ grails.project.dependency.resolution = {
         // runtime 'org.hibernatespatial:hibernate-spatial-mysql:1.1'
 
         runtime 'mysql:mysql-connector-java:5.1.29'
+ 
 
       
 

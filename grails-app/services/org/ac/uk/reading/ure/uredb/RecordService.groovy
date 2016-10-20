@@ -55,6 +55,9 @@ class RecordService {
         model = [record:record,accnum:acc,id:rec.id,nextid:nextid, short_title:rec.short_title,keywords:keywords,thumb:thumb];
         return model;
     }
+    def getNextRecordId_old(Long rid) {
+        return rid;
+    }
     /** 
      * get the id for the next record using recursion
      * @param rid
@@ -66,6 +69,7 @@ class RecordService {
         def gn;
         def cnt = 0;
         def max = 20;
+        def top = 50;
         def startid = 25;
         // recurse until a valid id is found
         gn = {newid->
@@ -73,6 +77,10 @@ class RecordService {
              cnt++;
             if (cnt > max ) {
                 newid = startid
+               
+            }
+            if (cnt > top) {
+                return null;
             }
             if (Uremeta.get(newid) == null) {
                 gn(newid)   

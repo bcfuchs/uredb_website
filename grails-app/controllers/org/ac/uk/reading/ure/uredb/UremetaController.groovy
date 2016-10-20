@@ -35,6 +35,7 @@ class UremetaController {
             render(view: "create", model: [uremetaInstance: uremetaInstance])
             return
         }
+        
 
 		flash.message = message(code: 'default.created.message', args: [message(code: 'uremeta.label', default: 'Uremeta'), uremetaInstance.id])
         redirect(action: "show", id: uremetaInstance.id)
@@ -53,18 +54,23 @@ class UremetaController {
 	
 	def show() {
 		def rc = new RecordController();
-		def r = Uremeta.get(params.id);
-		
+		def uremetaInstance = Uremeta.get(params.id);
+        if (!uremetaInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'uremeta.label', default: 'Uremeta'), params.id])
+            redirect(action: "list")
+            return
+        }
 	//	log.info params.id
 		
-		rc._getRecordByAccNum(r.accession_number);
+	  rc._getRecordByAccNum(uremetaInstance.accession_number);
 		
 	}
 
     def edit() {
+        
         def uremetaInstance = Uremeta.get(params.id)
         if (!uremetaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'uremeta.label', default: 'Uremeta'), params.id])
+            flash.message = message(code: 'default.not.found.message for id '+params.id, args: [message(code: 'uremeta.label', default: 'Uremeta'), params.id])
             redirect(action: "list")
             return
         }
@@ -73,9 +79,10 @@ class UremetaController {
     }
 
     def update() {
+ 
         def uremetaInstance = Uremeta.get(params.id)
         if (!uremetaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'uremeta.label', default: 'Uremeta'), params.id])
+            flash.message = message(code: 'default.not.found.message'+params.id, args: [message(code: 'uremeta.label', default: 'Uremeta'), params.id])
             redirect(action: "list")
             return
         }
