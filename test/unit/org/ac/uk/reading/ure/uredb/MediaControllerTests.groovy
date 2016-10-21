@@ -11,8 +11,10 @@ class MediaControllerTests {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+        params.type = 'image'
+        params.resource_id = "22"
+        params.ure_local = "uri.home"
+        
     }
 
     void testIndex() {
@@ -43,6 +45,7 @@ class MediaControllerTests {
         response.reset()
 
         populateValidParams(params)
+        params.type="image"
         controller.save()
 
         assert response.redirectedUrl == '/media/show/1'
@@ -77,7 +80,7 @@ class MediaControllerTests {
         populateValidParams(params)
         def media = new Media(params)
 
-        assert media.save() != null
+        assert media.save(flush:true) != null
 
         params.id = media.id
 

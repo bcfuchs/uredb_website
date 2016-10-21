@@ -51,7 +51,7 @@
     // so use +OR+
     // http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
     console.log(providers);
-    for (var i = 0; i < providers.length; i++) {
+    for (var i = 0,z = providers.length; i < z; i++) {
       var provider = providers[i];
       // provider = provider.replaceAll(/\s/,"%20")
       var provider_enc = encodeURIComponent(provider);
@@ -206,7 +206,7 @@ var image_preloader = function(url,sel) {
     var providers = Object.keys(provs);
     console.log(providers.length);
 
-    for (var i = 0; i < providers.length; i++) {
+    for (var i = 0,z = providers.length; i < z; i++) {
       var t = $($("#provider-label-template label")[0]).clone();
 
       var provider = providers[i];
@@ -228,7 +228,7 @@ var image_preloader = function(url,sel) {
   var fillGrid = function(items, width, height, displayInfobox) {
     console.log("fillGrid");
     var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
-    for (var i = 0; i < items.length; i++) {
+    for (var i = 0, z = items.length; i < z; i++) {
 
       var item = items[i];
       var provider = item.dataProvider;
@@ -284,7 +284,7 @@ var image_preloader = function(url,sel) {
     }
 
     if (doSkiplist === true) {
-      for (var i = 0; i < items.length; i++) {
+      for (var i = 0, z = items.length; i < z; i++) {
         var item = items[i];
         if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
           out.push(item);
@@ -376,7 +376,7 @@ var image_preloader = function(url,sel) {
     var hex, i;
 
     var result = "";
-    for (i=0; i<this.length; i++) {
+    for (i=0, z = this.length; i<z; i++) {
         hex = this.charCodeAt(i).toString(16);
         result += ("000"+hex).slice(-4);
     }

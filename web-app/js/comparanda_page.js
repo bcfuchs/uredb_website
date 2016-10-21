@@ -24,11 +24,12 @@
         console.log(eu[k][i])
         var item = '<div class="row"><img src="' + i + '"/></div>';
         var title = '<div class="row"><a href="' + link + '"><span>' + provider + '</span></a></div>'
-        var container = '<div class="container comparanda-container">' + item + title + '</div>'
+        var container = '<div class="container comparanda-container">' + item + title + '</div>';
         $(div).append(container);
 
       }
-      $("#comparanda-list").append(div)
+      
+      $("#comparanda-list").append(div);
      
     }
     
@@ -37,7 +38,7 @@
       var projects = myprojects.list();
       console.log(projects)
        $("#projects-list").html("");
-     for (var i = 0; i < projects.length; i++) {
+     for (var i = 0,z = projects.length;i < z; i++) {
        var project = projects[i];
         console.log(projects[i])
         var link = "#"
