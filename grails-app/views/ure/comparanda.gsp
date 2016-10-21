@@ -9,10 +9,17 @@
 </head>
 <body>
 	<style>
-.comparanda-container {
-	display: inline-block;
-	width: 20%;
-}
+	.comparanda-container {
+		display: inline-block;
+		width: 20%;
+	}
+		#comparanda-list img {
+			max-height: 100px;
+		}
+		
+		#projects-main {
+			display: none;
+		}
 </style>
 	<div id="project-strip"></div>
 	<div style="clear:both"></div>
@@ -31,15 +38,6 @@
 			<div id="projects-list"></div>
 		</div>
 	</div>
-	<style>
-		#comparanda-list img {
-			max-height: 100px;
-		}
-		
-		#projects-main {
-			display: none;
-		}
-</style>
 	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>
 	<script>
     $(document).ready(function() {
@@ -65,49 +63,7 @@
 				</div>
 	</div>
 	<style>
-		#project-strip {
-			width: 100%;
-		
-		}
-		.project-box {
-			background: black;
-		    width: 180px;
-		    height: 100px;
-		    display: inline;
-		    float: left;
-		    margin-left: 2px;
-		    overflow:hidden;
-		    
-		}
-			.project-box:hover {
-			cursor:pointer;
-			}
-		.project-box-title {
-			color: white;
-			font-size: 12px;
-			padding: 5px;
-			}
-		.project-box-items {}
-		.project-box-item {
-			display: inline;
-			float: left;
-			background: #222;
-			padding: 3px;
-			}
-		.project-box-item-caption {
-			color: white;
-			font-size: 8px;
-		}
-		.project-box-item-image-container  img {
-			max-width: 40px;
-			margin:0;
-			padding-left: 2px;
-			
-		}
-		.project-box-selected {
-		
-		background: gray !important;
-		}
+	
 	</style>
 </body>
 </html>

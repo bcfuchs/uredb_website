@@ -1152,6 +1152,52 @@ span.glyphicon.ure-control-btn:hover {
 	
 	
 }
+._________________________ Comparanda Page project strip_________________________ {
+	
+}  
+#project-strip {
+	width: 100%;
+
+}
+.project-box {
+	background: black;
+    width: 180px;
+    height: 100px;
+    display: inline;
+    float: left;
+    margin-left: 2px;
+    overflow:hidden;
+    
+}
+	.project-box:hover {
+	cursor:pointer;
+	}
+.project-box-title {
+	color: white;
+	font-size: 12px;
+	padding: 5px;
+	}
+.project-box-items {}
+.project-box-item {
+	display: inline;
+	float: left;
+	background: #222;
+	padding: 3px;
+	}
+.project-box-item-caption {
+	color: white;
+	font-size: 8px;
+}
+.project-box-item-image-container  img {
+	max-width: 40px;
+	margin:0;
+	padding-left: 2px;
+	
+}
+.project-box-selected {
+
+	background: gray !important;
+}
 ._________________________ Record image strip _________________________ {
 	
 }
