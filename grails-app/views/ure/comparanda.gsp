@@ -14,16 +14,19 @@
 	width: 20%;
 }
 </style>
-<g:render template="/ure/projects_widget"></g:render>
+	<div id="project-strip"></div>
+	<div style="clear:both"></div>
+	<div style="display:none;">
+	<g:render template="/ure/projects_widget"></g:render>
+	</div>
 	<div id="comparanda-page-wrapper">
-
 		<div id="comparanda-main" class="comp-toggle">
 			<h2 class="toggler">Comparanda</h2>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="comparanda-list"></div>
 		</div>
 		<div id="projects-main" class="comp-toggle">
-			<h2  class="toggler">Projects</h2>
+			<h2 class="toggler">Projects</h2>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="projects-list"></div>
 		</div>
@@ -34,17 +37,77 @@
 		}
 		
 		#projects-main {
-			display:none;
+			display: none;
 		}
 </style>
 	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>
 	<script>
-$(document).ready(function(){
-  $(".toggler").click(function(){
-  $(".comp-toggle").toggle();
-  window.make_projects_list();
-  })
-})
-	</script>
+    $(document).ready(function() {
+      $(".toggler").click(function() {
+        $(".comp-toggle").toggle();
+        window.make_projects_list();
+      })
+    })
+  </script>
+	<div id="comp-templates" style="display: none">
+		<div id="project-box" class="project-box">
+			<div class="project-box-title"></div>
+			<div class="project-box-items">
+				
+			</div>
+		</div>
+		<div id="project-box-item" class="project-box-item">
+	
+					<div class="project-box-item-image-container">
+					<img src=""/></img>
+					</div>
+					<div class="project-box-item-caption"></div>
+				</div>
+	</div>
+	<style>
+		#project-strip {
+			width: 100%;
+		
+		}
+		.project-box {
+			background: black;
+		    width: 180px;
+		    height: 100px;
+		    display: inline;
+		    float: left;
+		    margin-left: 2px;
+		    overflow:hidden;
+		    
+		}
+			.project-box:hover {
+			cursor:pointer;
+			}
+		.project-box-title {
+			color: white;
+			font-size: 12px;
+			padding: 5px;
+			}
+		.project-box-items {}
+		.project-box-item {
+			display: inline;
+			float: left;
+			background: #222;
+			padding: 3px;
+			}
+		.project-box-item-caption {
+			color: white;
+			font-size: 8px;
+		}
+		.project-box-item-image-container  img {
+			max-width: 40px;
+			margin:0;
+			padding-left: 2px;
+			
+		}
+		.project-box-selected {
+		
+		background: gray !important;
+		}
+	</style>
 </body>
 </html>

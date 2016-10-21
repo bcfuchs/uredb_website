@@ -16,6 +16,7 @@
  */
 /** START */
 !function() {
+  'use strict';
   // reset the cache
   var eu_querycache_store = 'eu_querycache'; 
   if ( $.localStorage.isSet(eu_querycache_store))  {
