@@ -29,6 +29,9 @@
 	<div id="comparanda-page-wrapper">
 		<div id="comparanda-main" class="comp-toggle">
 			<h2 class="toggler">Comparanda</h2>
+			
+			<g:render template="/ure/project_title_display_widget">
+			</g:render>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="comparanda-list"></div>
 		</div>
