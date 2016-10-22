@@ -402,7 +402,15 @@ var my_eu_items = (function(){
 
 window.ure_eu_items= my_eu_items;
 
-
-
+/***
+ * some jquery extras
+ */
+$.extend({
+qs:function (key) {
+  key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+  var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+  return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+}
+});
 
 }();

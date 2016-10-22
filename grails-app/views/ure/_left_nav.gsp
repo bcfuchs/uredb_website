@@ -10,7 +10,8 @@
 		(function(){
 			$(document).ready(function(){
 			$("#current-project-display").html(ure_projects.current());
-  
+  		
+  	
 		})
 		})()
 	</script>

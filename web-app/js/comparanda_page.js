@@ -170,7 +170,7 @@ var my_eu_items = ure_eu_items;
     };
    
     
-    window. make_dummy_projects2 =  make_dummy_projects2;
+    window.make_dummy_projects2 =  make_dummy_projects2;
     
     /*****************************************************************
      * 
@@ -249,10 +249,16 @@ var my_eu_items = ure_eu_items;
     }
     setup_project_strip();
   };
-  
+  var set_selected_project = function() {
+      var project = $.qs('project') || ""
+      if (project !== "") {
+        //  TODO click on current project. 
+      }
+  }
   
   $(document).ready(function() {
     make_comparanda_page();
+    set_selected_project();
   });
 
 }();
