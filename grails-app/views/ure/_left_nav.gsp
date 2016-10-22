@@ -3,7 +3,19 @@
 </div>
 <div id="comparanda" class="left_nav1" data-placement="top" data-toggle="tooltip"
 	title="drag europeana images here to add to comparanda">
-	Your comparanda
+	<div>Your comparanda for:</div>
+	<div>
+	 <span id="current-project-display" class="current-project-display"></span>
+	<script>
+		(function(){
+			$(document).ready(function(){
+			$("#current-project-display").html(ure_projects.current());
+  
+		})
+		})()
+	</script>
+	</div>
+
 	<div id="comparanda-thumbs"></div>
 	<!--  clicks assigned in eu_comparanda.js -->
 	<div class="left_nav2 lighttable-controls2">

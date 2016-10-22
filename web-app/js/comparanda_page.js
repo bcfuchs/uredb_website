@@ -7,167 +7,8 @@
    * outline eu_items object for data.js
    * 
    */
-  var my_eu_items = (function(){
-    var storage = $.localStorage
-    var domain, domain_store,pic_index;
-    pic_index = {} // index eu_pic_id->[accnums] // update on each save.
-    domain_store = "eu_items";
-    
-    function domainObj() {}
-    //TODO inherit this from a general data object!
-    domainObj.prototype.clone = function() {
-      return JSON.parse(JSON.stringify(domain['data']));
-    };
-    domainObj.prototype.list = function() {
-      return Object.keys(domain['data'])
-    }
-    domainObj.prototype.random = function(){
-      var t =  Object.keys(domain['data']);
-      var n = Math.floor(Math.random()*t.length);
-      return domain['data'][t[n]]
-    }
-    
-    function init() {
-      domain = new domainObj();
-      domain['data'] = {}; // data
-
-      // initialize storage
-      if (!storage.isSet(domain_store))
-        storage.set(domain_store, JSON.stringify(domain['data']));
-       
-       var data = storage.get(domain_store);
-       domain['data'] = data;
-       make_pic_index();
-    }
-    init();
-    
-    /*****************************************************************
-     * 
-     * @memberOf comparanda_page.eu_items 
-     */
-   function reset() {
-      domain = null;
-      storage.remove(domain_store);
-      init();
-      
-    }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */
-   function save(){
-     storage.set(domain_store,JSON.stringify(domain['data']));
-     make_pic_index();
-   };
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */
-   function get(item){
-     if (item in domain['data']) {
-       return domain['data'][item];
-     }
-     else {
-       return null;
-     }
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */
-   function create(accnum,thumburl) {
-     if (!(accnum in domain['data'])) {
-       domain['data'][accnum] = {}
-       domain['data'][accnum]['thumb'] = thumburl;
-       save();
-       return true;
-     }
-     return false;
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    *@
-    */
-   function put(accnum,eu_id,eu_meta) {
-     // note if there's no thumb we need to get one.
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    * 
-    */
-    function get_thumb_for_accnum(accnum) {
-      if ( accnum  in domain['data']) {
-        return domain['data'][accnum]['thumb'];
-      }
-      return null;
-      
-    }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    * @private
-    */
-   function make_pic_index() {
-     console.log("pic_index")
-     var items = domain['data'];
-    
-    
-     for (var accnum in items) {
-       var eupix = items[accnum];
-       for (var pic in eupix) {
-         console.log(pic);
-         if (! (pic in pic_index) ) {
-           pic_index[pic] = [];
-         }
-         pic_index[pic].push(accnum);
-       };
-       
-     }
- 
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */
-   function list() {
-     return domain.list();
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */
-   function get_accnums_for_eupic(pic_id) {
-     if (pic_id in pic_index) {
-       return pic_index[pic_id];
-     }
-     return null;
-   }
-   /*****************************************************************
-    * 
-    * @memberOf comparanda_page.eu_items 
-    */ 
-   function random() {
-     return domain.random();
-   }
-   
-   return {
-     reset:reset,
-     save:save,
-     get:get,
-     create: create,
-     put: put,
-     list:list,
-     get_accnums_for_eupic:get_accnums_for_eupic,
-     pic_index:pic_index,
-     get_thumb_for_accnum:get_thumb_for_accnum,
-     random:random 
-     
-   } ;
-  })();
-  
-  window.ure_eu_items= my_eu_items;
+// eu items Data
+var my_eu_items = ure_eu_items;
   /*****************************************************************
    * 
    * @memberOf comparanda_page 
@@ -306,11 +147,14 @@
       var  pr = window.ure_projects;
       pr.reset();
       var items = $.localStorage.get("eu_items");
-      var proj = ['Dionysus','Skyphos','Mythology'];
+      var proj = ['Dionysus','Skyphos','Mythology','Peplos',"Athens","Classics 110"];
       
+      var proj_len = proj.length;
+      var max = 4;
+      for (var i = 0; i < max; i++) {
       for (var item in items) {
-   
-        var p = proj[Math.floor(Math.random() * 3)];
+        console.log(i)
+        var p = proj[Math.floor(Math.random() * proj_len)];
    
         for (eupic in items[item]) {
          // console.log(eupic);
@@ -320,7 +164,7 @@
           }
         };
       }
-         
+      }   
       
     
     };

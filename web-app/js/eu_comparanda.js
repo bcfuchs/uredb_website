@@ -19,7 +19,8 @@
               eu_draggable_sel = "#euwidget .cell"
               eu_items = 'eu_items'
               this_accnum = accnum;
-            var myprojects = window.ure_projects; // project DAO
+              var myprojects = window.ure_projects; // projects DAO
+    
             
               /*****************************************************************
                * 

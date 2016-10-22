@@ -160,6 +160,7 @@
       if (project != undefined) {
         domain['data']['current_project'] = project;
         storage.set('current_project',project);
+        
         save();
         return project; 
       }
@@ -226,9 +227,10 @@ window.ure_projects = myprojects;
  */
 var my_eu_items = (function(){
 
-  var domain, domain_store,pic_index;
+  var domain, domain_store,meta_store,pic_index;
   pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
   domain_store = "eu_items";
+  meta_store = "eu_items_meta"
   domain  = {};
   function domainObj() {}
   //TODO inherit this from a general data object!
@@ -249,15 +251,25 @@ var my_eu_items = (function(){
     domain['data'] = {}; // data
 
     // initialize storage
+    // two separate files for legacy. 
     if (!storage.isSet(domain_store)) {
       domain['data']['eu_items'] = {};
-      domain['data']['meta'] = {};
-      domain['data']['undo'] = {};
-      domain['data']['archive'] = {};
-      storage.set(domain_store, JSON.stringify(domain['data']));
+ //     storage.set(domain_store, JSON.stringify(domain['data']));
+      storage.set(domain_store, JSON.stringify({}));
+      
     }
+    if (!storage.isSet(meta_store)) {
+      domain['data']['meta'] = {};
+      domain['data']['meta']['undo'] = {};
+      domain['data']['meta']['archive'] = {};
+      storage.set(meta_store, JSON.stringify(domain['meta']));
+    }
+     
      var data = storage.get(domain_store);
-     domain['data'] = data;
+     domain['data']['eu_items'] = data;
+     var meta = storage.get(meta_store);
+     domain['data']['meta'] = meta;
+     
      make_pic_index();
   };
   init();
