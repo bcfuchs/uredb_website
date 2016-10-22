@@ -36,6 +36,7 @@ if (gapi_client_id == null) {
 <meta name="google-signin-client_id" content="${gapi_client_id}"/>
 
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
+<script src="${resource(dir:'js',file:'ure_data.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>

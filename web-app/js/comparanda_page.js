@@ -337,6 +337,8 @@
      */
     
     var show_project_items = function(project,pr) {
+      // store as the selected project
+      pr.current(project);
       // get all the accnums for this project. 
       var accnums = pr.get_accnums(project);
       $(".comparanda-target-container").show();
@@ -393,10 +395,13 @@
         $(this).addClass("project-box-selected");
        var project = $(this).data('ure-project')
        show_project_items(project,pr)
+       $(".project-selected-title").html(project)
+       $(".project-selected-before").html("Project: ")
        // show only this project. 
        
       });
       });
+      
     }
     setup_project_strip();
   };

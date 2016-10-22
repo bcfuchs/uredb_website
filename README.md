@@ -37,7 +37,7 @@ docker run --rm --link uredemo-mysql:mysql -v ~/.grails:/root/.grails  -v "$PWD"
 "run-app -Dgrails.env=uredemo    --refresh-dependencies --stacktrace"
 ```
 
-Add a port switch if you need it (-p $HOSTPORT:$CONTAINERPORT)
+Add a port switch if you need one (-p $HOSTPORT:$CONTAINERPORT)
 
 ```
 docker run --rm --link uredemo-mysql:mysql -v ~/.grails:/root/.grails  -v "$PWD":/app:rw \

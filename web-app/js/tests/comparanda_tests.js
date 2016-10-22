@@ -20,11 +20,16 @@
   // don't evaluate except by calling from cli
   var project_tests = function() {
     console.log("loading tests");
-
+    var original_projects;
     var tests = {};
     var project = window.ure_projects;
     console.log(project);
+    
+    // first, store the actual project list, to replace it later
+    original_projects = project.get_all();
+    $.localStorage.set('orig_projects',JSON.stringify(domain['data']))
     // add lots of projects
+    
     tests['reset'] = function() {
       project.reset();
       console.log(JSON.stringify(project.get_all()));
@@ -57,7 +62,7 @@
 
       });
       
-      project.reset();
+      project.reset();  
     
     }
 
@@ -82,6 +87,8 @@
       for ( var n in tests) {
         tests[n]();
       }
+      
+      $.localStorage('projects',JSON.stringify(original_project))
     };
 
     return {
