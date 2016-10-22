@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +22,7 @@
 </style>
 	<div id="project-strip"></div>
 	<div style="clear:both"></div>
+	<g:render template="/ure/project_form_modal"></g:render>
 	<div style="display:none;">
 	<g:render template="/ure/projects_widget"></g:render>
 	</div>

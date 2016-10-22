@@ -257,6 +257,10 @@
                   // store it
                   storage.set(eu_items, JSON.stringify(eu_items_ls));
                 }
+                // update ure projects
+                // TODO this should be set as a signal -- watch
+               alert("updating projects...") 
+                ure_projects.put(ure_projects.current(), this_accnum, eu_item.thumb);
                 add_to_comp_bar(thumb);
 
               } // function addcomp
@@ -268,6 +272,8 @@
                */
 
               function add_to_comp_bar(thumb) {
+                
+                
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 // init if !
                 if (!thumbs) {
