@@ -19,8 +19,13 @@
 		#projects-main {
 			display: none;
 		}
-</style>
-	<div id="project-strip"></div>
+		
+	</style>
+	<div id="project-strip-container" style="display:none">
+		<div id="project-strip"></div>
+	</div>
+	
+	
 	<div style="clear:both"></div>
 	<g:render template="/ure/project_form_modal"></g:render>
 	<div style="display:none;">

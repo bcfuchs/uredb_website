@@ -25,7 +25,7 @@
     /***************************************************************** 
      * @memberOf ure_data.projects
      */
-    var init  = function  () {
+    var init  = function() {
       domain = new domainObj();
       domain['data'] = {}; // add project data 
       
@@ -141,7 +141,7 @@
      * return a list of project names, minus the archive
      */
     function list() {
-     
+   
      var projs = domain['data']['projects'];
       
       return Object.keys(projs) || [];
@@ -196,7 +196,7 @@
         var old_project  = JSON.stringify(domain['data']['projects'][proj]);
         domain['data']['project_archive'].push(old_project);
         delete domain['data']['projects'][proj];
-        old = null;
+       
       }
       save();
       
@@ -222,7 +222,7 @@
 window.ure_projects = myprojects; 
 /*****************************************************************
  * 
- * @memberOf ure_data.ure_eu_items
+ * @memberOf ure_data.eu_items
  * 
  */
 var my_eu_items = (function(){
@@ -245,8 +245,11 @@ var my_eu_items = (function(){
     var n = Math.floor(Math.random()*t.length);
     return domain['data']['eu_items'][t[n]];
   };
-  
+  /***************************************************************** 
+   * @memberOf ure_data.eu_items
+   */
   var init = function() {
+    
     domain = new domainObj();
     domain['data'] = {}; // data
 
@@ -360,6 +363,7 @@ var my_eu_items = (function(){
    }
 
  }
+ 
  /*****************************************************************
   * 
   * @memberOf ure_data.eu_items
@@ -401,6 +405,8 @@ var my_eu_items = (function(){
 })();
 
 window.ure_eu_items= my_eu_items;
+
+
 
 /***
  * some jquery extras

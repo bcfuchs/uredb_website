@@ -90,9 +90,12 @@ var my_eu_items = ure_eu_items;
       
       var myprojects = window.ure_projects;
       var projects = myprojects.list();
-      
-      $("#projects-list").html("");
-     
+    
+      $("#projects-strip").html("");
+      // remove the old handlers...
+      $(".project-box").off('click');
+      // show the project strip only if there are projects.
+      if (projects.length > 0) { $("#project-strip-container").show();}
      for (var i = 0,z = projects.length;i < z; i++) {
        var box = $("#project-box").clone().attr('id','');
        var project = projects[i];

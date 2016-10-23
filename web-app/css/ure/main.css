@@ -1155,18 +1155,39 @@ span.glyphicon.ure-control-btn:hover {
 ._________________________ Comparanda Page project strip_________________________ {
 	
 }  
-#project-strip {
+#project-strip-container {
 	width: 100%;
+	padding-bottom: 12px;
+  	overflow-x: scroll;
+
+}
+#project-strip {
+	width: 3000px;
+ 	 height: 100px;
+ 	 background:black;
+  	
+}
+	
+	
+
+}
+#project-strip {
+	width: 1000px;
+	height: 100px;
+	overflow-x: scroll;
+	
+	
 
 }
 .project-box {
 	background: black;
     width: 180px;
     height: 100px;
-    display: inline;
+    display: inline-block;
     float: left;
     margin-left: 2px;
     overflow:hidden;
+    border-right: 1px solid #311;
     
 }
 	.project-box:hover {

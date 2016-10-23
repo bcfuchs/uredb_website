@@ -1,6 +1,7 @@
 <div class="left_nav1 left-nav-search" id="left-nav-search" style="display: none;">
 	<g:render template="/ure/searchbar_small" />
 </div>
+<div class="left_nav1" id="left-nav-project-bar" style="display:none"></div>
 <div id="comparanda" class="left_nav1" data-placement="top" data-toggle="tooltip"
 	title="drag europeana images here to add to comparanda">
 	<div>Your comparanda for:</div>
@@ -10,8 +11,7 @@
 		(function(){
 			$(document).ready(function(){
 			$("#current-project-display").html(ure_projects.current());
-  		
-  	
+  
 		})
 		})()
 	</script>
