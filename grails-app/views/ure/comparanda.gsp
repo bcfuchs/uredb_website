@@ -4,7 +4,6 @@
 <title>Ure Museum Database: ${accnum}</title>
 <meta name="layout" content="ure/main" />
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
 </head>
 <body>
 	<style>
@@ -71,7 +70,7 @@
 				</div>
 	</div>
 	<style>
-	
 	</style>
+	<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
 </body>
 </html>

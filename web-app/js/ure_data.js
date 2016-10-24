@@ -230,7 +230,7 @@ var my_eu_items = (function(){
   var domain, domain_store,meta_store,pic_index;
   pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
   domain_store = "eu_items";
-  meta_store = "eu_items_meta"
+  meta_store = "eu_items_meta";
   domain  = {};
   function domainObj() {}
   //TODO inherit this from a general data object!
@@ -240,6 +240,7 @@ var my_eu_items = (function(){
   domainObj.prototype.list = function() {
     return Object.keys(domain['data']);
   };
+  
   domainObj.prototype.random = function(){
     var t =  Object.keys(domain['data']['eu_items']);
     var n = Math.floor(Math.random()*t.length);
@@ -375,6 +376,13 @@ var my_eu_items = (function(){
   * 
   * @memberOf ure_data.eu_items
   */
+ function get_all() {
+   return domain['data']['eu_items'];
+ }
+ /*****************************************************************
+  * 
+  * @memberOf ure_data.eu_items
+  */
  function get_accnums_for_eupic(pic_id) {
    if (pic_id in pic_index) {
      return pic_index[pic_id];
@@ -393,6 +401,7 @@ var my_eu_items = (function(){
    reset:reset,
    save:save,
    get:get,
+   get_all:get_all,
    create: create,
    put: put,
    list:list,

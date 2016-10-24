@@ -574,7 +574,7 @@
                */
 
               function getEUdata() {
-
+                
                 return storage.get(eu_items);
 
               }
@@ -600,6 +600,9 @@
    * set up the navigation strip
    * 
    */
+  
+  var my_eu_items = window.ure_eu_items;
+  
   var setup_compNavList = function(listsel, observesel) {
 
     var eu_items_store = "eu_items";
@@ -609,11 +612,7 @@
      * 
      * 
      */
-    var get_comp_list = function() {
-      var items = storage.get(eu_items_store);
-      // console.log(items);
-      return items;
-    };
+    
     /*****************************************************************
      * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
      * 
@@ -656,7 +655,7 @@
           // could just do:
           // if (mutation.type === 'childList')
           if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)
-            make_list(listsel, get_comp_list());
+            make_list(listsel, my_eu_items.get_all());
 
         });
       });
@@ -669,7 +668,7 @@
     };
 
     $(document).ready(function() {
-      make_list(listsel, get_comp_list());
+      make_list(listsel, my_eu_items.get_all());
       // remake list when a comp is added or removed.
       makeMutationObserver($(observesel)[0]);
 
@@ -686,7 +685,7 @@
   var listSelector = "#comparanda-nav-list";
   var observeSelector = "#comparanda-thumbs";
   setup_compNavList(listSelector, observeSelector);
-})
+});
 
 }();
 
