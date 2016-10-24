@@ -33,28 +33,7 @@
 		</init-param>
 	</filter>
 	
-	<filter>
-		<filter-name>TestFilter</filter-name>
-		<filter-class>
-			uredb.TestFilter
-		</filter-class>
-		<init-param>
-			<param-name>header</param-name>
-			<param-value>Cache-Control</param-value>
-		</init-param>
-		<init-param>
-			<param-name>value</param-name>
-			<param-value>public, max-age=31536000</param-value>
-		</init-param>
-		</filter>
-	<filter-mapping>
-    <filter-name>TestFilter</filter-name>
-    <url-pattern>*.css</url-pattern>
-    <url-pattern>*.js</url-pattern>
-    <url-pattern>*.gif</url-pattern>
-    <url-pattern>*.png</url-pattern>
-    <url-pattern>*.jpg</url-pattern>
-	</filter-mapping>
+	
 	
 	
 	<filter-mapping>
