@@ -81,51 +81,8 @@ var my_eu_items = ure_eu_items;
     
     make_projects_list();
     window.make_projects_list = make_projects_list;
-    /*****************************************************************
-     * 
-     * @memberOf comparanda_page 
-     */
-    var make_projects_strip = function(){
-      console.log("making projects strip ");
-      
-      var myprojects = window.ure_projects;
-      var projects = myprojects.list();
     
-      $("#projects-strip").html("");
-      // remove the old handlers...
-      $(".project-box").off('click');
-      // show the project strip only if there are projects.
-      if (projects.length > 0) { $("#project-strip-container").show();}
-     for (var i = 0,z = projects.length;i < z; i++) {
-       var box = $("#project-box").clone().attr('id','');
-       var project = projects[i];
-       $(box).attr('data-ure-project',project)
-       $(box).find(".project-box-title").html(project);
-       console.log(project)
-       
-       // accession numbers
-       var accs = myprojects.get(project);
-        for (acc in accs) {
-          var itembox = $("#project-box-item").clone().attr('id','');
-          
-          var thumburl = my_eu_items.get_thumb_for_accnum(acc)
-          $(itembox).find(".project-box-item-caption").html(acc)
-          $(itembox).find(".project-box-item-image-container img").attr("src",thumburl)
-          $(box).find(".project-box-items").append(itembox);
-          
-          
-        
-         
-        }
-       
-        $("#project-strip").append(box);
-      }
-     
-      
-    }
-    
-    make_projects_strip();
-    window.make_projects_strip = make_projects_strip;
+
    
     /*****************************************************************
      * 
@@ -184,16 +141,21 @@ var my_eu_items = ure_eu_items;
      */
     
     var show_project_items = function(project,pr) {
-      // store as the selected project
+      var pr = window.ure_projects;
+
+      // set the selected project in the persistent object
       pr.current(project);
+     
       // get all the accnums for this project. 
       var accnums = pr.get_accnums(project);
       $(".comparanda-target-container").show();
-      if (project === "--all--") 
+      if (project === "--all--" || typeof project === 'undefined') 
         return 0;
       $(".comparanda-target-container").each(function(){
         var accnum = $(this).data('ure-accnum');
-        if (accnums.indexOf(accnum) < 0 ) {
+        
+        // hide all the objects that aren't in this project
+        if (accnums !== 'undefined' && accnums.indexOf(accnum) < 0 ) {
           $(this).hide();
         }
         
@@ -230,6 +192,28 @@ var my_eu_items = ure_eu_items;
       })
       }
     make_project_toggle("#project-selector")
+     /*****************************************************************
+     * 
+     * @memberOf comparanda_page
+     */
+    var display_selected_project = function(sel){
+      
+      // highlight the correct project in the strip
+      $(".project-box").removeClass("project-box-selected")
+      $(sel).addClass("project-box-selected");
+      
+      // get the selected project from the selected element
+      var project = $(sel).data('ure-project');
+      
+      // display the  items for this project
+      show_project_items(project)
+      
+      // set the title 
+      $(".project-selected-title").html(project)
+      $(".project-selected-before").html("Project: ")
+      
+    }
+    window.ure_display_project =display_selected_project;
     /*****************************************************************
      * 
      * @memberOf comparanda_page
@@ -237,24 +221,71 @@ var my_eu_items = ure_eu_items;
     var setup_project_strip = function(){
       var  pr = window.ure_projects;
       $(document).ready(function(){
+        
       $(".project-box").click(function() {
-       $(".project-box").removeClass("project-box-selected")
-        $(this).addClass("project-box-selected");
-       var project = $(this).data('ure-project')
-       show_project_items(project,pr)
-       $(".project-selected-title").html(project)
-       $(".project-selected-before").html("Project: ")
-       // show only this project. 
+        var el = $(this)
+        if (this.constructor.name === 'jQuery.Event' ){
+          el = $(this).currentTarget;
+        }
+        display_selected_project(el);
        
       });
       });
       
     }
-    setup_project_strip();
+    /*****************************************************************
+     * 
+     * @memberOf comparanda_page 
+     */
+    var make_projects_strip = function(){
+
+      
+      var myprojects = window.ure_projects;
+      var projects = myprojects.list();
+      // remove all current click handlers
+     // $(".project-box").off('click');
+      // clear the div and remove the handlers
+      $("#project-strip").empty();
+      
+     
+      // show the project strip only if there are projects.
+      if (projects.length > 0) { $("#project-strip-container").show();}
+     for (var i = 0,z = projects.length;i < z; i++) {
+       var box = $("#project-box").clone().attr('id','');
+       var project = projects[i];
+       $(box).attr('data-ure-project',project)
+       $(box).find(".project-box-title").html(project);
+       console.log(project)
+       
+       // accession numbers
+       var accs = myprojects.get(project);
+        for (acc in accs) {
+          var itembox = $("#project-box-item").clone().attr('id','');
+          
+          var thumburl = my_eu_items.get_thumb_for_accnum(acc)
+          $(itembox).find(".project-box-item-caption").html(acc)
+          $(itembox).find(".project-box-item-image-container img").attr("src",thumburl)
+          $(box).find(".project-box-items").append(itembox);
+          
+          
+        
+         
+        }
+       
+        $("#project-strip").append(box);
+      }
+     
+     setup_project_strip(); 
+    };
+    window.make_projects_strip = make_projects_strip;
+    make_projects_strip();
+    
   };
   var set_selected_project = function() {
       var project = $.qs('project') || ""
       if (project !== "") {
+       var sel =  $(".project-box[data-ure-project="+project+"]")
+       window.ure_display_project(sel);
         //  TODO click on current project. 
       }
   }
@@ -262,6 +293,7 @@ var my_eu_items = ure_eu_items;
   $(document).ready(function() {
     make_comparanda_page();
     set_selected_project();
+   
   });
 
 }();
