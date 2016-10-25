@@ -43,6 +43,7 @@ $(document).ready(function(){
 		// update the strip
 		// TODO
 		ure_project_strip.add(title);
+		$("#myModalNorm").modal('hide');
 		
 	
 		
@@ -57,7 +58,7 @@ $(document).ready(function(){
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <button type="button" class="close" 
+                <button type="button" id="close-modal" class="close" 
                    data-dismiss="modal">
                        <span aria-hidden="true">&times;</span>
                        <span class="sr-only">Close</span>
@@ -73,7 +74,7 @@ $(document).ready(function(){
                 <form id="new-project-form" role="form">
                   <div class="form-group">
                     <label for="project-title-input">Project Title</label>
-                      <input type="text" class="form-control"
+                      <input type="text" class="form-control keypress" data-keypress-target="#new-project-save"
                       id="project-title-input" placeholder="Enter a title"/>
                   </div>
                   <div class="form-group">

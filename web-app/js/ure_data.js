@@ -35,7 +35,7 @@
         domain['data']['projects'] = {};
         domain['data']['meta'] = {};
         domain['data']['undo'] = {};
-        domain['data']['project_archive'] = {};
+        domain['data']['project_archive'] = [];
       
         storage.set(domain_store, JSON.stringify(domain['data']));
         // load from storage -- only domain['data'] is stored
@@ -75,7 +75,7 @@
      * 
      */
   function create(proj) {
-      
+     proj = encodeURIComponent(proj);
       
       if (proj === '' || proj === undefined) {
         throw "no project specified";
@@ -97,7 +97,7 @@
    * @memberOf ure_data.projects
    */
   function put(proj, accnum, item) {
-      
+      proj = encodeURIComponent(proj);
       if (!(proj in  domain['data']['projects'])) {
         domain['data']['projects'][proj] = {};
 
@@ -119,7 +119,7 @@
      * @memberOf ure_data.projects
      */
      function get_by_accnum(proj, accnum) {
-
+       proj = encodeURIComponent(proj);
       if (proj in domain['data']['projects'] && accnum in domain['data']['projects'][proj]) {
         return domain['data']['projects'][proj][accnum];
       }
@@ -129,6 +129,7 @@
      * @memberOf ure_data.projects
      */
     function get(proj) {
+      proj = encodeURIComponent(proj);
      if (proj in domain['data']['projects']) {
       return domain['data']['projects'][proj];
      }
@@ -143,8 +144,11 @@
     function list() {
    
      var projs = domain['data']['projects'];
-      
-      return Object.keys(projs) || [];
+     var out = [];
+     for (var name in projs) {
+       out.push(decodeURIComponent(name));
+     }
+      return out;
    
     } 
     /***************************************************************** 
@@ -155,18 +159,21 @@
      * if project is not defined, return project in current_project, 
      * if neither return null
      */
-    function current(project) {
-      
+    function current(proj) {
+      var project = encodeURIComponent(proj);
       if (project != undefined) {
         domain['data']['current_project'] = project;
         storage.set('current_project',project);
         
         save();
-        return project; 
+        
+        return proj; 
       }
       
       if ( 'current_project' in domain['data']) {
-        return domain['data']['current_project'];
+        var proj =  domain['data']['current_project'];
+       return decodeURIComponent(proj);
+        
       }
       return null;
       
@@ -176,6 +183,7 @@
      * @memberOf ure_data.projects
      */
     function get_accnums(proj) {
+      proj = encodeURIComponent(proj);
       if (proj in domain['data']['projects']) {
         return Object.keys(domain['data']['projects'][proj]);
       }
@@ -192,6 +200,7 @@
      * @memberOf ure_data.projects
      */
    function delete_project(proj) {
+     proj = encodeURIComponent(proj);
       if (proj in domain['data']['projects']) { 
         var old_project  = JSON.stringify(domain['data']['projects'][proj]);
         domain['data']['project_archive'].push(old_project);
@@ -428,4 +437,32 @@ qs:function (key) {
 }
 });
 
+/***
+ * some document extras.
+ */
+
+
+
+  /***
+   *@memberOf ure_data.document_extras
+   *
+   *declare class 'keypress' and a selector in data-keypress-target
+   */
+var enable_submit_on_keypress = function() {
+  $(document).ready(function(){
+  $(".keypress").each(function(){
+   $(this).keypress(function(e){
+        if(e && e.keyCode == 13) {
+          var target = $(this).data('keypress-target');
+          $(target).click();
+          
+        }
+    
+      });
+    });
+    });
+}
+enable_submit_on_keypress();
+
 }();
+

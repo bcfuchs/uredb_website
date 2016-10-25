@@ -28,7 +28,10 @@
 		<button id="retake-button" class="btn btn-default btn-xs">Submit</button>
 	</div>
 	<div class="col-xs-5">
-		<input type="text" class="form-control" id="retake-button-terms">
-		<br>
+		<input type="text" class="form-control keypress" data-keypress-target="#retake-button" id="retake-button-terms">
+		<br/>
 	</div>
 </div>
+<script>
+
+</script>
