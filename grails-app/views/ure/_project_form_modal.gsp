@@ -32,6 +32,8 @@ $(document).ready(function(){
 	$("#new-project-save").click(function(){
 		var title = $("#project-title-input").val();
 		// add project to projects
+		//TODO 
+		// escape this data !
 		try {
 			ure_projects.create(title);
 		}
@@ -39,7 +41,8 @@ $(document).ready(function(){
 			alert(e)
 			}
 		// update the strip
-		make_projects_strip();
+		// TODO
+		ure_project_strip.add(title);
 		
 	
 		

@@ -32,7 +32,11 @@
                  * bind functions to mini-dashboard
                  */
                 $("#view-comps").click(function() {
-                  window.location.href = "/comparanda"
+                  var proj = myprojects.current();
+                  var extra = ""
+                  if (proj !== 'undefined')
+                    extra = "?project="+proj;
+                  window.location.href = "/comparanda"+extra;
 
                 });
 
