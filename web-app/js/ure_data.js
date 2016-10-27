@@ -160,20 +160,27 @@
      * if neither return null
      */
     function current(proj) {
+      console.log(proj)
       var project = encodeURIComponent(proj);
-      if (project != undefined) {
+      console.log("current: " + project)
+    
+      if (typeof project !== 'undefined') {
+        console.log("ppp");
         domain['data']['current_project'] = project;
         storage.set('current_project',project);
-        
+        console.log(proj)
         save();
         
         return proj; 
       }
-      
+      else {
       if ( 'current_project' in domain['data']) {
+        console.log("aaa")
         var proj =  domain['data']['current_project'];
-       return decodeURIComponent(proj);
+        console.log(proj)
+        return decodeURIComponent(proj);
         
+      }
       }
       return null;
       
@@ -426,11 +433,14 @@ window.ure_eu_items= my_eu_items;
 
 
 
+
 /***
+ * @memberOf ure_data.jquery_extras
  * some jquery extras
  */
+var jquery_qs = function(){};
 $.extend({
-qs:function (key) {
+  qs:function (key) {
   key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
   var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
   return match && decodeURIComponent(match[1].replace(/\+/g, " "));
@@ -447,6 +457,7 @@ qs:function (key) {
    *@memberOf ure_data.document_extras
    *
    *declare class 'keypress' and a selector in data-keypress-target
+   * to get submit on return with buttons.
    */
 var enable_submit_on_keypress = function() {
   $(document).ready(function(){

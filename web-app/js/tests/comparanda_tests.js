@@ -14,32 +14,35 @@
       console.log(m + " failed!")
       }
     else {
-      console.log(m+" passed");
+      console.log(m+" passed!");
     }
   }
   // don't evaluate except by calling from cli
+ var original_projects;
   var project_tests = function() {
     console.log("loading tests");
-    var original_projects;
+    
     var tests = {};
     var project = window.ure_projects;
-    console.log(project);
+    
     
     // first, store the actual project list, to replace it later
     original_projects = project.get_all();
-    $.localStorage.set('orig_projects',JSON.stringify(domain['data']))
+    $.localStorage.set('orig_projects',JSON.stringify(original_projects))
     // add lots of projects
     
     tests['reset'] = function() {
       project.reset();
-      console.log(JSON.stringify(project.get_all()));
-    }
+ //     console.log(JSON.stringify(project.get_all()));
+      console.log(project.list().length )
+      assert(function() { return (project.list().length === 0); },'reset');
+    };
     var add_one_project = function(proj) {
       console.log('add one project');
       proj = proj || "project"
-      project.create(proj);
-      jlog(project.get(proj));
-      jlog(project.proj);
+   //   project.create(proj);
+      //jlog(project.get(proj));
+      //jlog(project.proj);
     }
     
     tests["add projects then delete"] = function() {
@@ -54,8 +57,9 @@
           }
         }
       }
-      console.log(project.get_all)
-      assert(function(){project.get_all.length === 10},"add projects then delete 1")
+   console.log(project.list().length) 
+      assert(function(){return (project.list().length === 10)},"add projects then delete 1")
+      
       console.log(JSON.stringify(project.get_all));
       projects.forEach(function(proj) {
         project['delete'](proj);
@@ -65,10 +69,10 @@
       project.reset();  
     
     }
-
+ 
     tests["create empty projects then delete"] = function() {
       var projects = [];
-      for (var i = 1; i < 10; i++) {
+      for (var i = 1; i < 100; i++) {
         var name = 'project_' + i;
         projects.push(name);
         project.create(name);
@@ -79,16 +83,38 @@
 
       });
       console.log(JSON.stringify(project.get_all()));
+      assert(function() { return (project.list().length === 0); },"create empty projects then delete");
+    }
+    
+    tests["get current"] = function() {
+     var name = "mybigproject"
+     project.create(name);
+      
+     project.current(name)
+     console.log(project.current())
+     assert(function() { return (project.current() === name); },"get current");
 
+     project['delete'](name);  
+    var name2 = "mybigproject2";
+      project.create(name2);
+       
+     
+       assert(function() { return (project.current() !== name2); },"get current 2");
+       project['delete'](name); 
+       project['delete'](name2); 
+   
+      
     }
 
     var run_tests = function() {
-
+      var i = 0;
       for ( var n in tests) {
+        i++;
+        console.log("\n"+i + ". "+ n+"\n")
         tests[n]();
       }
       
-      $.localStorage('projects',JSON.stringify(original_project))
+ //     $.localStorage.set('projects',JSON.stringify(original_projects));
     };
 
     return {
