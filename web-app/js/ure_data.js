@@ -3,15 +3,75 @@
  */
 ! function(){
   'use strict';
-    var storage = $.localStorage;
+  // refactor localStorage
+  
+    var locstorage = function(){
+      var s = localStorage;
+      // is there a storage item with key $key?
+      function isSet(key){
+        
+        return s.getItem(key)?true:false;
+      }
+      function isEmpty(key){
+        
+        var d = s.getItem(key);
+        
+        return d === null || d.length === 0 ?true:false;
+      }
+      function set(k,v) {
+
+
+        return s.setItem(k,v);
+      }
+      function get(k) {
+
+     
+	  
+	  var item = s.getItem(k);
+	  if (item !== null) {
+	      
+
+	      try {
+		  
+		  return  JSON.parse(item);
+		  
+              }
+	      catch(e) {
+		  
+		  throw(e)
+	      }
+	  }
+	  return null;
+	  
+	  
+      }
+	return {
+            set:set, //function(k,v) {s.getItem(k,v)},
+            get:get,
+            isSet: isSet,
+            remove:function(k){return s.removeItem(k)},
+            length: function() {return s.length},
+            key: function(k){return s.key(k)},
+	    clear: function(k){return s.clear(k)},
+            isEmpty:isEmpty
+            
+	};
+    };
+    var storage = locstorage();
+    window.ure_storage = locstorage()
+    window.ure_t = localStorage;
+    
   /*****************************************************************
    * 
    * @memberOf ure_data.projects
    * 
    */
   var myprojects = (function() {
-    var  domain, domain_store;
-    domain_store = 'projects';
+    var  domain, domain_store, config
+    config = {
+        domain_store:'projects'
+    }
+    domain_store = config.domain_store;
     domain = {};
 
     // class functions
@@ -31,7 +91,7 @@
       
 
       // initialize storage
-      if (!storage.isSet(domain_store)) {
+	if (!(storage.isSet(domain_store))) {
         domain['data']['projects'] = {};
         domain['data']['meta'] = {};
         domain['data']['undo'] = {};
@@ -76,7 +136,9 @@
      */
   function create(proj) {
      proj = encodeURIComponent(proj);
-      
+
+
+
       if (proj === '' || proj === undefined) {
         throw "no project specified";
       }
@@ -87,7 +149,7 @@
         return proj;
       }
       else {
-        throw 'project already exists';
+          throw new Error('project already exists');
       }
     
     }
@@ -98,15 +160,14 @@
    */
   function put(proj, accnum, item) {
       proj = encodeURIComponent(proj);
-      if (!(proj in  domain['data']['projects'])) {
-        domain['data']['projects'][proj] = {};
-
+      if (!(proj in  domain.data.projects)) {
+        domain.data.projects[proj] = {};
       }
-      if (!(accnum in  domain['data']['projects'][proj])) {
-        domain['data']['projects'][proj][accnum] = {};
+      if (!(accnum in  domain.data.projects[proj])) {
+        domain.data.projects[proj][accnum] = {};
       }
-      if (!(item in  domain['data']['projects'][proj][accnum])) {
-        domain['data']['projects'][proj][accnum][item] = 1;
+      if (!(item in  domain.data.projects[proj][accnum])) {
+        domain.data.projects[proj][accnum][item] = 1;
       }
       
       
@@ -120,9 +181,11 @@
      */
      function get_by_accnum(proj, accnum) {
        proj = encodeURIComponent(proj);
-      if (proj in domain['data']['projects'] && accnum in domain['data']['projects'][proj]) {
-        return domain['data']['projects'][proj][accnum];
+      if (proj in domain.data.projects && accnum in domain.data.projects[proj]) {
+
+          return domain.data.projects[proj][accnum];
       }
+
       return null;
     };
     /***************************************************************** 
@@ -160,29 +223,29 @@
      * if neither return null
      */
     function current(proj) {
-      console.log(proj)
-      var project = encodeURIComponent(proj);
-      console.log("current: " + project)
-    
-      if (typeof project !== 'undefined') {
-        console.log("ppp");
-        domain['data']['current_project'] = project;
-        storage.set('current_project',project);
-        console.log(proj)
-        save();
-        
-        return proj; 
-      }
-      else {
-      if ( 'current_project' in domain['data']) {
-        console.log("aaa")
-        var proj =  domain['data']['current_project'];
-        console.log(proj)
-        return decodeURIComponent(proj);
-        
-      }
-      }
-      return null;
+	
+	if (typeof proj === 'string') {	    
+	    var project = encodeURIComponent(proj);
+            domain.data.current_project  = project;
+            storage.set('current_project',project);
+            save();
+          
+            return proj; 
+	}
+	else {
+	    
+	    if ( 'current_project' in domain.data) {
+		if (typeof proj === 'undefined') {
+		    var proj =  domain.data.current_project;
+		    return decodeURIComponent(proj);
+		}
+		if (proj === null) {
+		    delete domain.data.current_project;
+		}
+	  }
+	}
+	// for everything else return null; 
+	return null;
       
     }
     
@@ -216,7 +279,14 @@
       }
       save();
       
-    };
+   };
+      function delete_all() {
+	  var projects = list();
+	  for (var i  in projects) {
+	      delete_project(projects[i])
+	  }
+	  current(null); // remove current project
+      }
     
     return {
       create: create,
@@ -227,9 +297,12 @@
       get_by_accnum: get_by_accnum,
       put: put,
       'delete':delete_project,
-      proj:domain,
+	delete_all:delete_all,
+	proj:domain,
       current:current,
-      reset:reset
+      reset:reset,
+      config:config,
+      init:init
       
      
     };
@@ -243,11 +316,13 @@ window.ure_projects = myprojects;
  */
 var my_eu_items = (function(){
 
-  var domain, domain_store,meta_store,pic_index;
-  pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
-  domain_store = "eu_items";
-  meta_store = "eu_items_meta";
-  domain  = {};
+    var domain, domain_store,meta_store,pic_index;
+    pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
+    domain_store = "eu_items";
+    meta_store = "eu_items_meta";
+    storage.remove(meta_store);
+    domain  = {};
+    
   function domainObj() {}
   //TODO inherit this from a general data object!
   domainObj.prototype.clone = function() {
@@ -270,27 +345,27 @@ var my_eu_items = (function(){
     domain = new domainObj();
     domain['data'] = {}; // data
 
-    // initialize storage
-    // two separate files for legacy. 
-    if (!storage.isSet(domain_store)) {
-      domain['data']['eu_items'] = {};
- //     storage.set(domain_store, JSON.stringify(domain['data']));
-      storage.set(domain_store, JSON.stringify({}));
+      if (!storage.isSet(domain_store)) {
+	  domain['data']['eu_items'] = {};
+	  storage.set(domain_store, JSON.stringify({}));
       
-    }
-    if (!storage.isSet(meta_store)) {
-      domain['data']['meta'] = {};
-      domain['data']['meta']['undo'] = {};
-      domain['data']['meta']['archive'] = {};
-      storage.set(meta_store, JSON.stringify(domain['meta']));
-    }
+      }
+
+      if (!(storage.isSet(meta_store))) {
+
+	  domain['data']['meta'] = {};
+	  domain['data']['meta']['undo'] = {};
+	  domain['data']['meta']['archive'] = {};
+	  storage.set(meta_store, JSON.stringify(domain.data.meta));
+
+      }
+
+      var data = storage.get(domain_store);
+      domain['data']['eu_items'] = data;
+      var meta = storage.get(meta_store);
+      domain['data']['meta'] = meta;
      
-     var data = storage.get(domain_store);
-     domain['data']['eu_items'] = data;
-     var meta = storage.get(meta_store);
-     domain['data']['meta'] = meta;
-     
-     make_pic_index();
+      make_pic_index();
   };
   init();
   
@@ -363,7 +438,7 @@ var my_eu_items = (function(){
   * @private
   */
  function make_pic_index() {
-   console.log("pic_index")
+
    var items = domain['data']['eu_items'];
   
   
