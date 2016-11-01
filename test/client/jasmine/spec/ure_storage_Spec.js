@@ -15,7 +15,7 @@ describe('ure_storage test',function(){
 
 
     })
-        it('set  one item but fail to stringify',function(){
+        it('set one item but forget to stringify',function(){
 
 	    var name = 'wazzup2'
 	    var t = '234a';
@@ -40,18 +40,6 @@ describe('ure_storage test',function(){
 
     })
 
-    it('set and get one object repeatedly',function(){
-
-	var name = 'wazzup2'
-
-	for (var i ; i < 100; i++){
-	    var key = 'a'+i
-	    var t = {key:i}
-	    ure_storage.set(name,JSON.stringify(t));
-	    expect(ure_storage.get(name)[key]).toEqual(t.a);
-	    ure_storage.remove(name);
-	}
-    })
 
     it('isSet? yes',function(){
 
