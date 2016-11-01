@@ -23,9 +23,9 @@
 
         return s.setItem(k,v);
       }
+	
       function get(k) {
 
-     
 	  
 	  var item = s.getItem(k);
 	  if (item !== null) {
@@ -192,13 +192,13 @@
      * @memberOf ure_data.projects
      */
     function get(proj) {
-      proj = encodeURIComponent(proj);
-     if (proj in domain['data']['projects']) {
-      return domain['data']['projects'][proj];
-     }
-     else {
-      return null;
-     }
+	proj = encodeURIComponent(proj);
+	if (proj in domain['data']['projects']) {
+	    return domain['data']['projects'][proj];
+	}
+	else {
+	    return null;
+	}
     } 
     /***************************************************************** 
      * @memberOf ure_data.projects
@@ -317,7 +317,7 @@ window.ure_projects = myprojects;
 var my_eu_items = (function(){
 
     var domain, domain_store,meta_store,pic_index;
-    pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
+
     domain_store = "eu_items";
     meta_store = "eu_items_meta";
     storage.remove(meta_store);
@@ -329,19 +329,19 @@ var my_eu_items = (function(){
     return JSON.parse(JSON.stringify(domain['data']));
   };
   domainObj.prototype.list = function() {
-    return Object.keys(domain['data']);
+    return Object.keys(domain.data.eu_items);
   };
   
   domainObj.prototype.random = function(){
-    var t =  Object.keys(domain['data']['eu_items']);
+    var t =  Object.keys(domain.data.eu_items);
     var n = Math.floor(Math.random()*t.length);
-    return domain['data']['eu_items'][t[n]];
+    return domain.data.eu_items[t[n]];
   };
   /***************************************************************** 
    * @memberOf ure_data.eu_items
    */
   var init = function() {
-    
+      pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
     domain = new domainObj();
     domain['data'] = {}; // data
 
@@ -374,9 +374,10 @@ var my_eu_items = (function(){
    * @memberOf ure_data.eu_items
    */
  function reset() {
-    domain = null;
-    storage.remove(domain_store);
-    init();
+     domain = null;
+
+     storage.remove(domain_store);
+     init();
     
   }
  /*****************************************************************
@@ -392,8 +393,8 @@ var my_eu_items = (function(){
   * @memberOf ure_data.eu_items
   */
  function get(item){
-   if (item in domain['data']['eu_items']) {
-     return domain['data']['eu_items'][item];
+   if (item in domain.data.eu_items) {
+     return domain.data.eu_items[item];
    }
    else {
      return null;
@@ -403,10 +404,11 @@ var my_eu_items = (function(){
   * 
   * @memberOf ure_data.eu_items
   */
+    
  function create(accnum,thumburl) {
-   if (!(accnum in domain['data']['eu_items'])) {
-     domain['data']['eu_items'][accnum] = {};
-     domain['data']['eu_items'][accnum]['thumb'] = thumburl;
+   if (!(accnum in domain.data.eu_items)) {
+     domain.data.eu_items[accnum] = {};
+     domain.data.eu_items[accnum]['thumb'] = thumburl;
      save();
      return true;
    }
@@ -418,7 +420,19 @@ var my_eu_items = (function(){
   *@
   */
  function put(accnum,eu_id,eu_meta) {
-   // note if there's no thumb we need to get one.
+     // iss this accnum already there?continue:false
+     if (typeof eu_id === 'undefined' || typeof accnum === 'undefined') { throw new Error("missing parameters")}
+     if (typeof eu_id !== 'string') { throw new TypeError('eu_id must be string')};
+     if (typeof eu_meta !== 'object') { throw new TypeError('eu_meta must be object')};
+     // todo check eu_meta
+     
+     if (accnum in domain.data.eu_items) {
+	 domain.data.eu_items[accnum][eu_id] = eu_meta;
+	 save();
+	 return true;
+     }
+     
+     return false;
  }
  /*****************************************************************
   * 
@@ -426,8 +440,8 @@ var my_eu_items = (function(){
   * 
   */
   function get_thumb_for_accnum(accnum) {
-    if ( accnum  in domain['data']['eu_items']) {
-      return domain['data']['eu_items'][accnum]['thumb'];
+    if ( accnum  in domain.data.eu_items) {
+      return domain.data.eu_items[accnum]['thumb'];
     }
     return null;
     
@@ -438,16 +452,17 @@ var my_eu_items = (function(){
   * @private
   */
  function make_pic_index() {
-   var items = domain['data']['eu_items'];
+   var items = domain.data.eu_items;
 
    for (var accnum in items) {
      var eupix = items[accnum];
      for (var pic in eupix) {
-       console.log(pic);
-       if (! (pic in pic_index) ) {
-         pic_index[pic] = [];
-       }
-       pic_index[pic].push(accnum);
+	 if (pic === 'thumb')
+	     continue;
+	 if (! (pic in pic_index) ) {
+             pic_index[pic] = [];
+	 }
+	 pic_index[pic].push(accnum);
      };
      
    }
@@ -457,27 +472,28 @@ var my_eu_items = (function(){
  /*****************************************************************
   * 
   * @memberOf ure_data.eu_items
+   return a list of accnums
   */
  function list() {
-   return domain.list();
+     return domain.list();
  }
  /*****************************************************************
   * 
   * @memberOf ure_data.eu_items
   */
  function get_all() {
-   return domain['data']['eu_items'];
+   return domain.data.eu_items;
  }
  /*****************************************************************
   * 
   * @memberOf ure_data.eu_items
   */
- function get_accnums_for_eupic(pic_id) {
-   if (pic_id in pic_index) {
-     return pic_index[pic_id];
-   }
-   return null;
- }
+
+  function get_accnums_for_eupic(pic_id) {
+
+     return (pic_id in pic_index)?pic_index[pic_id]:null;
+
+     }
  /*****************************************************************
   * 
   * @memberOf ure_data.eu_items
@@ -485,7 +501,15 @@ var my_eu_items = (function(){
  function random() {
    return domain.random();
  }
- 
+  /*****************************************************************
+  * 
+  * @memberOf ure_data.eu_items
+  * get all the data
+  */ 
+    function data(){
+	return domain.clone();
+
+    }
  return {
    reset:reset,
    save:save,
@@ -497,8 +521,9 @@ var my_eu_items = (function(){
    get_accnums_for_eupic:get_accnums_for_eupic,
    pic_index:pic_index,
    get_thumb_for_accnum:get_thumb_for_accnum,
-   random:random 
-   
+     random:random,
+     data:data
+     
  } ;
 })();
 
