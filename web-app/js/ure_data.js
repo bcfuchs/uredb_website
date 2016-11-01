@@ -134,12 +134,12 @@
      * 
      * 
      */
-  function create(proj) {
-     proj = encodeURIComponent(proj);
+      function create(proj) {
+	  var type = typeof(proj);
+	  proj = encodeURIComponent(proj);
 
 
-
-      if (proj === '' || proj === undefined) {
+      if (proj === '' ||  type === 'undefined') {
         throw "no project specified";
       }
       if (!(proj in  domain['data']['projects'])) {
@@ -438,10 +438,8 @@ var my_eu_items = (function(){
   * @private
   */
  function make_pic_index() {
-
    var items = domain['data']['eu_items'];
-  
-  
+
    for (var accnum in items) {
      var eupix = items[accnum];
      for (var pic in eupix) {
