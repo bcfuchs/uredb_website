@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Ure Museum Database: ${accnum}</title>
+<title>Ure Museum | Projects</title>
 <meta name="layout" content="ure/main" />
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>

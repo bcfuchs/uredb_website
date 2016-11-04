@@ -328,8 +328,8 @@ var image_preloader = function(url,sel) {
    */
   var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
     paginationSize = 100;
-    $("#eumore").show();
-    $("#euless").show();  
+    $(".pagination-widget .eumore").show();
+    $(".pagination-widget .euless").show();  
     // increment the cursor if there is one. 
     
     if ('eu_cursor' in window) {
@@ -346,26 +346,26 @@ var image_preloader = function(url,sel) {
       
     }
     
-    $("#itemsCount").html(window.eu_cursor);
+    $(".pagination-widget .itemsCount").html(window.eu_cursor);
     
-    $("#total-results").html(totalResults);
+    $(".pagination-widget .total-results").html(totalResults);
     // itemsCount = totalResults
     // hide eumore
     // if the cursor is at the end 
     if (window.eu_cursor === totalResults) {
-        $("#eumore").hide();
-        $("#euless").show(); 
+        $(".pagination-widget .eumore").hide();
+        $(".pagination-widget .euless").show(); 
         
     }
     // if the cursor is beyond end of data
     if (window.eu_cursor > totalResults) {
-      $("#eumore").hide();
-      $("#euless").show();  
-      $("#itemsCount").html(totalResults);
+      $(".pagination-widget .eumore").hide();
+      $(".pagination-widget .euless").show();  
+      $(".pagination-widget .itemsCount").html(totalResults);
   }
     // if the batch is <= paginationSize or we are on the first batch..
     if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
-      $("#euless").hide();
+      $(".pagination-widget .euless").hide();
     
     
     
@@ -1226,7 +1226,7 @@ var image_preloader = function(url,sel) {
      * Set up prev/next buttons. Get more eu items
      */
     var set_next_page_button = function() {
-      $(document).on('click', '#eumore', function() {
+      $(document).on('click', '.pagination-widget .eumore', function() {
         // get the next batch incrementing the cursor..
         makeEuRelatedItems(true);
       
@@ -1238,7 +1238,7 @@ var image_preloader = function(url,sel) {
      * Set up prev/next buttons. Get more eu items
      */
     var set_prev_page_button = function() {
-      $(document).on('click', '#euless', function() {
+      $(document).on('click', '.pagination-widget .euless', function() {
         // get the last batch incrementing the cursor..
         window.europeanaWidget_decrementCursor = true;
         makeEuRelatedItems();

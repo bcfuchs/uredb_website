@@ -1,3 +1,4 @@
+
 <!--  choose projects on the comparanda page using a select menu-->
 
 <div id="projects-widget" class="container projects-widget">

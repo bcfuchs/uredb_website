@@ -1,6 +1,12 @@
-/** EU COMPARANDA */
+/** 
+* EU COMPARANDA 
+exports are: 
+  window.EuComparanda = EuComparanda;
+  window.comparanda_getEUdata = getEUdata;
 
-!function() {
+*/
+
+! function() {
 
   /**
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
@@ -20,14 +26,14 @@
               eu_items = 'eu_items'
               this_accnum = accnum;
               var myprojects = window.ure_projects; // projects DAO
-    
-            
+              
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
                * 
                */
-              var init = function() {
+              
+              var init_comp_buttons = function(){
                 /**
                  * bind functions to mini-dashboard
                  */
@@ -49,7 +55,11 @@
                 });
 
                 $("#load-comps").click(function() {
-                  $("#comps-file").toggle();
+                  
+                  $("#comps-file").toggle();  
+                  $("#comps-file").show();  
+                  
+                 
                   document.getElementById('comps-file').addEventListener('change', load_comparanda_from_json, false);
 
                 });
@@ -68,6 +78,18 @@
 
                 });
 
+                
+                
+              }
+            window.ure_init_comp_buttons = init_comp_buttons();
+            
+              /*****************************************************************
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               */
+              var init = function() {
+                init_comp_buttons();
                 /**
                  * init load of data from storage
                  */

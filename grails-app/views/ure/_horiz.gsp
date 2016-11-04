@@ -4,6 +4,7 @@
 			<img src="${resource(dir:'assets',file:'web-black.gif')}" alt="[ University Home Page ]"
 				style="float: left; margin: 0 0 0 0; border: 0;">
 		</a>
+		<g:render template="/ure/gapi_login"></g:render>
 		<a href="http://www.rdg.ac.uk/Ure/index.php">
 			<img src="${resource(dir:'images',file:'urelogo1.gif')}" alt="[ Ure Museum Home Page ]"
 				style="float: right; margin: 0 0 0 0; border: 0;">
@@ -34,6 +35,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a id="navbar-search" href="/search">Search</a></li>
 					<li><a id="navbar-browse" href="/fieldlist">Browse</a></li>
+					<li><a id="navbar-search" href="/comparanda">Projects</a></li>
 					<li><a id="navbar-permissions" href="/permissions">Permissions</a></li>
 					<li><a href="http://www.reading.ac.uk/Ure/collection/index.php">About</a></li>
 					<li><a id="navbar-urehome" href="http://www.reading.ac.uk/Ure/index.php">Ure Museum Home</a></li>

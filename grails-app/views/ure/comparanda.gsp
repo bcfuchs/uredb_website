@@ -32,7 +32,7 @@
 	</div>
 	<div id="comparanda-page-wrapper">
 		<div id="comparanda-main" class="comp-toggle">
-			<h2 class="toggler">Comparanda</h2>
+			<h2 class="toggler">Projects</h2>
 			
 			<g:render template="/ure/project_title_display_widget">
 			</g:render>
@@ -73,5 +73,11 @@
 	</style>
 	<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
 	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>
+	<script>
+	$(document).ready(function(){
+		
+	})
+
+	</script>
 </body>
 </html>

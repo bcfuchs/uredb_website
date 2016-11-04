@@ -3,8 +3,8 @@
 <html lang="en">
 <!-- main.tmpl -->
 <head>
-<title>Ure Museum | Collection</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title><g:layoutTitle default="Ure Museum | Collection" /></title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 <!-- 
                          .-.                                       
@@ -27,14 +27,13 @@ if (uredb_wskey == null) {
 <script>
 var uredb_wskey = "${uredb_wskey}";
 </script>
- <% 
+<% 
 def gapi_client_id = System.getenv("GAPI_CLIENT_ID");
 if (gapi_client_id == null) {
     gapi_client_id = System.getProperty("GAPI_CLIENT_ID");
 }
 %>
-<meta name="google-signin-client_id" content="${gapi_client_id}"/>
-
+<meta name="google-signin-client_id" content="${gapi_client_id}" />
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="${resource(dir:'js',file:'ure_data.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
@@ -54,7 +53,7 @@ easterEgg('v',function(){
 		$("#versioninfo").toggle();
 	});
 	});
-	
+		
 
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -76,6 +75,7 @@ easterEgg('v',function(){
 	<sec:ifLoggedIn>
 		<g:render template="/shared/ure/topnav"></g:render>
 	</sec:ifLoggedIn>
+	
 	<div id="wrapper">
 		<g:render template="/ure/horiz"></g:render>
 		<div id="blocky" class="container">
@@ -93,11 +93,12 @@ easterEgg('v',function(){
 			The Ure Museum is part of<br>The University of Reading, Whiteknights, PO Box 217, Reading, RG6 6AH
 		</div>
 	</div>
-	 <div id="versioninfo" style="display:none">
- version: <g:meta name="app.version"/><br/>
- grails: <g:meta name="app.grails.version"/>
- </div>
- 
+	<div id="versioninfo" style="display: none">
+		version:
+		<g:meta name="app.version" />
+		<br /> grails:
+		<g:meta name="app.grails.version" />
+	</div>
 	<g:render template="/ure/lighttable_widget"></g:render>
 	<r:layoutResources />
 	<script>
@@ -138,8 +139,6 @@ println flash.lastURI
 		<g:render template="/ure/ga"></g:render>
 	</g:if>
 	<script src="${resource(dir:'js',file:'ure_gapi.js')}"></script>
-
-<script src="https://apis.google.com/js/client:platform.js?onload=ure_gapi_startApp"></script>
-	
+	<script src="https://apis.google.com/js/client:platform.js?onload=ure_gapi_startApp"></script>
 </body>
 </html>

@@ -2,7 +2,8 @@
         "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
 <head>
-<title>Ure Museum Database</title>
+
+<title>Ure Museum | field</title>
 <meta name="layout" content="ure/main" />     
 <script src="${resource(dir:'bootstrap/js',file:'bootstrap-typeahead.js')}"></script>
 <script src="${resource(dir:'js',file:'stops.js')}"></script>

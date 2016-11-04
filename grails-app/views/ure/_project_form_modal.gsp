@@ -19,15 +19,37 @@ color: black;
 font-size: 18pt;
 }
 </style>
+<span id="new-project-button-wrapper">+
+<a id="new-project-button"  data-toggle="modal" data-target="#myModalNorm">
+    Start a new  project
+</a>
+</span>
+<style>
+#new-project-button:hover {
+	cursor: pointer;
 
-<button id="new-project-button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">
-    + Start a new  project
-</button>
+}
+
+#compwrap {
+margin-top: 40px;
+
+}
+</style>
 <script>
 $(document).ready(function(){
 //reposition the new project button
 	$("#left-nav-project-bar").show();
-	$("#left-nav-project-bar").prepend($("#new-project-button"))
+	$("#left-nav-project-bar").prepend($("#new-project-button-wrapper"));
+	var comps =  $("#comp-controls").clone().attr('id',"comps2")
+
+	$("#comp-controls").empty();
+	
+	var el = $('<div id="compwrap"></div>');
+	$(el).append(comps)
+	$("#left-nav-project-bar").append(el)
+	$("#comps-file").attr('data-project-page',true);
+	EuComparanda();
+	
 	
 	$("#new-project-save").click(function(){
 		var title = $("#project-title-input").val();

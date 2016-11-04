@@ -2,7 +2,7 @@
 <%@ page import="grails.converters.*"%>
 <html>
 <head>
-<title>Ure Museum Database: ${accnum}</title>
+<title>Ure Museum | ${accnum}</title>
 <meta name="layout" content="ure/main" />
 <% 
          flash.accnum = accnum
@@ -10,7 +10,6 @@
          flash.message  = "HI2"
 %>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-
 <script>
 		// set global js vars for highlighting text
 		var  uredb_matcher_hasMatch = false;
@@ -67,8 +66,9 @@
  %>
 	</span>
 <sec:ifAnyGranted roles='ROLE_CURATOR'>
-<a style="text-decoration: none" href="/uremeta/edit/${id}"><i class="icon-pencil"></i> Edit</a>
+	<a style="text-decoration: none" href="/uremeta/edit/${id}"><i class="icon-pencil"></i> Edit</a>
 </sec:ifAnyGranted>
+
 	<div id="record-page-wrapper" class="record-page-wrapper">
 		<script src="${resource(dir:'js',file:'record.js')}"></script>
 		<g:if test="${flash.fromSearch == true}">

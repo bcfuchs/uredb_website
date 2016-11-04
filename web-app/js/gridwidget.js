@@ -1,13 +1,13 @@
 ! function() {
   var gridWidget = function(gridid,width,height,displayInfobox,addCellClick) {
-    
+
     if (addCellClick === undefined) {
       addCellClick = true;
     }
     var wall = new Freewall(gridid);
                 wall.reset({
                   selector : '.cell',
-                  delay: 25,
+                  delay: 105,
                   animate : true,
                   cellW : width,
                   cellH : height,
@@ -17,9 +17,9 @@
                 });
                 wall.fitWidth();
                 // for scroll bar appear;
-                $(window).trigger("resize");
+            //    $(window).trigger("resize");
                 
-               // $(gridid).delay(3000).show();
+               // $(gridid).delay(1000).show();
 
              // show the infobox on hover
               
