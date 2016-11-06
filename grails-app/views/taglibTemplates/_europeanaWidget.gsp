@@ -8,11 +8,12 @@
 		data-relevance-toggle="off">Tag as not relevant</span>
 	<a style="padding-left: 12px; color: #FFFFCC;" href="/manage/related">Manage search queries </a>
 	<span id="query-retake-text" style="padding-left: 12px; text-decoration: underline; cursor: pointer;">custom eu search</span>
+	
 	<div class="pagination-widget" id="pagination-widget-top">
 		<span id="euless" class="euless incrementer">&lt;</span>
 		<span class="itemsCount" ></span>
 		&nbsp;of&nbsp;
-		<span class="total-results" style="padding-left: 12px;"></span>
+		<span class="total-results" style="padding-left: 8px;"></span>
 		<span class="eumore" class="incrementer">&gt;</span>
 	</div>
 	
@@ -46,13 +47,14 @@
 		</div>
 	</div>
 </div>
+
 <div class="pagination-widget" id="pagination-widget-bottom">
 		<span id="euless" class="euless incrementer">&lt;</span>
 		<span class="itemsCount" ></span>
 		&nbsp;of&nbsp;
-		<span class="total-results" style="padding-left: 12px;"></span>
-		<span class="eumore" class="incrementer">&gt;</span>
-	</div>
+		<span class="total-results" style="padding-left: 8px;"></span>
+		<span class="eumore incrementer">&gt;</span>
+</div>
 	
 <div id="provider-label-template" style="display: none;">
 	<label class="checkbox-inline provider-checklist" data-eu-provider-list='key'>
