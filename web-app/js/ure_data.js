@@ -5,7 +5,7 @@
   'use strict';
   /*****************************************************************************
    * 
-   * @memberOf ure_data.projects
+   * @memberOf ure_data.gapi
    * 
    * Google appdata interface
    * 
@@ -15,39 +15,70 @@
     // TODO -- need sign-in hook for init data
     var app_id = window.gapi_client_id;
     var appData = gdad(filename, app_id);
-    function _read_complete_event(file) {
-          var e = $.Event('ure_gapi_read_complete');
-          $(window).trigger(e,{file:file});
+    /*****************************************************************************
+     * 
+     * @memberOf ure_data.gapi
+     * 
+     */
+    function on_read_complete(cb,file) {
+      var signal = 'ure_gapi_read_complete';
+      $(window).on(signal, function(e, d) {
+        // only for this file
+        if (d.file === filename) {
+          cb();
         }
+      });
+    }
+    /*****************************************************************************
+     * 
+     * @memberOf ure_data.gapi
+     * 
+     */
+    function _read_complete_event(file) {
+      var e = $.Event('ure_gapi_read_complete');
+      $(window).trigger(e, {
+        file : file
+      });
+    }
+    /*****************************************************************************
+     * 
+     * @memberOf ure_data.gapi
+     * 
+     */
     function save(d) {
       appData.save(d);
     }
-    
-   function on_sign_in(cb) {
+    /*****************************************************************************
+     * 
+     * @memberOf ure_data.gapi
+     * 
+     */
+    function on_sign_in(cb) {
       var signal = 'ure_gapi_signed_in'
       $(window).on(signal, function(e, d) {
         cb();
       });
-      
+
     }
+    /*****************************************************************************
+     * 
+     * @memberOf ure_data.gapi
+     * 
+     */
     function read(success, error) {
-      console.log("gapi read "+filename);
-      
       appData.read().then(function(data) {
-        console.log(data);
         success(data);
         _read_complete_event(filename);
-       
-        
       }, function(err) {
         error(err);
       });
     }
-    
+
     return {
       save : save,
       read : read,
-      onSignIn: on_sign_in
+      onSignIn : on_sign_in,
+      onReadComplete:on_read_complete
     };
   };
 
@@ -367,7 +398,7 @@
       get_by_accnum : get_by_accnum,
       put : put,
       'delete' : delete_project,
-      remove: delete_project,
+      remove : delete_project,
       delete_all : delete_all,
       proj : domain,
       current : current,
@@ -386,19 +417,20 @@
    */
   var my_eu_items = (function() {
 
-    var domain, domain_store, meta_store, pic_index,config,gapi;
+    var domain, domain_store, meta_store, pic_index, config, gapi;
     config = {
-        domain_store : 'eu_items',
-        meta_store: 'eu_items_meta',
-        gapi_file : 'eu_items.js'
-      }
-    
+      domain_store : 'eu_items',
+      meta_store : 'eu_items_meta',
+      gapi_file : 'eu_items.js'
+    }
+
     domain_store = "eu_items";
     meta_store = "eu_items_meta";
     storage.remove(meta_store);
     domain = {};
-    
-    function domainObj() {}
+
+    function domainObj() {
+    }
     // TODO inherit this from a general data object!
     domainObj.prototype.clone = function() {
       return JSON.parse(JSON.stringify(domain['data']));
@@ -412,8 +444,7 @@
       var n = Math.floor(Math.random() * t.length);
       return domain.data.eu_items[t[n]];
     };
-    
-    
+
     /***************************************************************************
      * @memberOf ure_data.eu_items
      */
@@ -422,7 +453,7 @@
       domain = new domainObj();
       domain['data'] = {}; // data
       gapi = ure_gapi(config.gapi_file);
-      
+
       if (!storage.isSet(domain_store)) {
         domain.data.eu_items = {};
         storage.set(domain_store, JSON.stringify({}));
@@ -437,13 +468,13 @@
 
       }
       var read_success = function(data) {
-        
+
         if (typeof data !== 'object')
-           data = JSON.parse(data);
-        
+          data = JSON.parse(data);
+
         domain.data.eu_items = data;
         make_pic_index();
-        storage.set(domain_store,domain.data.eu_items);
+        storage.set(domain_store, domain.data.eu_items);
       }
       var read_fail = function(err) {
         console.log(err);
@@ -451,14 +482,14 @@
       gapi.onSignIn(function() {
         gapi.read(read_success, read_fail);
       });
-//      
-//      var data = storage.get(domain_store);
-//      domain.data.eu_items = data;
+      //      
+      // var data = storage.get(domain_store);
+      // domain.data.eu_items = data;
       var meta = storage.get(meta_store);
       domain['data']['meta'] = meta;
 
       make_pic_index();
-      
+
     };
     init();
 
@@ -480,11 +511,11 @@
     function save() {
       // save to localstorage
       storage.set(domain_store, JSON.stringify(domain.data.eu_items));
-      
+
       // save to gdrive -- will stringify
-      
+
       gapi.save(domain.data.eu_items);
-      
+
       make_pic_index();
     }
     ;
@@ -542,9 +573,27 @@
     }
     /***************************************************************************
      * 
-     * @memberOf ure_data.eu_items 
+     * @memberOf ure_data.eu_items
      */
-    function remove(accnum,eu_id) {
+    function remove_accnum(accnum) {
+      if ( typeof accnum === 'undefined') {
+        throw new Error("missing parameters")
+      }
+   
+      if (accnum in domain.data.eu_items) {
+        delete domain.data.eu_items[accnum];
+        save();
+        return true;
+      }
+
+      return false;
+
+    }
+    /***************************************************************************
+     * 
+     * @memberOf ure_data.eu_items
+     */
+    function remove(accnum, eu_id) {
       if (typeof eu_id === 'undefined' || typeof accnum === 'undefined') {
         throw new Error("missing parameters")
       }
@@ -558,7 +607,7 @@
       }
 
       return false;
-      
+
     }
     /***************************************************************************
      * 
@@ -608,7 +657,15 @@
      * @memberOf ure_data.eu_items
      */
     function get_all() {
-      
+
+      return domain.data.eu_items;
+    }
+    /***************************************************************************
+     * 
+     * @memberOf ure_data.eu_items
+     */
+    function get_all_eu_items() {
+
       return domain.data.eu_items;
     }
     /***************************************************************************
@@ -641,9 +698,11 @@
       save : save,
       get : get,
       get_all : get_all,
+      get_all_eu_items: get_all_eu_items,
       create : create,
       put : put,
-      remove: remove,
+      remove : remove,
+      remove_accnum: remove_accnum,
       list : list,
       get_accnums_for_eupic : get_accnums_for_eupic,
       pic_index : pic_index,

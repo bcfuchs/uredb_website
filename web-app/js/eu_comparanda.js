@@ -75,7 +75,7 @@ exports are:
 
                 $("#clear-comps").click(function() {
                   var eu = getEUdata_new();
-                  eu.remove(this_accnum);
+                  eu.remove_accnum(this_accnum);
                //   delete eu[this_accnum]; // eu-data 1 
                //   storage.set(eu_items, eu) // eu-data 2
                   $("#comparanda-thumbs").html("");
@@ -428,7 +428,7 @@ exports are:
               function load_comparanda(eu) {
 
                 var eu_items = getEUdata_new(); // eu-data 5. 
-                var  old_comp = eu_items.get_all();
+                var  old_comp = eu_items.get_all_eu_items();
                 
                 for ( var acc in eu) {
                   // add the acc

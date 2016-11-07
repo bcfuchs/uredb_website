@@ -1656,6 +1656,15 @@ a#extlink:link {
 	width: 100px;
 }
 /** END  Europeana Widget */
+
+._________________________ GAPI _________________________ {
+	
+}
+
+iframe[src^="https://apis.google.com"] {
+  display: none;
+}
+
 ._________________________ Media _________________________ {
 	
 }
