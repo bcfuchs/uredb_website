@@ -15,6 +15,10 @@
     // TODO -- need sign-in hook for init data
     var app_id = window.gapi_client_id;
     var appData = gdad(filename, app_id);
+    function _read_complete_event(file) {
+          var e = $.Event('ure_gapi_read_complete');
+          $(window).trigger(e,{file:file});
+        }
     function save(d) {
       appData.save(d);
     }
@@ -32,6 +36,9 @@
       appData.read().then(function(data) {
         console.log(data);
         success(data);
+        _read_complete_event(filename);
+       
+        
       }, function(err) {
         error(err);
       });
@@ -360,6 +367,7 @@
       get_by_accnum : get_by_accnum,
       put : put,
       'delete' : delete_project,
+      remove: delete_project,
       delete_all : delete_all,
       proj : domain,
       current : current,
@@ -414,8 +422,9 @@
       domain = new domainObj();
       domain['data'] = {}; // data
       gapi = ure_gapi(config.gapi_file);
+      
       if (!storage.isSet(domain_store)) {
-        domain['data']['eu_items'] = {};
+        domain.data.eu_items = {};
         storage.set(domain_store, JSON.stringify({}));
 
       }
@@ -428,7 +437,10 @@
 
       }
       var read_success = function(data) {
-        console.log(data)
+        
+        if (typeof data !== 'object')
+           data = JSON.parse(data);
+        
         domain.data.eu_items = data;
         make_pic_index();
         storage.set(domain_store,domain.data.eu_items);
@@ -441,7 +453,7 @@
       });
 //      
 //      var data = storage.get(domain_store);
-//      domain['data']['eu_items'] = data;
+//      domain.data.eu_items = data;
       var meta = storage.get(meta_store);
       domain['data']['meta'] = meta;
 
@@ -466,10 +478,13 @@
      * @memberOf ure_data.eu_items
      */
     function save() {
-      storage.set(domain_store, JSON.stringify(domain['data']));
-      console.log("eu_items_data")
-      console.log(domain['data'])
-      gapi.save(domain['data']);
+      // save to localstorage
+      storage.set(domain_store, JSON.stringify(domain.data.eu_items));
+      
+      // save to gdrive -- will stringify
+      
+      gapi.save(domain.data.eu_items);
+      
       make_pic_index();
     }
     ;
@@ -527,6 +542,26 @@
     }
     /***************************************************************************
      * 
+     * @memberOf ure_data.eu_items 
+     */
+    function remove(accnum,eu_id) {
+      if (typeof eu_id === 'undefined' || typeof accnum === 'undefined') {
+        throw new Error("missing parameters")
+      }
+      if (typeof eu_id !== 'string') {
+        throw new TypeError('eu_id must be string')
+      }
+      if (accnum in domain.data.eu_items) {
+        delete domain.data.eu_items[accnum][eu_id];
+        save();
+        return true;
+      }
+
+      return false;
+      
+    }
+    /***************************************************************************
+     * 
      * @memberOf ure_data.eu_items
      * 
      */
@@ -573,6 +608,7 @@
      * @memberOf ure_data.eu_items
      */
     function get_all() {
+      
       return domain.data.eu_items;
     }
     /***************************************************************************
@@ -607,6 +643,7 @@
       get_all : get_all,
       create : create,
       put : put,
+      remove: remove,
       list : list,
       get_accnums_for_eupic : get_accnums_for_eupic,
       pic_index : pic_index,

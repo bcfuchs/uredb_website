@@ -11,9 +11,18 @@ exports are:
   /**
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
+  
   var EuComparanda = function(accnum) {
     var msg_json_broken = "can't read comparanda file...";
     console.log("EuComparanda");
+    
+    function onSignedIn(cb) {
+      var signal = 'ure_gapi_signed_in'
+        $(window).on(signal, function(e, d) {
+        cb();
+         });
+      
+    }
 
     $(document)
         .ready(
@@ -65,9 +74,10 @@ exports are:
                 });
 
                 $("#clear-comps").click(function() {
-                  var eu = getEUdata();
-                  delete eu[this_accnum];
-                  storage.set(eu_items, eu)
+                  var eu = getEUdata_new();
+                  eu.remove(this_accnum);
+               //   delete eu[this_accnum]; // eu-data 1 
+               //   storage.set(eu_items, eu) // eu-data 2
                   $("#comparanda-thumbs").html("");
                   $("#comparanda-thumbs").data('thumbs', "");
 
@@ -98,7 +108,7 @@ exports are:
                 // attach iframeoverlay to body
                 var ifr = $("#iframeOverlay").remove();
                 $('body').append(ifr);
-                var eu = getEUdata();
+                var eu = getEUdata_new().get_all();  // eu-data
                 if (eu !== null) {
                   load_comparanda(eu)
                 }
@@ -121,7 +131,13 @@ exports are:
                 })
               }// init
 
-              init();
+              var signal = 'ure_gapi_read_complete';
+                $(window).on(signal, function(e, d) {
+                  if (d.file === 'eu_items.js') {
+                    init();
+                  }
+                });
+             
 
               /**
                * 
@@ -186,9 +202,9 @@ exports are:
                 scope : "comparanda",
 
                 create : function(event, ui) {
-
-                  if (!storage.isSet(eu_items))
-                    storage.set(eu_items, '{}');
+                  // auto-init
+//                  if (!storage.isSet(eu_items))
+//                    storage.set(eu_items, '{}'); // eu-data 3
 
                 }
               });
@@ -265,23 +281,25 @@ exports are:
                 var items = $(document).data('eu-items');
                 items[thumb] = eu_item;
 
-                // save it to localstorage as well
-                var json = storage.get(eu_items);
-                var eu_items_ls = json;
+            
+         //       var json = storage.get(eu_items); // eu-data 3 
+           //     var eu_items_ls = json;
+               var eu_items_ls =  ure_eu_items.get_all();
 
                 // start an array for this accnum if none
 
-                if (!(this_accnum in eu_items_ls)) {
+                if (!(this_accnum in eu_items_ls)) { // eu-data 3a
                   eu_items_ls[this_accnum] = {};
                   eu_items_ls[this_accnum]['thumb'] = this_thumb
 
                 }
 
                 // add this eu item to the accnum array
-                if (!eu_items_ls[this_accnum][thumb]) {
+                if (!eu_items_ls[this_accnum][thumb]) { // eu-data 4
                   eu_items_ls[this_accnum][thumb] = eu_item;
                   // store it
-                  storage.set(eu_items, JSON.stringify(eu_items_ls));
+                  ure_eu_items.put(this_accnum,thumb,eu_item); 
+               //   storage.set(eu_items, JSON.stringify(eu_items_ls)); // eu-data 4.1
                 }
                 // update ure projects
                 // TODO this should be set as a signal -- watch
@@ -335,9 +353,9 @@ exports are:
                 // items[thumb] = eu_item;
 
                 // remove it from localstorage as well
-                var json = storage.get(eu_items);
-                var eu_items_ls = json;
-
+                //var json = storage.get(eu_items);  //  eu-data 5
+                // var eu_items_ls = json;
+                var eu_items_ls = ure_eu_items.get_all();
                 // // start an array for this accnum if none
                 //
                 // if ((accnum in eu_items_ls)) {
@@ -347,9 +365,10 @@ exports are:
                 // }
 
                 // add this eu item to the accnum array
-                delete eu_items_ls[accnum][thumb];
+                // delete eu_items_ls[accnum][thumb];  // eu-data 6
+                ure_eu_items.remove(accnum,thumb)
                 // store it
-                storage.set(eu_items, JSON.stringify(eu_items_ls));
+                //storage.set(eu_items, JSON.stringify(eu_items_ls));
 
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 if (!thumbs) {
@@ -395,20 +414,21 @@ exports are:
                 setRemoveDragComparanda("#comparanda-thumbs img");
               }
 
+             
+
               /**
                * @memberOf eu_comparanda.EuComparanda
-               * 
-               * load_comparanda
+               *  * load_comparanda
                * @param {Object}
                *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into DOM
-               * 
-               * 
+               * @param eu -- the eu items object parsed from file. 
                */
               function load_comparanda(eu) {
 
-                var old_comp = getEUdata();
+                var eu_items = getEUdata_new(); // eu-data 5. 
+                var  old_comp = eu_items.get_all();
                 
                 for ( var acc in eu) {
                   // add the acc
@@ -483,7 +503,7 @@ exports are:
                */
 
               function save_comparanda_as_json() {
-                var eu = getEUdata();
+                var eu = getEUdata(); // eu-data
                 var json = JSON.stringify(eu);
                 var blob = new Blob([ json ], {
                   type : "text/plain;charset=utf-8"
@@ -521,7 +541,7 @@ exports are:
 
                 // get the lighttable as html.-- for later
                 // get the list
-                var eu = getEUdata();
+                var eu = getEUdata(); //eu-data
                 var divs = [];
                 var domain = document.domain;
                 var html = document.implementation.createHTMLDocument();
@@ -592,6 +612,19 @@ exports are:
 
                 return '<div class="eu-items">' + out.join("") + '</div>';
               }
+
+              /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda 
+               * 
+               * get object containing collected items
+               * 
+               */
+
+              function getEUdata_new() {
+                return ure_eu_items;
+                //return storage.get(eu_items);  // eu-data 7
+
+              } 
               /*****************************************************************
                * @memberOf eu_comparanda.EuComparanda 
                * 
@@ -600,8 +633,8 @@ exports are:
                */
 
               function getEUdata() {
-                
-                return storage.get(eu_items);
+               
+               return storage.get(eu_items);  // eu-data 8
 
               }
               window.comparanda_getEUdata = getEUdata;
@@ -613,10 +646,19 @@ exports are:
   /**
    * load / save /collect europeana items for $accnum
    */
-
-  window.EuComparanda = EuComparanda;
+  EuComparanda_call = function(accnum) {
+    // wait for logged in signal
+    // TODO -- add timeout + local switch. 
+    EuComparanda(accnum);
+    
+    
+    
+  }
+  
+  window.EuComparanda = EuComparanda_call;
 
 }();
+
 
 /** guick nav for comparanda */
 
