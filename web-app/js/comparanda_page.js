@@ -18,6 +18,7 @@
    * 
    * 
    */
+  
   var grid_component = (function() {
     var config = {
       component_selector : "#comparanda"
@@ -208,6 +209,7 @@
       });
 
     }
+    
     function add(project) {
       make_projects_strip();
       set_project(project)
@@ -216,7 +218,7 @@
     function set_project(project) {
       if (project !== "") {
         // test -- empty sel set
-        var sel = $(".project-box[data-ure-project=" + project + "]");
+        var sel = $(".project-box[data-ure-project='" + project + "']");
         display_selected_project(sel);
         
       }
@@ -341,18 +343,14 @@ var dummy_projects  = function() {
     project_strip.load();
     project_strip.set((function(){return $.qs('project') || ""})());
     project_toggle();
-    
+
     return 0;
-   
-
-   
-   
- 
-
   };
   
   $(document).ready(function() {
-    make_comparanda_page();
+    ure_gapi('eu_items.js').onReadComplete(function(){
+      make_comparanda_page();
+    });
 
   });
 
