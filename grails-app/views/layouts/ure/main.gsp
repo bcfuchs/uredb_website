@@ -24,17 +24,21 @@ if (uredb_wskey == null) {
     uredb_wskey = System.getProperty("WSKEY");
 }
 %>
-<script>
-var uredb_wskey = "${uredb_wskey}";
-</script>
+
 <% 
 def gapi_client_id = System.getenv("GAPI_CLIENT_ID");
 if (gapi_client_id == null) {
     gapi_client_id = System.getProperty("GAPI_CLIENT_ID");
 }
 %>
+<script>
+var uredb_wskey = "${uredb_wskey}";
+var gapi_client_id = "${gapi_client_id}";
+</script>
 <meta name="google-signin-client_id" content="${gapi_client_id}" />
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
+<script src="https://apis.google.com/js/client:platform.js?onload=ure_gapi_startApp"></script>
+<script src="${resource(dir:'js/vendor/gdad',file:'gdad.js')}"></script>
 <script src="${resource(dir:'js',file:'ure_data.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
@@ -138,7 +142,9 @@ println flash.lastURI
 	<g:if test="${ga_script == true }">
 		<g:render template="/ure/ga"></g:render>
 	</g:if>
-	<script src="${resource(dir:'js',file:'ure_gapi.js')}"></script>
-	<script src="https://apis.google.com/js/client:platform.js?onload=ure_gapi_startApp"></script>
+	
+
+
+
 </body>
 </html>
