@@ -10,26 +10,40 @@
    * Google appdata interface
    * 
    */
-  
+
   var ure_gapi = function(filename) {
-    //TODO -- need sign-in hook for init data
+    // TODO -- need sign-in hook for init data
     var app_id = window.gapi_client_id;
     var appData = gdad(filename, app_id);
-    function save(d) { appData.save(d) };
-    function read(success,error) {
-      appData.read().then(function (data) {
-        success(data)
-        
-      }, function () {
-        error(data);
+    function save(d) {
+      appData.save(d);
+    }
+    
+   function on_sign_in(cb) {
+      var signal = 'ure_gapi_signed_in'
+      $(window).on(signal, function(e, d) {
+        cb();
       });
+      
+    }
+    function read(success, error) {
+      console.log("gapi read "+filename);
+      
+      appData.read().then(function(data) {
+        console.log(data);
+        success(data);
+      }, function(err) {
+        error(err);
+      });
+    }
+    
+    return {
+      save : save,
+      read : read,
+      onSignIn: on_sign_in
     };
-   return{
-    save:save,
-    read:read
   };
-  };
-  
+
   window.ure_gapi = ure_gapi;
   // refactor localStorage
 
@@ -91,11 +105,11 @@
    * 
    */
   var myprojects = (function() {
-    var domain, domain_store, config,gapi;
-    
+    var domain, domain_store, config, gapi;
+
     config = {
       domain_store : 'projects',
-      gapi_file: 'projects.js'
+      gapi_file : 'projects.js'
     }
     domain_store = config.domain_store;
     domain = {};
@@ -109,6 +123,13 @@
     domainObj.prototype.clone = function() {
       return JSON.parse(JSON.stringify(domain['data']));
     };
+    var gapi_on_sign_in = function(cb) {
+      var signal = 'ure_gapi_signed_in'
+      $(window).on(signal, function(e, d) {
+        console.log(e);
+        cb();
+      });
+    }
     /***************************************************************************
      * @memberOf ure_data.projects
      */
@@ -116,7 +137,7 @@
       domain = new domainObj();
       domain['data'] = {}; // add project data
       gapi = ure_gapi(config.gapi_file);
-      
+
       // initialize storage
       if (!(storage.isSet(domain_store))) {
         domain['data']['projects'] = {};
@@ -128,17 +149,19 @@
         // load from storage -- only domain['data'] is stored
       }
       // TODO -- online/offline syncing gapi <--> localstorage.
-      // TODO -- only load after authorisation. 
-      // for now, assume gapi is right; read only on init, save on every save. 
+      // TODO -- only load after authorisation.
+      // for now, assume gapi is right; read only on init, save on every save.
       var read_success = function(data) {
         domain['data'] = data;
         storage.set(domain_store, JSON.stringify(domain['data']));
       }
-      var read_fail  = function(err) {
+      var read_fail = function(err) {
         console.log(err);
-      
+
       }
-     //  var data = gapi.read(read_success,read_fail);
+      gapi.onSignIn(function() {
+        gapi.read(read_success, read_fail);
+      });
       var data = storage.get(domain_store);
       domain['data'] = data;
 
@@ -165,7 +188,7 @@
     function save() {
       storage.set(domain_store, JSON.stringify(domain['data']));
       gapi.save(domain['data']);
-      
+
     }
     ;
     // create an empty project
@@ -292,8 +315,8 @@
      */
     function get_accnums(proj) {
       proj = encodeURIComponent(proj);
-      if (proj in domain['data']['projects']) {
-        return Object.keys(domain['data']['projects'][proj]);
+      if (proj in domain.data.projects) {
+        return Object.keys(domain.data.projects[proj]);
       }
       return null;
     }
@@ -310,10 +333,10 @@
      */
     function delete_project(proj) {
       proj = encodeURIComponent(proj);
-      if (proj in domain['data']['projects']) {
-        var old_project = JSON.stringify(domain['data']['projects'][proj]);
-        domain['data']['project_archive'].push(old_project);
-        delete domain['data']['projects'][proj];
+      if (proj in domain.data.projects) {
+        var old_project = JSON.stringify(domain.data.projects[proj]);
+        domain.data.project_archive.push(old_project);
+        delete domain.data.projects[proj];
 
       }
       save();
@@ -355,15 +378,19 @@
    */
   var my_eu_items = (function() {
 
-    var domain, domain_store, meta_store, pic_index;
-
+    var domain, domain_store, meta_store, pic_index,config,gapi;
+    config = {
+        domain_store : 'eu_items',
+        meta_store: 'eu_items_meta',
+        gapi_file : 'eu_items.js'
+      }
+    
     domain_store = "eu_items";
     meta_store = "eu_items_meta";
     storage.remove(meta_store);
     domain = {};
-
-    function domainObj() {
-    }
+    
+    function domainObj() {}
     // TODO inherit this from a general data object!
     domainObj.prototype.clone = function() {
       return JSON.parse(JSON.stringify(domain['data']));
@@ -377,6 +404,8 @@
       var n = Math.floor(Math.random() * t.length);
       return domain.data.eu_items[t[n]];
     };
+    
+    
     /***************************************************************************
      * @memberOf ure_data.eu_items
      */
@@ -384,13 +413,12 @@
       pic_index = {}; // index eu_pic_id->[accnums] // update on each save.
       domain = new domainObj();
       domain['data'] = {}; // data
-
+      gapi = ure_gapi(config.gapi_file);
       if (!storage.isSet(domain_store)) {
         domain['data']['eu_items'] = {};
         storage.set(domain_store, JSON.stringify({}));
 
       }
-
       if (!(storage.isSet(meta_store))) {
 
         domain['data']['meta'] = {};
@@ -399,13 +427,26 @@
         storage.set(meta_store, JSON.stringify(domain.data.meta));
 
       }
-
-      var data = storage.get(domain_store);
-      domain['data']['eu_items'] = data;
+      var read_success = function(data) {
+        console.log(data)
+        domain.data.eu_items = data;
+        make_pic_index();
+        storage.set(domain_store,domain.data.eu_items);
+      }
+      var read_fail = function(err) {
+        console.log(err);
+      }
+      gapi.onSignIn(function() {
+        gapi.read(read_success, read_fail);
+      });
+//      
+//      var data = storage.get(domain_store);
+//      domain['data']['eu_items'] = data;
       var meta = storage.get(meta_store);
       domain['data']['meta'] = meta;
 
       make_pic_index();
+      
     };
     init();
 
@@ -426,6 +467,9 @@
      */
     function save() {
       storage.set(domain_store, JSON.stringify(domain['data']));
+      console.log("eu_items_data")
+      console.log(domain['data'])
+      gapi.save(domain['data']);
       make_pic_index();
     }
     ;
@@ -583,7 +627,7 @@
   $.extend({
     qs : function(key) {
       key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta
-                                                            // chars
+      // chars
       var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
       return match && decodeURIComponent(match[1].replace(/\+/g, " "));
     }
