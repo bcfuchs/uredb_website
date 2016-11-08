@@ -286,21 +286,7 @@ var project_toggle = function(){
  */
 
 var dummy_projects  = function() {
-    /***************************************************************************
-     * 
-     * @memberOf comparanda_page
-     */
-    var make_dummy_projects = function() {
-      var pr = window.ure_projects;
-      pr.reset();
-      pr.put('Dionysus', '13.10.25', 'pic2');
-      pr.put('Dionysus', '13.10.22', 'pic2');
-      pr.put('skyphos', '13.10.25', 'pic2');
-      pr.put('skyphos', '13.10.24', 'pic2');
-      pr.put('skyphos', '13.10.25', 'pic2');
-      pr.put('skyphos', '13.10.25', 'pic2');
-    }
-    window.make_dummy_projects = make_dummy_projects
+
     /***************************************************************************
      * 
      * @memberOf comparanda_page.dummy_projects
@@ -364,6 +350,7 @@ var dummy_projects  = function() {
 	grid_component:grid_component,
 	dummy_projects: dummy_projects,
 	project_strip:project_strip,
+	project_toggle:project_toggle,
 	Component:Component
     }
 }();
