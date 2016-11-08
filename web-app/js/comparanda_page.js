@@ -35,7 +35,10 @@
       var grid_sel = config.component_selector;
       $(grid_sel).hide();
       var eu = ure_eu_items.get_all();
-      // TEST eu is undefined or length 0
+
+
+	
+	// TEST eu is undefined or length 0
       for ( var k in eu) {
         var div = document.createElement('div');
         $(div).addClass("comparanda-target-container");
@@ -48,9 +51,11 @@
           if (i === 'thumb') {
             continue;
           }
+
+	    
           var link = eu[k][i]['link'];
           var provider = eu[k][i]['provider'];
-          console.log(eu[k][i])
+
           var item = '<div class="row"><img src="' + i + '"/></div>';
           var title = '<div class="row"><a href="' + link + '"><span>' + provider + '</span></a></div>'
           var container = '<div class="container comparanda-container">' + item + title + '</div>';
@@ -301,28 +306,30 @@ var dummy_projects  = function() {
      * @memberOf comparanda_page.dummy_projects
      */
     var make_dummy_projects2 = function() {
-      var pr = window.ure_projects;
-      pr.reset();
-      var items = $.localStorage.get("eu_items");
-      var proj = [ 'Dionysus', 'Skyphos', 'Mythology', 'Peplos', "Athens", "Classics 110" ];
-
-      var proj_len = proj.length;
-      var max = 4;
-      for (var i = 0; i < max; i++) {
-        for ( var item in items) {
-          console.log(i)
-          var p = proj[Math.floor(Math.random() * proj_len)];
-
-          for (eupic in items[item]) {
-            // console.log(eupic);
-            if (eupic !== 'thumb') {
-              pr.put(p, item, eupic);
-              console.log(p + ":" + ":" + item + " : " + eupic);
+	var pr = window.ure_projects;
+	pr.reset();
+	var items = ure_eu_items.get_all_eu_items();
+	var proj = [ 'Dionysus', 'Skyphos', 'Mythology', 'Peplos', "Athens", "Classics 110" ];
+	for (var i = 0,j = proj.length; i < j; i++) {
+	    pr.create(proj[i]);
+	}
+	var proj_len = proj.length;
+	var max = 4;
+	for (var i = 0; i < max; i++) {
+            for ( var item in items) {
+		console.log(i)
+		var p = proj[Math.floor(Math.random() * proj_len)];
+		
+		for (eupic in items[item]) {
+		    // console.log(eupic);
+		    if (eupic !== 'thumb') {
+			pr.put(p, item, eupic);
+			console.log(p + ":" + ":" + item + " : " + eupic);
+		    }
+		}
+		
             }
-          }
-          ;
-        }
-      }s
+	}
 
     };
 
@@ -353,5 +360,10 @@ var dummy_projects  = function() {
     });
 
   });
-
+    window.comparanda_page = {
+	grid_component:grid_component,
+	dummy_projects: dummy_projects,
+	project_strip:project_strip,
+	Component:Component
+    }
 }();
