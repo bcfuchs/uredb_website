@@ -66,7 +66,9 @@
      * 
      */
     function read(success, error) {
+      console.log(success);
       appData.read().then(function(data) {
+        console.log("after promise")
         success(data);
         _read_complete_event(filename);
       }, function(err) {

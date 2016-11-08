@@ -3,6 +3,7 @@ describe('ure_storage test',function(){
 
     beforeEach(function(){
 	ure_storage.clear();
+	
     })
 
 

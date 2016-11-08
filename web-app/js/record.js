@@ -20,7 +20,7 @@
   // / How to do this right
   // 1. collect all the elements to be linked
   // 2. pass the linker in as a callback
-  var container, exclude_fields, stops, content_container, no_token_fields,data_attr;
+  var container, exclude_fields, stops, content_container, no_token_fields, data_attr;
   container = "#meta2 .ure-record-data"
   content_container = ".ure-content";
   exclude_fields = [ 'media', 'accession_number' ];
@@ -87,12 +87,12 @@
         if (html !== null && html !== undefined) {
           html = html.trim();
           if (html !== "") {
-          var html = html.replace(/\w+/g, function(w) {
-            return ($.inArray(w, stops) < 0) ? '<a href="' + url + w + '">' + w + '</a>' : w;
-          });
-          $(reccell).html(html);
+            var html = html.replace(/\w+/g, function(w) {
+              return ($.inArray(w, stops) < 0) ? '<a href="' + url + w + '">' + w + '</a>' : w;
+            });
+            $(reccell).html(html);
           }
-          }
+        }
       }
       if ($.inArray(field, no_token_fields) > -1) {
 
@@ -123,22 +123,35 @@
             uredb_matcher_matchval = uredb_matcher_matchval.replace('\\/', '--');
           }
           $(".reccellcontent a[href='/recordlist/" + uredb_matcher_matchfield + "/" + uredb_matcher_matchval + "']")
-          .addClass("uredb-matcher").attr("data-uredb-matched", "");
+              .addClass("uredb-matcher").attr("data-uredb-matched", "");
           try {
             $('html, body').animate(
                 {
                   scrollTop : $(
                       ".reccellcontent a[href='/recordlist/" + uredb_matcher_matchfield + "/" + uredb_matcher_matchval
-                      + "']").offset().top
+                          + "']").offset().top
                 }, 1000);
+          } catch (err) {
+            console.log(err);
           }
-          catch(err){
-                console.log(err)
-          }
-
 
         }
 
       });
 
+}()
+
+/**
+ * Initialise comparanda widget
+ */
+!function() {
+  $(document).ready(function() {
+    var accnum = $('meta[name=accnum]').attr("content");
+    alert(accnum)
+    var signal = "doEuRelated_complete" // fired in europeana_widget.js
+    $(window).on(signal, function(e, data) {
+      EuComparanda(accnum);
+
+    });
+  });
 }()

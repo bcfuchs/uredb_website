@@ -4,41 +4,20 @@
 <head>
 <title>Ure Museum | ${accnum}</title>
 <meta name="layout" content="ure/main" />
+<meta name="accnum" content="${accnum}" />
+<meta name="nextid" content="${nextid}" />
 <% 
-         flash.accnum = accnum
-         session.accnum = accnum 
-         flash.message  = "HI2"
-%>
+	         flash.accnum = accnum
+	         session.accnum = accnum 
+	%>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-<script>
-		// set global js vars for highlighting text
-		var  uredb_matcher_hasMatch = false;
-		<g:if test="${session.uredb_hasMatch}">
-			var uredb_matcher_matchfield = "${session.uredb_matchfield}";
-			var uredb_matcher_matchval = "${session.uredb_matchval}";
-			uredb_matcher_hasMatch = true;
-		</g:if>		
-		<%
-		// now set hasMatch to false so a match is displayed only when there's actually a match. 
-		session.uredb_hasMatch  = false;
-		%>
-		$(document).ready(function(){
-		 // save data about this object to the DOM
-		 $(document).data('ure-item',{accnum:'${accnum}'});
-		 $(document).data('eu-items',{})
-		
-		// add an item to menubar
-		  	$("#breadcrumb-items-left").html('<a href="/fieldlist/accession_number">objects</a> > ${accnum}');
-		  	$("#breadcrumb-items-left").css("margin-left","-85px")
-  
-		})
-	</script>
+<g:render template="/ure/matcher"></g:render>
 <style>
 /** hide left nav on param s */
-#left_nav { 
-	<g:if test="${params.s == 'noleftnav'}">   
-			display:none; 
-	</g:if>
+#left_nav { <
+	g: if test="${params.s == 'noleftnav'}">     
+				display:none; </
+	g: if>
 }
 
 #left-nav-search {
@@ -65,10 +44,11 @@
     
  %>
 	</span>
-<sec:ifAnyGranted roles='ROLE_CURATOR'>
-	<a style="text-decoration: none" href="/uremeta/edit/${id}"><i class="icon-pencil"></i> Edit</a>
-</sec:ifAnyGranted>
-
+	<sec:ifAnyGranted roles='ROLE_CURATOR'>
+		<a style="text-decoration: none" href="/uremeta/edit/${id}">
+			<i class="icon-pencil"></i> Edit
+		</a>
+	</sec:ifAnyGranted>
 	<div id="record-page-wrapper" class="record-page-wrapper">
 		<script src="${resource(dir:'js',file:'record.js')}"></script>
 		<g:if test="${flash.fromSearch == true}">
@@ -76,14 +56,12 @@
 				<a href="${flash.searchUrl}">back to search</a>
 			</span>
 		</g:if>
-
 		<h2>
 			${accnum}:
 			${short_title}-
 			${nextid}
 		</h2>
 		<div id="record-main">
-	
 			<div id="meta2">
 				<g:render template="/shared/ure/meta2" var="t" model="[record:record]" />
 			</div>
@@ -102,7 +80,7 @@
             %>
 -->
 			<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
-			<script>
+			<r:script>
 				! function(){
 				window.eu_experimental = false;
 				if (window.eu_experimental === true) { 
@@ -111,16 +89,13 @@
 				}
 				  
 				}()
-			</script>
-			
+			</r:script>
 			<div id="europeana-section" style="display: none;">
 				<g:render template="/taglibTemplates/europeanaWidget"
 					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
 				</g:render>
 			</div>
-		
 		</div>
-		
 		<!-- #record-main -->
 	</div>
 	<!--  #record-page-wrapper -->
@@ -130,17 +105,7 @@
      %>
 	<g:form useToken="true"></g:form>
 	<g:render template="/ure/iframeOverlay" model="${iframeModel}" />
-	<script>
-		// set up the eucomparanda collection system
-		// this can only be called after grid has finished building!!!
-		var signal = "doEuRelated_complete" // fired in europeana_widget.js
-		$(window).on(signal, function (e, data) {
-		   	EuComparanda("${accnum}");
-        	
-    });
-		
-     </script>
-     <script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
-     <script src="${resource(dir:'js',file:'tests/comparanda_tests.js?v=2')}"></script>
+	<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
+	<script src="${resource(dir:'js',file:'tests/comparanda_tests.js?v=2')}"></script>
 </body>
 <html>

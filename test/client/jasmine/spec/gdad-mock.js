@@ -6,11 +6,15 @@
     var store = {};
     store[filename] = null;
     function read() {
-
-      return store[filename];
+	console.log('read ' + filename);
+	return new Promise(function(){
+	    console.log("in promise");
+	    return store[filename]})
+      
     }
     function save(data) {
-      store[filename] = data;
+
+	store[filename] = data;
     }
 
     return {

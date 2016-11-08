@@ -28,7 +28,7 @@
 			 init_euRelated("${accnum}","${gridid}","${width}","${height}", true);
 	      });
     })();
-  </script>
+  <script>
   
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
@@ -62,10 +62,10 @@
 	</label>
 </div>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
-<script>
+<r:script>
   !function() {
     easterEgg('m', function() {
       $("#itemsCount").click();
     });
   }();
-</script>
+</r:script>
