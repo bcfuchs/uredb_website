@@ -603,7 +603,7 @@
       if (typeof eu_id !== 'string') {
         throw new TypeError('eu_id must be string')
       }
-      if (accnum in domain.data.eu_items) {
+      if (accnum in domain.data.eu_items && eu_id in domain.data.eu_items[accnum]) {
         delete domain.data.eu_items[accnum][eu_id];
         save();
         return true;
@@ -725,10 +725,9 @@
   };
   $.extend({
     qs : function(key) {
-      key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta
-      // chars
-      var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
-      return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+	key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta
+	var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+	return match && decodeURIComponent(match[1].replace(/\+/g, " "));
     }
   });
 

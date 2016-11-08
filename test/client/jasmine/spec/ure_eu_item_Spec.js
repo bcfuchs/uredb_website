@@ -6,7 +6,11 @@ describe('ure_eu_item unit  tests', function() {
   var url = 'http://hi.there'
   var thumb = url;
   var eu_id = "http://some_eu_url";
-  var meta = {
+    var okl = function(a) {
+
+	return Object.keys(a).length;
+    }
+    var meta = {
     "guid" : "a",
     "provider" : "b",
     "ure_accnum" : accnum,
@@ -17,7 +21,9 @@ describe('ure_eu_item unit  tests', function() {
   var create_one = function() {
     return eu.create(accnum, url);
   }
-
+    var create_new = function(a,u) {
+	return eu.create(a,u);
+    }
   beforeEach(function() {
     eu.reset(); // delete all projects and remove current project
 
@@ -122,6 +128,66 @@ describe('ure_eu_item unit  tests', function() {
     expect(eu.get_accnums_for_eupic(bad_eu_id)).toBeNull();
   });
 
+        
+    it('remove an accnum from  eu_items',function(){
+	var accs = []
+	for (var i = 0; i < 10; i++) {
+	    var newaccnum = accnum + i;
+	    accs.push(newaccnum);
+	    create_new(newaccnum,url);
+	    eu.put(newaccnum, eu_id, meta);
+	    
+	}
+	var a = accs[0];
+	eu.remove_accnum(a);
+	expect(eu.remove_accnum(a)).toBeFalsy();
+	
+    })
+    it('remove an accnum from  eu_items w/o params',function(){
+	expect(function(){eu.remove_accnum()}).toThrow();
+
+    });        
+    it('remove an eu_id from  eu_items',function(){
+	var accs = []
+	for (var i = 0; i < 10; i++) {
+	    var newaccnum = accnum + i;
+	    accs.push(newaccnum);
+	    create_new(newaccnum,url);
+	    eu.put(newaccnum, eu_id, meta);
+	    
+	}
+	var a = accs[0];
+	eu.remove(a,eu_id);
+	expect(eu.remove(a,eu_id)).toBeFalsy();
+	
+    })
+    it('remove an eu_id  from  eu_items w/o params',function(){
+
+	expect(function(){eu.remove()}).toThrow();
+
+    });
+
+        it('remove an eu_id  from  eu_items w bad params params',function(){
+
+	    expect(function(){eu.remove(accnum,{})}).toThrow();
+
+    });
+
+    it('get all   eu_items',function(){
+	var accs = []
+	var max = 100
+	for (var i = 0; i < max; i++) {
+	    var newaccnum = accnum + i;
+	    create_new(newaccnum,url);
+	    eu.put(newaccnum, eu_id, meta);
+	    
+	}
+	
+	
+	expect(okl(eu.get_all_eu_items())).toEqual(max);;
+	
+    })
+    
   it('get all the data', function() {
     expect(('eu_items' in eu.data())).toBeTruthy();
   });
