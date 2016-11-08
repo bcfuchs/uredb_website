@@ -66,9 +66,9 @@
      * 
      */
     function read(success, error) {
-      console.log(success);
+  
       appData.read().then(function(data) {
-        console.log("after promise")
+        
         success(data);
         _read_complete_event(filename);
       }, function(err) {
@@ -163,21 +163,17 @@
     domainObj.prototype.clone = function() {
       return JSON.parse(JSON.stringify(domain['data']));
     };
-    var gapi_on_sign_in = function(cb) {
-      var signal = 'ure_gapi_signed_in'
-      $(window).on(signal, function(e, d) {
-        console.log(e);
-        cb();
-      });
-    }
+
     /***************************************************************************
      * @memberOf ure_data.projects
      */
-    var init = function() {
-      domain = new domainObj();
-      domain['data'] = {}; // add project data
-      gapi = ure_gapi(config.gapi_file);
 
+      var init = function() {
+
+	  domain = new domainObj();
+	  domain['data'] = {}; // add project data
+	  gapi = ure_gapi(config.gapi_file);
+	  
       // initialize storage
       if (!(storage.isSet(domain_store))) {
         domain['data']['projects'] = {};
@@ -199,9 +195,10 @@
         console.log(err);
 
       }
-      gapi.onSignIn(function() {
-        gapi.read(read_success, read_fail);
-      });
+	  gapi.onSignIn(function() {
+	      
+	    gapi.read(read_success, read_fail);
+	  });
       var data = storage.get(domain_store);
       domain['data'] = data;
 
@@ -360,11 +357,14 @@
       }
       return null;
     }
-    /***************************************************************************
+
+      /***************************************************************************
      * @memberOf ure_data.projects
      */
-    function get_all() {
-      return domain.clone();
+      function get_all() {
+	  
+	
+	return domain.clone();
     }
     ;
     // delete a project put it in _old
@@ -384,7 +384,8 @@
     }
     ;
     function delete_all() {
-      var projects = list();
+
+	var projects = list();
       for ( var i in projects) {
         delete_project(projects[i])
       }

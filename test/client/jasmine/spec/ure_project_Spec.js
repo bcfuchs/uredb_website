@@ -2,8 +2,8 @@
 describe('ure_project integration tests',function(){
 
     beforeEach(function(){
-	ure_projects.delete_all(); // delete all projects and remove current project
-
+//	ure_projects.delete_all(); // delete all projects and remove current project
+	ure_projects.reset();
     })
     
     it('create a project',function(){
@@ -132,21 +132,24 @@ describe('ure_project integration tests',function(){
 	})
     
     it('get all',function(){
+
 	var proj = "blabla";
 	var max = 100;
 
-
 	for (var i = 0 ; i < max; i++) {
+
 	    var n = proj + i;
 	    ure_projects.create(n);
 	    
 	}
-	console.log(Object.keys(ure_projects.get_all().projects).length);
-	expect(Object.keys(ure_projects.get_all().projects).length).toEqual(max);
-    })
-    it('reset',function(){
-	var name = 'wazzup2'
 
+	var total = Object.keys(ure_projects.get_all().projects).length;
+	expect(total).toEqual(max);
+    })
+
+    it('reset',function(){
+
+	var name = 'wazzup2'
 	ure_projects.create(name);
 	ure_projects.reset();
 	expect(ure_projects.list().length).toEqual(0);
