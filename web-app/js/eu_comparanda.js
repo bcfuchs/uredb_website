@@ -146,10 +146,13 @@ window.ure_eu_comparanda = {}
                * @private
                */
               var moveImage = function(e) {
-                var url = $(this).attr('data-ure-image-url');
+		  console.log("moveImage");
+		  
+                  var url = $(this).attr('data-ure-image-url');
                 // var style = "background-image: url('" + url + "')";
                 // add a helper class and hide the text.
                 var out = $(this).clone().addClass("image-drag-helper");
+		
                 var a = out.find(".image-infobox");
                 a.hide();
                 // out = "<div>hi there</div>"
@@ -304,10 +307,8 @@ window.ure_eu_comparanda = {}
                 if (!eu_items_ls[this_accnum][thumb]) { // eu-data 4
                   eu_items_ls[this_accnum][thumb] = eu_item;
                   // store it
-		    console.log(111);
-		    console.log(this_accnum)
-		    console.log(thumb);
-		    console.log(eu_item);
+
+
                     ure_eu_items.put(this_accnum,thumb,eu_item); 
                //   storage.set(eu_items, JSON.stringify(eu_items_ls)); // eu-data 4.1
                 }
@@ -353,7 +354,7 @@ window.ure_eu_comparanda = {}
                * 
                */
               function removecomp(thumb) {
-                console.log("removecomp " + thumb)
+                console.log("removecomp ")
                 // add the thumb to the thumb strip
 
                 // get the url for the thumb
@@ -397,32 +398,7 @@ window.ure_eu_comparanda = {}
 
               } // function removecomp
 
-              /**
-               * @memberOf eu_comparanda.EuComparanda
-               * 
-               * load_comparanda_old
-               * @param {Object}
-               *          eu -- the eu_items hash from localstorage
-               * 
-               * load existing comparanda into comp div
-               * 
-               * 
-               */
-              function load_comparanda_old(eu) {
 
-                if (accnum in eu) {
-                  for ( var thumb in eu[accnum]) {
-                    // skip the record thumb
-                    if (thumb === "thumb") {
-                      continue;
-                    }
-                    var eu_item = eu[accnum][thumb]
-
-                    addcomp(accnum, eu_item);
-                  }
-                }
-                setRemoveDragComparanda("#comparanda-thumbs img");
-              }
 
              
 
@@ -513,7 +489,7 @@ window.ure_eu_comparanda = {}
                */
 
               function save_comparanda_as_json() {
-                var eu = getEUdata(); // eu-data
+                var eu = getEUdata_new(); // eu-data
                 var json = JSON.stringify(eu);
                 var blob = new Blob([ json ], {
                   type : "text/plain;charset=utf-8"
@@ -573,7 +549,7 @@ window.ure_eu_comparanda = {}
                 for ( var accnum in eu) {
                   var url = "http://" + document.domain + "/record/" + accnum + "?s=noleftnav";
                   var compHTML = getComparanda(eu[accnum]);
-                  console.log(compHTML);
+//                  console.log(compHTML);
                   var id = accnum
                   var thumb = eu[accnum]['thumb'];
                   divs.push('<div class="accnum-reference row">' + '<a target="show" href="' + url + '">'
@@ -587,7 +563,7 @@ window.ure_eu_comparanda = {}
                 $(html).find("#left").append(divs.join(""));
                 $(html).find("head").append(style);
                 $(html).find("head").append(bootstrap_css);
-                console.log(html)
+//                console.log(html)
                 var doc = new XMLSerializer().serializeToString(html);
 
                 var blob = new Blob([ doc ], {
@@ -650,7 +626,9 @@ window.ure_eu_comparanda = {}
               window.comparanda_getEUdata = getEUdata;
 
 		var export_methods = {
+		    onSignedIn:onSignedIn,
 		    addToComparanda: addToComparanda,
+		    moveImage:moveImage,
 		    removecomp:removecomp,
 		    load_comparanda:load_comparanda,
 		    load_comparanda_from_json:load_comparanda_from_json,
