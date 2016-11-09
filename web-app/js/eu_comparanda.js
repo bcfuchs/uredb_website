@@ -5,6 +5,7 @@ exports are:
   window.comparanda_getEUdata = getEUdata;
 
 */
+window.ure_eu_comparanda = {}
 
 ! function() {
 
@@ -182,6 +183,7 @@ exports are:
               var addToComparanda = function(e, ui) {
                 console.log("addToComparanda");
                 var d = ui.draggable;
+
                 var eu_link = $(d).attr("data-eu-link");
                 var thumb = $(d).attr("data-ure-image-url");
                 var guid = $(d).attr("data-eu-guid");
@@ -208,6 +210,7 @@ exports are:
 
                 }
               });
+		
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
@@ -271,20 +274,23 @@ exports are:
 
                 // add the thumb to the thumb strip
                 addToCompBar = addToCompBar || true;
-                var thumb = eu_item.thumb;
+		  
+                  var thumb = eu_item.thumb;
                 // NOTE this makes the addcomp function dependant on
                 // document.ready
 
                 // get the url for the thumb
                 var this_thumb = $($("#record-images .cell")[0]).attr('data-ure-image-url');
                 // save to document
-                var items = $(document).data('eu-items');
+                  var items = $(document).data('eu-items') || {}
                 items[thumb] = eu_item;
 
             
          //       var json = storage.get(eu_items); // eu-data 3 
-           //     var eu_items_ls = json;
-               var eu_items_ls =  ure_eu_items.get_all();
+		  //     var eu_items_ls = json;
+		  
+
+		  var eu_items_ls =  ure_eu_items.get_all();
 
                 // start an array for this accnum if none
 
@@ -298,7 +304,11 @@ exports are:
                 if (!eu_items_ls[this_accnum][thumb]) { // eu-data 4
                   eu_items_ls[this_accnum][thumb] = eu_item;
                   // store it
-                  ure_eu_items.put(this_accnum,thumb,eu_item); 
+		    console.log(111);
+		    console.log(this_accnum)
+		    console.log(thumb);
+		    console.log(eu_item);
+                    ure_eu_items.put(this_accnum,thumb,eu_item); 
                //   storage.set(eu_items, JSON.stringify(eu_items_ls)); // eu-data 4.1
                 }
                 // update ure projects
@@ -541,7 +551,7 @@ exports are:
 
                 // get the lighttable as html.-- for later
                 // get the list
-                var eu = getEUdata(); //eu-data
+                var eu = getEUdata_new(); //eu-data
                 var divs = [];
                 var domain = document.domain;
                 var html = document.implementation.createHTMLDocument();
@@ -639,8 +649,27 @@ exports are:
               }
               window.comparanda_getEUdata = getEUdata;
 
+		var export_methods = {
+		    addToComparanda: addToComparanda,
+		    removecomp:removecomp,
+		    load_comparanda:load_comparanda,
+		    load_comparanda_from_json:load_comparanda_from_json,
+		    save_comparanda_as_json:save_comparanda_as_json,
+		    save_comparanda_as_html:save_comparanda_as_html,
+		    getEUdata_new:getEUdata_new
+		}
+
+		for (var i in export_methods) {
+		    
+		    window.ure_eu_comparanda[i] = export_methods[i];
+		}
+		
             }); // $(document).ready()
 
+
+
+
+      
   }; // EuComparanda
 
   /**
@@ -662,7 +691,7 @@ exports are:
 
 /** guick nav for comparanda */
 
-!function() {
+! function() {
   /*****************************************************************
    * @memberOf eu_comparanda.EuComparanda 
    * set up the navigation strip
@@ -747,13 +776,26 @@ exports are:
    * 
    * 
    */
-  var init_comNavList = function(){};
-  
+    var init_comNavList = function(){};
+    var listSelector = "#comparanda-nav-list";
+    var observeSelector = "#comparanda-thumbs";
+    
  $(document).ready(function(){
-  var listSelector = "#comparanda-nav-list";
-  var observeSelector = "#comparanda-thumbs";
+ 
   setup_compNavList(listSelector, observeSelector);
-});
+ });
+
+    var eu_comparanda = {
+	setup_compNavList: setup_compNavList,
+	listSelector:listSelector,
+	observeSelector:observeSelector
+
+    }
+
+    for (var i in eu_comparanda) {
+
+	window.ure_eu_comparanda[i] = eu_comparanda[i];
+    }
 
 }();
 

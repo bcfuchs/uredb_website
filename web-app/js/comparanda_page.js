@@ -104,26 +104,32 @@
      */
     function show_project_items(project) {
       
-
+	console.log("project: " + project);
       // set the selected project in the persistent object
       myprojects.current(project);
 
       // get all the accnums for this project.
       var accnums =  myprojects.get_accnums(project);
-      $(".comparanda-target-container").show();
+	console.log(accnums);
+	$(".comparanda-target-container").show();
       if (project === "--all--" || typeof project === 'undefined')
         return 0;
       $(".comparanda-target-container").each(function() {
         var accnum = $(this).data('ure-accnum');
 
         // hide all the objects that aren't in this project
-        if (accnums !== 'undefined' && accnums.indexOf(accnum) < 0) {
-          $(this).hide();
-        }
+        if (typeof accnums !== 'undefined' && accnums.indexOf(accnum) < 0) {
 
+            $(this).hide();
+        }
+	  
       });
+	console.log( $(".comparanda-target-container:hidden").length);
+	console.log( $(".comparanda-target-container"  ).length);
 
     }
+      
+      window.ure_comp_show_project_items = show_project_items;
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
@@ -172,7 +178,7 @@
         var project = projects[i];
         $(box).attr('data-ure-project', project);
         $(box).find(".project-box-title").html(project);
-        console.log(project)
+
 
         // accession numbers
         var accs = myprojects.get(project);
@@ -259,9 +265,10 @@ var project_toggle = function(){
 
     });
 
-    $(sel).change(function() {
-      var project = $(this).val();
-      show_project_items(project, prs);
+      $(sel).change(function() {
+	  console.log(this);
+	  var project = $(this).val();
+	  ure_comp_show_project_items(project);
 
     })
   };
@@ -303,14 +310,14 @@ var dummy_projects  = function() {
 	var max = 4;
 	for (var i = 0; i < max; i++) {
             for ( var item in items) {
-		console.log(i)
+
 		var p = proj[Math.floor(Math.random() * proj_len)];
 		
 		for (eupic in items[item]) {
-		    // console.log(eupic);
+
 		    if (eupic !== 'thumb') {
 			pr.put(p, item, eupic);
-			console.log(p + ":" + ":" + item + " : " + eupic);
+			//console.log(p + ":" + ":" + item + " : " + eupic);
 		    }
 		}
 		

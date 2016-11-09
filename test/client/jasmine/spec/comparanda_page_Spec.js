@@ -18,9 +18,9 @@ describe('comparanda_page  functional  tests',function(){
     var make_eu_items = function(n){
 	for (var i = 0; i < n; i++) {
 	    var newaccnum = accnum + i;
-	    eu.create(newaccnum,thumb);
+	    eu.create(newaccnum,thumb+i);
 	    for (var k = 0; k < 10; k++) {
-		eu.put(newaccnum,thumb+"_"+k,meta);
+		eu.put(newaccnum,thumb+i+"_"+k,meta);
 	    }
 	}
 
@@ -34,13 +34,13 @@ describe('comparanda_page  functional  tests',function(){
     beforeEach(function(){
 	eu.reset();
 
-	complist  = $('<div id="comparanda"><div id="comparanda-list"></div>\
-        <div id="project-selector"></div>\
+	complist  = $('<div id="comparanda" class="comparanda-target-container">><div id="comparanda-list"></div>\
+        <select id="project-selector"></select>\
         <div id="project-strip"></div></div>');
 	$(document.body).append(complist);
 
 	var project_box_html = '\
-<div id="comp-templates" style="display: none">\
+<div id="comp-templates">\
 <div id="project-box" class="project-box">\
 <div class="project-box-title"></div>\
 <div class="project-box-items">\
@@ -55,15 +55,16 @@ describe('comparanda_page  functional  tests',function(){
 </div>'
 	project_box_fixture = $(project_box_html);
 	$(document.body).append(project_box_fixture);
-	make_projects();
 
+	make_projects();
+	grid.load();
     });
 
     
     it('grid.load',function(){
 	
 
-	grid.load();
+
 	expect($("#comparanda-list div").length).toEqual(640);
 
 	
@@ -102,6 +103,28 @@ describe('comparanda_page  functional  tests',function(){
     })
 
     
+    it('select project strip',function(){
+	comp.project_strip.load();
+	comp.project_toggle();
+	var sel = "#project-selector option";
+
+	$(".comparanda-target-container").show();
+	$($(sel)[3]).select();	
+        var out = $(sel).filter(":selected").length;
+	console.log(out);
+	var els = $(".comparanda-target-container:hidden");
+	var els2 = $(".comparanda-target-container");
+	console.log(els.length);
+	console.log(els2.length);
+	console.log("=====");
+	$(".comparanda-target-container").hide();
+	var els = $(".comparanda-target-container:hidden");
+	var els2 = $(".comparanda-target-container");
+	console.log(els.length);
+	console.log(els2.length);
+	
+    })
+
     it('',function(){
 
     })
