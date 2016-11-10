@@ -1258,6 +1258,10 @@ var image_preloader = function(url,sel) {
 
     });
   };
+  /**
+   *  @memberOf europeana_widget.init_euRelated
+   *  init the eu_related grid if params are present.
+   */
   
   var init_euRelated_listener = function(){
     $(document).ready(function(){
@@ -1266,9 +1270,7 @@ var image_preloader = function(url,sel) {
       var gridid = $(eumeta).data('grid-id')
       var width = $(eumeta).data('grid-width')
       var height = $(eumeta).data('grid-height');
-      var display_infobox = $(eumeta).data('display-infobox');
-      console.log("llistening for euwidget")
-      
+      var display_infobox = $(eumeta).data('display-infobox');      
    //   if (! $("#europeanaWidget").attr('data-didStash'))
         init_euRelated(accnum,gridid,width,height, display_infobox);   
       });

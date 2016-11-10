@@ -25,14 +25,11 @@
 		data-grid-width="${width}"
 		data-grid-height="${height}"
 		data-display-infobox=true></div>
-	
-  
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
 	</div>
 </div>
-
 <script id="europeana_widget_js" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
 
 <div id="gridTemplate" style="display: none;">
@@ -59,10 +56,4 @@
 	</label>
 </div>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
-<r:script>
-  !function() {
-    easterEgg('m', function() {
-      $("#itemsCount").click();
-    });
-  }();
-</r:script>
+

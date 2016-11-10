@@ -105,7 +105,8 @@ window.ure_eu_comparanda = {}
                  * init load of data from storage
                  */
                 // prevent freewall from showing image strip vertically.
-                $("#europeana-section").delay(200).slideDown(1000);
+               // $("#europeana-section").delay(200).slideDown(1000);
+                
                 // attach iframeoverlay to body
                 var ifr = $("#iframeOverlay").remove();
                 $('body').append(ifr);

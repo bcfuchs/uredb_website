@@ -33,6 +33,7 @@ if (gapi_client_id == null) {
 <script>
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
+window.ure = {}
 </script>
 <meta name="uredb_wskey" content="${uredb_wskey}">
 <meta name="google-signin-client_id" content="${gapi_client_id}" />

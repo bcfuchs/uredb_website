@@ -6,11 +6,19 @@
 <meta name="layout" content="ure/main" />
 <meta name="accnum" content="${accnum}" />
 <meta name="nextid" content="${nextid}" />
+<g:if test="${session.uredb_hasMatch}">
+<meta name="matchfield" content="${session.uredb_matchfield}"/>
+<meta name="matchval" content="${session.uredb_matchval}"/>
+<meta name="hasMatch" content="true"/>
+</g:if>	
+
+<meta name="" content=""/>
+
+<script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <% 
 	         flash.accnum = accnum
 	         session.accnum = accnum 
 	%>
-<script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 <g:render template="/ure/matcher"></g:render>
 <style>
 /** hide left nav on param s */
@@ -90,7 +98,7 @@
 				  
 				}()
 			</r:script>
-			<div id="europeana-section" style="display: none;">
+			<div id="europeana-section">
 				<g:render template="/taglibTemplates/europeanaWidget"
 					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>
 				</g:render>
