@@ -24,7 +24,6 @@ if (uredb_wskey == null) {
     uredb_wskey = System.getProperty("WSKEY");
 }
 %>
-
 <% 
 def gapi_client_id = System.getenv("GAPI_CLIENT_ID");
 if (gapi_client_id == null) {
@@ -35,6 +34,7 @@ if (gapi_client_id == null) {
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
 </script>
+<meta name="uredb_wskey" content="${uredb_wskey}">
 <meta name="google-signin-client_id" content="${gapi_client_id}" />
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
 <script src="https://apis.google.com/js/client:platform.js"></script>
@@ -45,21 +45,8 @@ var gapi_client_id = "${gapi_client_id}";
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
 <script src="${resource(dir:'js',file:'messages.js')}"></script>
 <script src="${resource(dir:'js',file:'media.js')}"></script>
-<script>
-easterEgg('z',function(){
-	$(document).ready(function(){
-		$(".dev-features").toggle();
-	});
-	});
+<script src="${resource(dir:'js',file:'global.js?v=2')}"></script>
 
-easterEgg('v',function(){
-	$(document).ready(function(){
-		$("#versioninfo").toggle();
-	});
-	});
-		
-
-</script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -119,7 +106,7 @@ easterEgg('v',function(){
     
  flash.lastURI = request.forwardURI 
  flash.lastQuerystring =  request.getQueryString();
-println flash.lastURI
+ println flash.lastURI
  %>
 
  -->

@@ -19,16 +19,13 @@
 	
 	<div id="provider-filter" class="collapse controls span2"></div>
 	<!--  ajax: populate this grid with data from server  -->
-	<script id="init_euRelated">	
+	<div id="eu-widget-meta" class="eu-widget-meta" style="display:none" 
+		data-ure-accnum="${accnum}" 
+		data-grid-id="${gridid}"
+		data-grid-width="${width}"
+		data-grid-height="${height}"
+		data-display-infobox=true></div>
 	
-	( function() {
-		$(document).ready(function(){
-		// initialize the grid, using values supplied to the template	
-		if (! $("#europeanaWidget").attr('data-didStash'))
-			 init_euRelated("${accnum}","${gridid}","${width}","${height}", true);
-	      });
-    })();
-  <script>
   
 	<div id="${gridid}" class="ure-grid eu-grid ${klass_ }">
 		<%   def hideInfodiv = (displayInfobox)?"hide-infodiv":"showtheinfobox" %>

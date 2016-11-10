@@ -1258,5 +1258,22 @@ var image_preloader = function(url,sel) {
 
     });
   };
+  
+  var init_euRelated_listener = function(){
+    $(document).ready(function(){
+    var eumeta = $("#eu-widget-meta");
+      var accnum = $(eumeta).data('ure-accnum')
+      var gridid = $(eumeta).data('grid-id')
+      var width = $(eumeta).data('grid-width')
+      var height = $(eumeta).data('grid-height');
+      var display_infobox = $(eumeta).data('display-infobox');
+      console.log("llistening for euwidget")
+      
+   //   if (! $("#europeanaWidget").attr('data-didStash'))
+        init_euRelated(accnum,gridid,width,height, display_infobox);   
+      });
+    
+  }
+  init_euRelated_listener();
   window.init_euRelated = init_euRelated;
 }();
