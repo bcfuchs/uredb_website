@@ -147,7 +147,7 @@ window.ure_eu_comparanda = {}
                * @private
                */
               var moveImage = function(e) {
-		  console.log("moveImage");
+                  console.log("moveImage");
 		  
                   var url = $(this).attr('data-ure-image-url');
                 // var style = "background-image: url('" + url + "')";

@@ -71,8 +71,8 @@
 	</div>
 	<style>
 	</style>
-	<script src="${resource(dir:'js',file:'eu_comparanda.js?v=2')}"></script>
-	<script src="${resource(dir:'js',file:'comparanda_page.js"?v=2')}"></script>
+	<script src="${resource(dir:'js',file:'eu_comparanda.js')}?v=2	"></script>
+	<script src="${resource(dir:'js',file:'comparanda_page.js')}?v=2"></script>
 	<script>
 	$(document).ready(function(){
 		

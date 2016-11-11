@@ -1,5 +1,6 @@
 
 <r:script>
+// NOTE: do not refactor to pure js-- this needs to set session vars. 
 ;
 ! function(){
 		// set global js vars for highlighting text

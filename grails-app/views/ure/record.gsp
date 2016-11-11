@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%@ page import="grails.converters.*"%>
 <html>
 <head>
@@ -6,35 +5,22 @@
 <meta name="layout" content="ure/main" />
 <meta name="accnum" content="${accnum}" />
 <meta name="nextid" content="${nextid}" />
-<g:if test="${session.uredb_hasMatch}">
-<meta name="matchfield" content="${session.uredb_matchfield}"/>
-<meta name="matchval" content="${session.uredb_matchval}"/>
-<meta name="hasMatch" content="true"/>
-</g:if>	
-
-<meta name="" content=""/>
-
+<% def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);def token = th.generateToken(); session['token'] = token;%><meta name="synctoken" content="${token}"/>
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
-<% 
-	         flash.accnum = accnum
-	         session.accnum = accnum 
-	%>
+<% flash.accnum = accnum %><%  session.accnum = accnum %>
 <g:render template="/ure/matcher"></g:render>
 <style>
 /** hide left nav on param s */
-#left_nav { <
-	g: if test="${params.s == 'noleftnav'}">     
-				display:none; </
-	g: if>
+#left_nav { <g:if test="${params.s == 'noleftnav'}">     
+				display:none; 
+			</g: if>
 }
 
 #left-nav-search {
 	display: block !important;
 }
 </style>
-<g:set var="recordId" value="${id}" scope="request" />
-<g:set var="nextRecordId" value="${nextid}" scope="request" />
-<g:set var="isRecordPage" value="true" scope="request" />
+<g:set var="recordId" value="${id}" scope="request" /><g:set var="nextRecordId" value="${nextid}" scope="request" /><g:set var="isRecordPage" value="true" scope="request" />
 </head>
 <body>
 	<span>
@@ -80,24 +66,7 @@
 			<span id="keywords-display"></span>
 			<span id="query-display" style="display: none;"></span>
 			<g:render template="/ure/queryRetakeWidget" />
-			<!-- 
-			<%
-            def th = org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session);
-            def token = th.generateToken();
-            session['token'] = token;
-            %>
--->
 			<script src="${resource(dir:'js',file:'prefs_sync.js')}"></script>
-			<r:script>
-				! function(){
-				window.eu_experimental = false;
-				if (window.eu_experimental === true) { 
-					syncRelated("${token}");
-					console.log("${token}")
-				}
-				  
-				}()
-			</r:script>
 			<div id="europeana-section">
 				<g:render template="/taglibTemplates/europeanaWidget"
 					model='[height:"100px",width:"100px",accnum:accnum,gridid:"euwidget",klass:"euwidget",displayInfobox:true]'>

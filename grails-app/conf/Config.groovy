@@ -120,7 +120,7 @@ grails.war.resources = { stagingDir ->
 environments {
     production {
 
-        grails.resources.mappers.googleclosurecompiler.disable = true
+       grails.resources.mappers.googleclosurecompiler.disable = true
     }
    
 	test2 {
@@ -133,7 +133,7 @@ environments {
     dev2 {
 
         disable.auto.recompile=false
-        grails.resources.mappers.googleclosurecompiler.disable = true
+       grails.resources.mappers.googleclosurecompiler.disable = true
         grails.gsp.enable.reload=true
         grails.reload.enabled = true
     }

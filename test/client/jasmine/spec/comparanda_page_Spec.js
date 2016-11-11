@@ -1,45 +1,47 @@
-describe('comparanda_page  functional  tests',function(){
-    var comp = comparanda_page;
-    var grid = comp.grid_component;
-    var complist,project_box_fixture;
-    comp.dummy_projects();
-    var eu = ure_eu_items;
-    var url = 'http://hi.there'
-    var thumb = url;
-    var eu_id = "http://some_eu_url";
-    var accnum = '1.2.3';
-    var meta = {
-	"guid" : "a",
-	"provider" : "b",
-	"ure_accnum" : accnum,
-	"thumb" : "c",
-	"link" : "d"
-    };
-    var make_eu_items = function(n){
-	for (var i = 0; i < n; i++) {
-	    var newaccnum = accnum + i;
-	    eu.create(newaccnum,thumb+i);
-	    for (var k = 0; k < 10; k++) {
-		eu.put(newaccnum,thumb+i+"_"+k,meta);
-	    }
-	}
+describe(
+    'comparanda_page  functional  tests',
+    function() {
+      var comp = comparanda_page;
+      var grid = comp.grid_component;
+      var complist, project_box_fixture;
+      comp.dummy_projects();
+      var eu = ure_eu_items;
+      var url = 'http://hi.there'
+      var thumb = url;
+      var eu_id = "http://some_eu_url";
+      var accnum = '1.2.3';
+      var meta = {
+        "guid" : "a",
+        "provider" : "b",
+        "ure_accnum" : accnum,
+        "thumb" : "c",
+        "link" : "d"
+      };
+      var make_eu_items = function(n) {
+        for (var i = 0; i < n; i++) {
+          var newaccnum = accnum + i;
+          eu.create(newaccnum, thumb + i);
+          for (var k = 0; k < 10; k++) {
+            eu.put(newaccnum, thumb + i + "_" + k, meta);
+          }
+        }
 
-    }
-    var make_projects = function() {
-	
-	make_eu_items(20);
-	make_dummy_projects2();	
-    }
-    
-    beforeEach(function(){
-	eu.reset();
+      }
+      var make_projects = function() {
 
-	complist  = $('<div id="comparanda" class="comparanda-target-container">><div id="comparanda-list"></div>\
+        make_eu_items(20);
+        make_dummy_projects2();
+      }
+
+      beforeEach(function() {
+        eu.reset();
+
+        complist = $('<div id="comparanda" class="comparanda-target-container">><div id="comparanda-list"></div>\
         <select id="project-selector"></select>\
         <div id="project-strip"></div></div>');
-	$(document.body).append(complist);
+        $(document.body).append(complist);
 
-	var project_box_html = '\
+        var project_box_html = '\
 <div id="comp-templates">\
 <div id="project-box" class="project-box">\
 <div class="project-box-title"></div>\
@@ -53,88 +55,83 @@ describe('comparanda_page  functional  tests',function(){
 <div class="project-box-item-caption"></div>\
 </div>\
 </div>'
-	project_box_fixture = $(project_box_html);
-	$(document.body).append(project_box_fixture);
+        project_box_fixture = $(project_box_html);
+        $(document.body).append(project_box_fixture);
 
-	make_projects();
-	grid.load();
-    });
+        make_projects();
+        grid.load();
+      });
 
-    
-    it('grid.load',function(){
-	
+      it('grid.load', function() {
 
+        expect($("#comparanda-list div").length).toEqual(640);
 
-	expect($("#comparanda-list div").length).toEqual(640);
+      })
 
-	
-    })
+      it('project_strip', function() {
 
-    it('project_strip',function(){
-	
-	comp.project_strip.load();
-	expect($('.project-box').length).toEqual(7);
+        comp.project_strip.load();
+        expect($('.project-box').length).toEqual(7);
 
-    })
+      })
 
-    it('project_strip click',function(){
-	comp.project_strip.load();
-	var el = $('.project-box')[0];
+      it('project_strip click', function() {
+        comp.project_strip.load();
+        var el = $('.project-box')[0];
         $(el).click();
-	expect($(el).hasClass("project-box-selected")).toBeTruthy();
-    })
+        expect($(el).hasClass("project-box-selected")).toBeTruthy();
+      })
 
-    it('project_strip click other project',function(){
-	comp.project_strip.load();
-	
-	var el = $('.project-box')[0];
-	var el2 = $('.project-box')[1];
+      it('project_strip click other project', function() {
+        comp.project_strip.load();
+
+        var el = $('.project-box')[0];
+        var el2 = $('.project-box')[1];
         $(el).click();
-	
-	expect($(el2).hasClass("project-box-selected")).toBeFalsy();
-    })
 
-    it('project_toggle',function(){
+        expect($(el2).hasClass("project-box-selected")).toBeFalsy();
+      })
 
-	comp.project_toggle();
-	var sel = "#project-selector option";
-	var project_number = ure_projects.list().length;
-	expect($(sel).length).toEqual(project_number);
-    })
+      it('project_toggle', function() {
 
-    
-    it('select project strip',function(){
-	comp.project_strip.load();
-	comp.project_toggle();
-	var sel = "#project-selector option";
+        comp.project_toggle();
+        var sel = "#project-selector option";
+        var project_number = ure_projects.list().length;
+        expect($(sel).length).toEqual(project_number);
+      })
 
-	$(".comparanda-target-container").show();
-	$($(sel)[3]).select();	
+      it('select project strip', function() {
+        comp.project_strip.load();
+        comp.project_toggle();
+        var sel = "#project-selector option";
+
+        $(".comparanda-target-container").show();
+        $($(sel)[3]).select();
         var out = $(sel).filter(":selected").length;
-	console.log(out);
-	var els = $(".comparanda-target-container:hidden");
-	var els2 = $(".comparanda-target-container");
-	console.log(els.length);
-	console.log(els2.length);
-	console.log("=====");
-	$(".comparanda-target-container").hide();
-	var els = $(".comparanda-target-container:hidden");
-	var els2 = $(".comparanda-target-container");
-	console.log(els.length);
-	console.log(els2.length);
-	
-    })
+        console.log(out);
+        var els = $(".comparanda-target-container:hidden");
+        var els2 = $(".comparanda-target-container");
+        console.log(els.length);
+        console.log(els2.length);
+        console.log("=====");
+        $(".comparanda-target-container").hide();
+        var els = $(".comparanda-target-container:hidden");
+        var els2 = $(".comparanda-target-container");
+        console.log(els.length);
+        console.log(els2.length);
 
-    it('',function(){
+      })
 
-    })
+      it('', function() {
 
-    afterEach(function(){
+      })
 
-	complist.remove();
-	complist = null;
-	project_box_fixture.remove();
-	project_box_fixture = null;
+      afterEach(function() {
+
+        complist.remove();
+        complist = null;
+        project_box_fixture.remove();
+        project_box_fixture = null;
+      });
+
     });
-
-});

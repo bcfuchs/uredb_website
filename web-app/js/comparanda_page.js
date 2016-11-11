@@ -82,8 +82,10 @@
    * 
    * 
    */
+  
   var project_strip = (function() {
     var myprojects = window.ure_projects;
+    var trash = [];
     var config = {
       component_selector : "#project-strip"
     };
@@ -104,14 +106,14 @@
      */
     function show_project_items(project) {
       
-	console.log("project: " + project);
+      console.log("project: " + project);
       // set the selected project in the persistent object
       myprojects.current(project);
 
       // get all the accnums for this project.
       var accnums =  myprojects.get_accnums(project);
-	console.log(accnums);
-	$(".comparanda-target-container").show();
+      console.log(accnums);
+      $(".comparanda-target-container").show();
       if (project === "--all--" || typeof project === 'undefined')
         return 0;
       $(".comparanda-target-container").each(function() {
@@ -124,12 +126,68 @@
         }
 	  
       });
-	console.log( $(".comparanda-target-container:hidden").length);
-	console.log( $(".comparanda-target-container"  ).length);
-
     }
       
       window.ure_comp_show_project_items = show_project_items;
+      /***************************************************************************
+       * 
+       * @memberOf comparanda_page.project_strip_component
+       * 
+       */
+      
+      function update() {
+        
+        
+      }
+      /***************************************************************************
+       * 
+       * @memberOf comparanda_page.project_strip_component
+       * -remove the project
+       * -warn  
+       * -update the component
+       * 
+       */
+      
+      function onDragOut(e){
+        console.log("onDragOut")
+        var project; 
+        project = $(this).data('ure-project');
+        //TODO warn-modal promise. 
+        // data change + UI change
+        var project_el = $(this);
+        
+        // TODO project_el shoudl be focus. 
+        remove_project(project,project_el);
+        project_el.remove();
+        project_el = null;
+        
+      }
+      /***************************************************************************
+       * 
+       * @memberOf comparanda_page.project_strip_component
+       */
+      
+      function _trash(el,data,type) {
+        var millis = new Date().getTime();
+        trash.push({el:el,time:millis,data:data, type:type});
+        return millis; 
+      }
+      /***************************************************************************
+       * 
+       * @memberOf comparanda_page.project_strip_component
+       * 
+       * puts project in the trash. 
+       * data: tag project as trash. Keep the data until trash is emptied. 
+       */
+      
+      function remove_project(project,el) {
+        console.log("removing project " + project);
+        var type = 'project';
+        var data = ure_project.get_project(project);
+        _trash(el,data,type);
+      //  return ure_projects.remove(project);
+        
+      }
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
@@ -176,6 +234,7 @@
       for (var i = 0, z = projects.length; i < z; i++) {
         var box = $("#project-box").clone().attr('id', '');
         var project = projects[i];
+        $(box).attr('id',project+"_box");
         $(box).attr('data-ure-project', project);
         $(box).find(".project-box-title").html(project);
 
@@ -198,6 +257,36 @@
       setup_project_strip();
       
     };
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * 
+     * 
+     */
+    function _project_mover(e){
+      console.log("hi there")
+      var out = $(this).clone().addClass("image-drag-helper");
+      return out;
+      
+      
+    }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * -- prototype. 
+     * 
+     */
+    function setDraggable(selector,stop, snapto_selector) {
+      console.log('setting draggable  for ' + selector)
+      $(selector).draggable({
+        snap : snapto_selector,
+        stop: stop,
+        cursor : "hand",
+        snapTolerance : 1000,
+        scope : "project_strip",
+        helper : _project_mover
+      });
+    }
     
     /***************************************************************************
      * 
@@ -217,6 +306,7 @@
           display_selected_project(el);
 
         });
+        setDraggable(".project-box",onDragOut, "#comparanda-main")
       });
 
     }
@@ -245,7 +335,11 @@
       set : set_project,
       selected:config.selected
     };
-
+ return {
+   
+   
+   
+   }
   })();
 // todo -- put this stuff at the end!!!
 window.ure_project_strip = project_strip;

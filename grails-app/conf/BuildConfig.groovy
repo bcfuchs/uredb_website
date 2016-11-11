@@ -59,7 +59,8 @@ grails.project.dependency.resolution = {
 
     }
     plugins {
-        runtime ":resources:1.2.1"
+        compile ":resources:1.2.1"
+  //      compile ":closure-compiler:0.9.2"
         compile ":spring-security-core:1.2.7.3"
         compile ":spring-security-ui:0.2"
         compile ":mail:1.0.1";
@@ -73,6 +74,7 @@ grails.project.dependency.resolution = {
         build ":jetty:2.0.3"
         runtime ":database-migration:1.3.8"
         compile (":cache:1.1.2")  { excludes ":servlet-api:" }
+     
 
 
     }

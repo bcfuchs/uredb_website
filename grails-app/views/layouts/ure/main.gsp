@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<%@ page import="java.util.Properties"%>
+<!DOCTYPE html><%@ page import="java.util.Properties"%>
 <html lang="en">
 <!-- main.tmpl -->
 <head>
@@ -19,17 +18,8 @@
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
 <g:layoutHead />
-<% def uredb_wskey = System.getenv("WSKEY");
-if (uredb_wskey == null) {
-    uredb_wskey = System.getProperty("WSKEY");
-}
-%>
-<% 
-def gapi_client_id = System.getenv("GAPI_CLIENT_ID");
-if (gapi_client_id == null) {
-    gapi_client_id = System.getProperty("GAPI_CLIENT_ID");
-}
-%>
+<% def uredb_wskey = System.getenv("WSKEY");if (uredb_wskey == null) { uredb_wskey = System.getProperty("WSKEY");}%>
+<% def gapi_client_id = System.getenv("GAPI_CLIENT_ID");if (gapi_client_id == null) {gapi_client_id = System.getProperty("GAPI_CLIENT_ID");}%>
 <script>
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
