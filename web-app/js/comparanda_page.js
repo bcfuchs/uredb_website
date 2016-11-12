@@ -72,10 +72,11 @@
     }
     return {
       load : load,
-      config : config
-
+	config : config,
+	
     }
   })();
+    
   /***************************************************************************
    * 
    * @memberOf comparanda_page.project_strip_component
@@ -149,17 +150,18 @@
        */
       
       function onDragOut(e){
-        console.log("onDragOut")
-        var project; 
-        project = $(this).data('ure-project');
-        //TODO warn-modal promise. 
-        // data change + UI change
-        var project_el = $(this);
-        
-        // TODO project_el shoudl be focus. 
-        remove_project(project,project_el);
-        project_el.remove();
-        project_el = null;
+          console.log("onDragOut")
+          var project; 
+          project = $(this).data('ure-project');
+
+          //TODO warn-modal promise. 
+          // data change + UI change
+          var project_el = $(this);
+      
+          // TODO project_el shoudl be focus. 
+	  
+          remove_project(project,project_el);
+
         
       }
       /***************************************************************************
@@ -181,11 +183,17 @@
        */
       
       function remove_project(project,el) {
-        console.log("removing project " + project);
-        var type = 'project';
-        var data = ure_project.get_project(project);
-        _trash(el,data,type);
-      //  return ure_projects.remove(project);
+	  if (typeof project === 'undefined')
+	      throw new TypeError('no project specified);
+	  
+          var type = 'project';
+	  // exception --- project not found. Unlikely
+          var data = ure_projects.get(project);
+          _trash(el.clone(),data,type);
+	  el.remove();
+          el = null;
+	  
+	  
         
       }
     /***************************************************************************
@@ -256,7 +264,7 @@
 
       setup_project_strip();
       
-    };
+    }; // make_projects_strip
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
@@ -277,7 +285,7 @@
      * 
      */
     function setDraggable(selector,stop, snapto_selector) {
-      console.log('setting draggable  for ' + selector)
+//      console.log('setting draggable  for ' + selector)
       $(selector).draggable({
         snap : snapto_selector,
         stop: stop,
@@ -329,11 +337,15 @@
       make_projects_strip(); 
     }
     return {
-      config : config,
-      load:load,
-      add : add,
-      set : set_project,
-      selected:config.selected
+	config : config,
+	load:load,
+	add : add,
+	set : set_project,
+	remove_project: remove_project,
+	_trash:_trash,
+	onDragOut: onDragOut,
+	update:update,
+	selected:config.selected
     };
  return {
    
