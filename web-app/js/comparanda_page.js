@@ -1,4 +1,4 @@
-!function() {
+! function() {
 
   /**
    * outline eu_items object for data.js
@@ -184,7 +184,7 @@
       
       function remove_project(project,el) {
 	  if (typeof project === 'undefined')
-	      throw new TypeError('no project specified);
+	      throw new TypeError('no project specified');
 	  
           var type = 'project';
 	  // exception --- project not found. Unlikely
@@ -306,9 +306,11 @@
       var pr = window.ure_projects;
       $(document).ready(function() {
 
-        $(".project-box").click(function() {
-          var el = $(this)
-          if (this.constructor.name === 'jQuery.Event') {
+	  
+          $(".project-box").click(function() {
+              var el = $(this)
+
+              if (this.constructor.name === 'jQuery.Event') {
             el = $(this).currentTarget;
           }
           display_selected_project(el);

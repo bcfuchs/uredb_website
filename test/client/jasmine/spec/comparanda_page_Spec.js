@@ -105,31 +105,22 @@ describe(
             comp.project_strip.load();
             comp.project_toggle();
             var sel = "#project-selector option";
-
             $(".comparanda-target-container").show();
             $($(sel)[3]).select();
             var out = $(sel).filter(":selected").length;
-            console.log(out);
-            var els = $(".comparanda-target-container:hidden");
-            var els2 = $(".comparanda-target-container");
-            console.log(els.length);
-            console.log(els2.length);
-            console.log("=====");
-            $(".comparanda-target-container").hide();
-            var els = $(".comparanda-target-container:hidden");
-            var els2 = $(".comparanda-target-container");
-            console.log(els.length);
-            console.log(els2.length);
+	    expect(out).toEqual(1);
 
 	})
 
-	it('', function() {
-
+	it('show project items --all--', function() {
+	    var project = "--all--";
+	    expect(ure_comp_show_project_items(project)).toEqual(0);
 	})
 	it('remove_project no params', function() {
-	    console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
 	    expect(comp.project_strip.remove_project).toThrow();
 	})
+	
 	it('remove_project', function() {
 
 	    var project = ure_projects.list()[0];
@@ -148,8 +139,15 @@ describe(
 	    var res2  = $(".project-box[data-ure-project='"+project+"']")
 	    expect(res2.length).toEqual(total-1);
 	})
-	it('', function() {
+	it('test event called', function() {
+            comp.project_strip.load();	    
+		console.log("$$$$$----------$$$$$$$$$$$");
+	    var test = function() {
 
+		$(".project-box")[0].click();
+	    }
+	    test.call($.Event());
+	    
 	})
 
 	afterEach(function() {
