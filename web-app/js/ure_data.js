@@ -367,7 +367,8 @@
 	return domain.clone();
     }
     ;
-    // delete a project put it in _old
+    // delete a project 
+    
     /***************************************************************************
      * @memberOf ure_data.projects
      */
