@@ -190,7 +190,7 @@ class UrlMappings {
 
         "/$controller/$action?/$id?"{
 
-            System.err.println "action: $action ---"
+  
             constraints { controller(matches:/^((?!(api|mobile|web|test|admin)).*)$/) }
         }
         /******** 
