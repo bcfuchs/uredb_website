@@ -294,7 +294,7 @@ window.ure_eu_comparanda = {}
 		  //     var eu_items_ls = json;
 		  
 
-		  var eu_items_ls =  ure_eu_items.get_all();
+                var eu_items_ls =  ure_eu_items.get_all();
 
                 // start an array for this accnum if none
 

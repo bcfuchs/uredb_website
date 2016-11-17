@@ -12,9 +12,28 @@
    */
 
   var ure_gapi = function(filename) {
-    // TODO -- need sign-in hook for init data
-    var app_id = window.gapi_client_id;
-    var appData = gdad(filename, app_id);
+    var config, appData, app_id;
+    config = {
+        isAnonUser:false
+    };
+    // set to no gplus if this option is selected
+    // default is to assume we want to continue towards log in
+    if ('ure' in window && 'isAnonUser' in window.ure && window.ure.isAnonUser === true) 
+      config.isAnonUser = true;
+    
+     app_id = window.gapi_client_id;
+   
+    if (typeof gdad !== 'undefined' && config.isAnonUser === false) {
+      appData = gdad(filename, app_id); 
+    }
+    else {
+      // noops for anon users
+      appData = {
+          save:function(){},
+          read:function(){}
+      }
+    }
+    
     /*****************************************************************************
      * 
      * @memberOf ure_data.gapi
@@ -80,7 +99,8 @@
       save : save,
       read : read,
       onSignIn : on_sign_in,
-      onReadComplete:on_read_complete
+      onReadComplete:on_read_complete,
+      config:config
     };
   };
 
@@ -195,8 +215,8 @@
         console.log(err);
 
       }
-	  gapi.onSignIn(function() {
-	      
+     // if user signs in, sync with google plus
+	  gapi.onSignIn(function() {  
 	    gapi.read(read_success, read_fail);
 	  });
       var data = storage.get(domain_store);
@@ -661,7 +681,7 @@
      * @memberOf ure_data.eu_items
      */
     function get_all() {
-
+    
       return domain.data.eu_items;
     }
     /***************************************************************************
