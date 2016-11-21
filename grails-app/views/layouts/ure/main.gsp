@@ -24,6 +24,7 @@
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
 window.ure = {}
+window.ure.isAnonUser = true;
 </script>
 <meta name="uredb_wskey" content="${uredb_wskey}">
 <meta name="google-signin-client_id" content="${gapi_client_id}" />
@@ -60,6 +61,7 @@ window.ure = {}
 	
 	<div id="wrapper">
 		<g:render template="/ure/horiz"></g:render>
+		
 		<div id="blocky" class="container">
 			<div class="row">
 				<div id="left_nav" class="col-md-2">

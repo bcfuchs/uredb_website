@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="${resource(dir:'css/ure',file:'home2.css')}" />
 </head>
 <body>
+	
 	<div id="thumb-data" style="display: none;"></div>
 	<img id="thumbmap" usemap="#thumbs_new2" src="http://uredb.reading.ac.uk/ure/pixdir/thumbs_fit.jpg" style="border: 0;"
 		alt="Image map" />

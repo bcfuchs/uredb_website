@@ -30,8 +30,8 @@
       // noops for anon users
       appData = {
           save:function(){},
-          read:function(){}
-      }
+          read:function(){ return new Promise(function(res,rej){});}
+      };
     }
     
     /*****************************************************************************
@@ -506,9 +506,9 @@
       gapi.onSignIn(function() {
         gapi.read(read_success, read_fail);
       });
-      //      
-      // var data = storage.get(domain_store);
-      // domain.data.eu_items = data;
+      // get the local items if any--but replace them on gapi sign-in      
+      var data = storage.get(domain_store);
+      domain.data.eu_items = data;
       var meta = storage.get(meta_store);
       domain['data']['meta'] = meta;
 

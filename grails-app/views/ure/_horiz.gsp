@@ -4,7 +4,8 @@
 			<img src="${resource(dir:'assets',file:'web-black.gif')}" alt="[ University Home Page ]"
 				style="float: left; margin: 0 0 0 0; border: 0;">
 		</a>
-		<g:render template="/ure/gapi_login"></g:render>
+		
+		<g:render template="/ure/login_modal"></g:render>
 		<a href="http://www.rdg.ac.uk/Ure/index.php">
 			<img src="${resource(dir:'images',file:'urelogo1.gif')}" alt="[ Ure Museum Home Page ]"
 				style="float: right; margin: 0 0 0 0; border: 0;">

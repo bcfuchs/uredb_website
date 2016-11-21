@@ -1662,7 +1662,7 @@ a#extlink:link {
 }
 
 iframe[src^="https://apis.google.com"] {
-  display: none;
+//  display: none;
 }
 
 ._________________________ Media _________________________ {
