@@ -59,11 +59,11 @@
 }
 </style>
 <div id="login-link-container" class="login-button-wrapper">
-	+
-	<div id="login-button-wrapper" class="login-link">
+	
+	<div id="login-button-wrapper" class="login-link">+
 		<a id="login-button" data-toggle="modal" data-target="#login-modal"> login </a>
 	</div>
-	<div id="logged-in-info2" class="login-link">
+	<div id="logged-in-info2" class="login-link">You are signed in as 
 		<span id="gplus-name"></span>
 	</div>
 	<div id="logout-button" class="login-link">
@@ -168,7 +168,11 @@
        		  logoutButtonSelector: "#logout-button",
        		  loggedInInfoSelector:"#logged-in-info2"
          		  };
-    
+    function init(){
+      $(config.loginButtonSelector).show();
+      $(config.logoutButtonSelector).hide();
+      $(config.loggedInInfoSelector).hide();
+     }
     function onSignInFail(){
 		alert("failed to sign you in")
       }
@@ -191,6 +195,7 @@
 	  _signInSignal() 
 	  $(config.loginButtonSelector).hide();
 	  $(config.logoutButtonSelector).show();
+	  $(config.loggedInInfoSelector).show();
 	  
 	}
   	
@@ -200,6 +205,7 @@
           alert("Signed out!")
           $(config.loginButtonSelector).show();
           $(config.logoutButtonSelector).hide();
+          $(config.loggedInInfoSelector).hide();
           _signOutSignal()
       });
     }
@@ -215,14 +221,15 @@
 			alert(name);
 		});
     	}
-
-   
+	// TODO 
+   	init();
     window.onGoogleSignIn = onSignIn
     window.onGoogleSignOut = onSignOut;
     window.onGoogleSignInFail = onSignInFail
 
   	return {
-		config:configs
+		config:config,
+		init:init
     	}
 
  })();
