@@ -63,7 +63,12 @@
 	<div id="login-button-wrapper" class="login-link">
 		<a id="login-button" data-toggle="modal" data-target="#login-modal"> login </a>
 	</div>
-	<div id="logged-in-info" class="login-link">Logged in info</div>
+	<div id="logged-in-info2" class="login-link">
+		<span id="gplus-name"></span>
+	</div>
+	<div id="logout-button" class="login-link">
+	<a href="#" onclick="onGoogleSignOut();">Sign out</a>
+	</div>
 </div>
 <style>
 #new-project-button:hover {
@@ -106,6 +111,7 @@
 						<span class="g-signin2" 
 							data-cookiepolicy="single_host_origin" 
 							data-onsuccess="onGoogleSignIn"
+							data-onfailure="onGoogleSignInFail"
 							data-theme="dark"
 							data-height="50"
 							data-width="50"
@@ -139,50 +145,89 @@
    *
    */
   !function() {
+/**
+ * Gplus login behaviour: 
+ * - on init: 
+   	    
+   	     check if session logged in. yes: login, no: logout
+   	- on login:
+     	show user info + log out link
+     	send login signal 
+    - on logout:
+      	show log in link
+      	send logged out signal	
 
-    var signedIn = function() {
-      console.log("signed in to google, my friend");
-    }
+      	
+ */
 
-    var signInSignal = function() {
-      var e = $.Event('ure_gapi_signed_in');
-      $(window).trigger(e);
-
-    }
-	var on_g_signin = function(){
-	  alert("signed in!!!!!!")
-     var auth2 = gapi.auth2.getAuthInstance();
-      var googleUser = auth2.currentUser.get(); 
-	  var profile = googleUser.getBasicProfile();
-	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-	  console.log('Name: ' + profile.getName());
-	  console.log('Image URL: ' + profile.getImageUrl());
-	  console.log('Email: ' + profile.getEmail());
-       
+ var gplus_login = (function(){
+   var user,auth2,id,name,email,nameSelector,config;
    
-
-	}
-    var on3 = function() {
-      alert("sign in callback")
-      gapi.load('auth2', function() {
-        gapi.auth2.init({
-          fetch_basic_profile : false,
-          scope : 'https://www.googleapis.com/auth/plus.login'
-
-        }).then(function() {
-          var auth2 = gapi.auth2.getAuthInstance();
-          //auth2.isSignedIn.listen(function(d){console.log("signed in!<----")});
-          //console.log(auth2.currentUser.get().getGrantedScopes());
-          // broadcast the signed-in signal
-          signInSignal();
-
-        });
-      });
-    };
-
-    window.on3 = on3;
-    window.onGoogleSignIn = on_g_signin;
+   config = { nameSelector:"#gplus-name",
+       		  loginButtonSelector: "#login-button-wrapper",
+       		  logoutButtonSelector: "#logout-button",
+       		  loggedInInfoSelector:"#logged-in-info2"
+         		  };
     
+    function onSignInFail(){
+		alert("failed to sign you in")
+      }
+
+    function _signInSignal() {
+ 	 	 var e = $.Event('ure_gapi_signed_in');
+     	$(window).trigger(e);
+
+ 		}
+    function _signOutSignal() {
+  	 	 var e = $.Event('ure_gapi_signed_out');
+      	$(window).trigger(e);
+  		}
+ 		
+    function onSignIn(){
+	  alert("Signed in!")
+      auth2 = gapi.auth2.getAuthInstance();
+      user = auth2.currentUser.get(); 
+	  setProfileInfo();
+	  _signInSignal() 
+	  $(config.loginButtonSelector).hide();
+	  $(config.logoutButtonSelector).show();
+	  
+	}
+  	
+    function onSignOut() {
+      auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+          alert("Signed out!")
+          $(config.loginButtonSelector).show();
+          $(config.logoutButtonSelector).hide();
+          _signOutSignal()
+      });
+    }
+    
+  	function setProfileInfo() {
+  	  	var profile = user.getBasicProfile();
+		id = profile.getId();	
+		name = profile.getName();
+		email = profile.getEmail();	
+		
+		$(document).ready(function(){
+			$(config.nameSelector).html(name);
+			alert(name);
+		});
+    	}
+
+   
+    window.onGoogleSignIn = onSignIn
+    window.onGoogleSignOut = onSignOut;
+    window.onGoogleSignInFail = onSignInFail
+
+  	return {
+		config:configs
+    	}
+
+ })();
+
+
     var init_login_box = function() {
       var signal = 'ure_gapi_signed_in';
       $(window).on(signal, function(e, d) {

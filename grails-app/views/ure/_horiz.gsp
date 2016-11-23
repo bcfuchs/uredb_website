@@ -14,6 +14,7 @@
 		<a name="top"></a>
 		<a href="#main" class="skip">[ Skip main navigation menu ]</a>
 	</div>
+	
 	<div id="top2_nav">
 		<h1>Ure Museum Database</h1>
 	</div>
