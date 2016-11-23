@@ -29,7 +29,7 @@ window.ure.isAnonUser = true;
 <meta name="uredb_wskey" content="${uredb_wskey}">
 <meta name="google-signin-client_id" content="${gapi_client_id}" />
 <script src="${resource(dir:'js/vendor/jquery',file:'jquery.storageapi.js')}"></script>
-<script src="https://apis.google.com/js/client:platform.js"></script>
+<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 <script src="${resource(dir:'js/vendor/gdad',file:'gdad.js')}"></script>
 <script src="${resource(dir:'js',file:'ure_data.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>

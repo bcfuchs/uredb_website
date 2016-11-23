@@ -63,7 +63,7 @@
 	<div id="login-button-wrapper" class="login-link">
 		<a id="login-button" data-toggle="modal" data-target="#login-modal"> login </a>
 	</div>
-	<div id="logged-in-info" " class="login-link">Logged in info</div>
+	<div id="logged-in-info" class="login-link">Logged in info</div>
 </div>
 <style>
 #new-project-button:hover {
@@ -103,9 +103,15 @@
 </style>
 				<div class="login-choice-container">
 					<div id="g-signin-button" class="login-choice">
-						<span class="g-signin" data-cookiepolicy="single_host_origin" data-callback="on3"
+						<span class="g-signin2" 
+							data-cookiepolicy="single_host_origin" 
+							data-onsuccess="onGoogleSignIn"
+							data-theme="dark"
+							data-height="50"
+							data-width="50"
 							data-clientid="851919155896-p7ltpoc45oetrmpen0aghenut5am6vcu.apps.googleusercontent.com"
-							data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/drive.appdata"> </span>
+							data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/drive.appdata"> 
+						</span>
 					</div>
 					<div id="no-login" type="button" class="login-choice btn btn-primary">
 					No thanks!
@@ -135,7 +141,7 @@
   !function() {
 
     var signedIn = function() {
-      console.log("signedIn");
+      console.log("signed in to google, my friend");
     }
 
     var signInSignal = function() {
@@ -143,8 +149,21 @@
       $(window).trigger(e);
 
     }
+	var on_g_signin = function(){
+	  alert("signed in!!!!!!")
+     var auth2 = gapi.auth2.getAuthInstance();
+      var googleUser = auth2.currentUser.get(); 
+	  var profile = googleUser.getBasicProfile();
+	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	  console.log('Name: ' + profile.getName());
+	  console.log('Image URL: ' + profile.getImageUrl());
+	  console.log('Email: ' + profile.getEmail());
+       
+   
 
+	}
     var on3 = function() {
+      alert("sign in callback")
       gapi.load('auth2', function() {
         gapi.auth2.init({
           fetch_basic_profile : false,
@@ -162,6 +181,8 @@
     };
 
     window.on3 = on3;
+    window.onGoogleSignIn = on_g_signin;
+    
     var init_login_box = function() {
       var signal = 'ure_gapi_signed_in';
       $(window).on(signal, function(e, d) {
