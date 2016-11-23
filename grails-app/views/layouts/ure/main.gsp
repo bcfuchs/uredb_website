@@ -32,6 +32,7 @@ window.ure.isAnonUser = true;
 <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 <script src="${resource(dir:'js/vendor/gdad',file:'gdad.js')}"></script>
 <script src="${resource(dir:'js',file:'ure_data.js')}"></script>
+<script src="${resource(dir:'js',file:'ure_gapi.js')}"></script>
 <script src="${resource(dir:'js/vendor/filesaverjs',file:'FileSaver.js')}"></script>
 <script src="${resource(dir:'js',file:'egg.js?v=2')}"></script>
 <script src="${resource(dir:'js',file:'lighttable.js')}"></script>
