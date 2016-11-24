@@ -17,7 +17,9 @@
 <script src="//code.jquery.com/jquery-1.11.3.js"></script>
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A=="
+	crossorigin="anonymous"></script>
 <g:layoutHead />
 <% def uredb_wskey = System.getenv("WSKEY");if (uredb_wskey == null) { uredb_wskey = System.getProperty("WSKEY");}%>
 <% def gapi_client_id = System.getenv("GAPI_CLIENT_ID");if (gapi_client_id == null) {gapi_client_id = System.getProperty("GAPI_CLIENT_ID");}%>
@@ -25,7 +27,7 @@
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
 window.ure = {}
-window.ure.isAnonUser = true;
+window.ure.isAnonUser = false;  // set to false in ure_gapi if user logs in.
 </script>
 <meta name="uredb_wskey" content="${uredb_wskey}">
 <meta name="google-signin-client_id" content="${gapi_client_id}" />
@@ -40,7 +42,6 @@ window.ure.isAnonUser = true;
 <script src="${resource(dir:'js',file:'messages.js')}"></script>
 <script src="${resource(dir:'js',file:'media.js')}"></script>
 <script src="${resource(dir:'js',file:'global.js?v=2')}"></script>
-
 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -60,10 +61,8 @@ window.ure.isAnonUser = true;
 	<sec:ifLoggedIn>
 		<g:render template="/shared/ure/topnav"></g:render>
 	</sec:ifLoggedIn>
-	
 	<div id="wrapper">
 		<g:render template="/ure/horiz"></g:render>
-		
 		<div id="blocky" class="container">
 			<div class="row">
 				<div id="left_nav" class="col-md-2">
@@ -124,9 +123,5 @@ window.ure.isAnonUser = true;
 	<g:if test="${ga_script == true }">
 		<g:render template="/ure/ga"></g:render>
 	</g:if>
-	
-
-
-
 </body>
 </html>

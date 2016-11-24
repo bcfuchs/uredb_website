@@ -75,6 +75,8 @@
     function on_sign_in(cb) {
       var signal = 'ure_gapi_signed_in'
       $(window).on(signal, function(e, d) {
+        alert("got signal " + signal)
+        console.log(cb)
         cb();
       });
 
@@ -498,7 +500,7 @@
 
         domain.data.eu_items = data;
         make_pic_index();
-        storage.set(domain_store, domain.data.eu_items);
+        storage.set(domain_store, JSON.stringify(domain.data.eu_items));
       }
       var read_fail = function(err) {
         console.log(err);

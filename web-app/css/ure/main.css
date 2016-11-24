@@ -1660,9 +1660,9 @@ a#extlink:link {
 ._________________________ GAPI _________________________ {
 	
 }
-
+// hide the gplus welcome back pop-up
 iframe[src^="https://apis.google.com"] {
-//  display: none;
+  display: none;
 }
 
 ._________________________ Media _________________________ {

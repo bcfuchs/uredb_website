@@ -43,6 +43,7 @@
       alert("Signed in!");
       auth2 = gapi.auth2.getAuthInstance();
       user = auth2.currentUser.get();
+    
       setProfileInfo();
       _signInSignal();
       $(config.loginButtonSelector).hide();
