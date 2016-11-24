@@ -75,8 +75,7 @@
     function on_sign_in(cb) {
       var signal = 'ure_gapi_signed_in'
       $(window).on(signal, function(e, d) {
-        alert("got signal " + signal)
-        console.log(cb)
+        
         cb();
       });
 
