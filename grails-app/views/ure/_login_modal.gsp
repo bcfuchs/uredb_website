@@ -1,4 +1,3 @@
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 #login-link-container {
 	position: relative;
@@ -13,6 +12,7 @@
 	top: 20px;
 	cursor: pointer;
 }
+
 .login-link {
 		display: inline-block;
 }
@@ -21,20 +21,20 @@
 	color: black;
 }
 
-.modal-body .form-horizontal .col-sm-2,.modal-body .form-horizontal .col-sm-10
+.login-modal-body .form-horizontal .col-sm-2,.login-modal-body .form-horizontal .col-sm-10
 	{
 	width: 100%
 }
 
-.modal-body .form-horizontal .control-label {
+.login-modal-body .form-horizontal .control-label {
 	text-align: left;
 }
 
-.modal-body .form-horizontal .col-sm-offset-2 {
+.login-modal-body .form-horizontal .col-sm-offset-2 {
 	margin-left: 15px;
 }
 
-.modal-title {
+.login-modal-title {
 	color: black;
 	font-size: 18pt;
 }
@@ -58,6 +58,7 @@
     font-size: 12px;
 }
 </style>
+
 <div id="login-link-container" class="login-button-wrapper">
 	
 	<div id="login-button-wrapper" class="login-link">+
@@ -70,28 +71,20 @@
 	<a href="#" onclick="onGoogleSignOut();">Sign out</a>
 	</div>
 </div>
-<style>
-#new-project-button:hover {
-	cursor: pointer;
-}
 
-#compwrap {
-	margin-top: 40px;
-}
-</style>
 <script>
   $(document).ready(function() {
     //reposition the new project button
 
     $(".login-choice").click(function() {
-      $("#login-modal").modal('hide');
+       $("#login-modal").modal('hide');
 
     })
 
   })
 </script>
 <!-- Modal -->
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal-label" aria-hidden="true">
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal-label" are>
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<!-- Modal Header -->
@@ -100,12 +93,10 @@
 					<span aria-hidden="true">&times;</span>
 					<span class="sr-only">Close</span>
 				</button>
-				<h4 class="modal-title" id="login-modal-label">Log In</h4>
+				<h4 class="login-modal-title" id="login-modal-label">Log In</h4>
 			</div>
 			<!-- Modal Body -->
-			<div class="modal-body">
-				<style>
-</style>
+			<div class="login-modal-body">
 				<div class="login-choice-container">
 					<div id="g-signin-button" class="login-choice">
 						<span class="g-signin2" 
