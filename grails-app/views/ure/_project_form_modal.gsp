@@ -1,40 +1,11 @@
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style>
-#myModalNorm {
-	color:black;
-}
-.modal-body .form-horizontal .col-sm-2,
-.modal-body .form-horizontal .col-sm-10 {
-    width: 100%
-}
 
-.modal-body .form-horizontal .control-label {
-    text-align: left;
-}
-.modal-body .form-horizontal .col-sm-offset-2 {
-    margin-left: 15px;
-}
-.modal-title {
-color: black;
-font-size: 18pt;
-}
-</style>
+
+
 <span id="new-project-button-wrapper">+
-<a id="new-project-button"  data-toggle="modal" data-target="#myModalNorm">
+<a id="new-project-button"  data-toggle="modal" data-target="#project-form-modal">
     Start a new  project
 </a>
 </span>
-<style>
-#new-project-button:hover {
-	cursor: pointer;
-
-}
-
-#compwrap {
-margin-top: 40px;
-
-}
-</style>
 <script>
 $(document).ready(function(){
 //reposition the new project button
@@ -61,11 +32,11 @@ $(document).ready(function(){
 		}
 		catch(e) {
 			alert(e)
-			}
+		}
 		// update the strip
 		// TODO
 		ure_project_strip.add(title);
-		$("#myModalNorm").modal('hide');
+		$("#project-form-modal").modal('hide');
 		
 	
 		
@@ -74,7 +45,7 @@ $(document).ready(function(){
 })
 </script>
 <!-- Modal -->
-<div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog" 
+<div class="modal fade" id="project-form-modal" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

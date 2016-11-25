@@ -1656,6 +1656,37 @@ a#extlink:link {
 	width: 100px;
 }
 /** END  Europeana Widget */
+._________________________ project form modal _________________________ {
+	
+}
+	#project-form-modal {
+		color:black;
+	}
+	#project-form-modal .modal-body .form-horizontal .col-sm-2,
+	#project-form-modal .modal-body .form-horizontal .col-sm-10 {
+	    width: 100%
+	}
+	
+	#project-form-modal .modal-body .form-horizontal .control-label {
+	    text-align: left;
+	}
+	#project-form-modal .modal-body .form-horizontal .col-sm-offset-2 {
+	    margin-left: 15px;
+	}
+	#project-form-modal .modal-title {
+		color: black;
+		font-size: 18pt;
+	}
+	#new-project-button:hover {
+		cursor: pointer;
+	
+	}
+	
+	#compwrap {
+	margin-top: 40px;
+	
+	}
+
 
 ._________________________ GAPI _________________________ {
 	
