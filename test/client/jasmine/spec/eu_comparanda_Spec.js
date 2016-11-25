@@ -53,20 +53,21 @@ describe('eu_comparanda  unit+functional  tests',function(){
 	eucomp.moveImage.call(testel);
 	fail();
     });
+
     
     it('view-comps click',function(){
 	$("#view-comps").click();
 	fail();
     })
     
-    it('',function(){
+    it('save comps as html',function(){
 	$("#save-comps-as-html").click();
 	fail();
     })
     
-    it('',function(){
+    it('load comps',function(){
 	$("#load-comps").click();
-		fail();
+	fail();
 
     })
     
@@ -114,11 +115,13 @@ describe('eu_comparanda  unit+functional  tests',function(){
 	fail();
     })
 
-    it('removecomp',function(){
+    it('remove comp',function(){
 	
 	eucomp.removecomp(thumb);
 	fail();
     })
+
+
     it('load_comparanda',function(){
 
 	eucomp.load_comparanda(eu_json);
@@ -133,6 +136,9 @@ describe('eu_comparanda  unit+functional  tests',function(){
 	eucomp.save_comparanda_as_json();
 
     });
+    
+
+
     
     afterEach(function(){
 	eugrid.remove();

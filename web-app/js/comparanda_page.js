@@ -240,11 +240,16 @@
         $("#project-strip-container").show();
       }
       for (var i = 0, z = projects.length; i < z; i++) {
+        
         var box = $("#project-box").clone().attr('id', '');
         var project = projects[i];
+        var project_title = project
+        if (project === "null") {
+          project_title = "unassigned"
+        }
         $(box).attr('id',project+"_box");
         $(box).attr('data-ure-project', project);
-        $(box).find(".project-box-title").html(project);
+        $(box).find(".project-box-title").html(project_title);
 
 
         // accession numbers
@@ -272,7 +277,7 @@
      * 
      */
     function _project_mover(e){
-      console.log("hi there")
+   
       var out = $(this).clone().addClass("image-drag-helper");
       return out;
       
@@ -303,14 +308,13 @@
      * 
      */
     function setup_project_strip () {
-      var pr = window.ure_projects;
+    
       $(document).ready(function() {
-
 	  
           $(".project-box").click(function() {
               var el = $(this)
 
-              if (this.constructor.name === 'jQuery.Event') {
+         if (this.constructor.name === 'jQuery.Event') {
             el = $(this).currentTarget;
           }
           display_selected_project(el);
@@ -320,12 +324,23 @@
       });
 
     }
-    
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * add a project to the strip
+     * 
+     */
     function add(project) {
       make_projects_strip();
-      set_project(project)
+      set_project(project);
     }
     
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     *  set the current project
+     * 
+     */
     function set_project(project) {
       if (project !== "") {
         // test -- empty sel set
@@ -335,25 +350,29 @@
       }
       
     }
+    
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * 
+     * 
+     */
     function load(){
       make_projects_strip(); 
     }
+   
     return {
-	config : config,
-	load:load,
-	add : add,
-	set : set_project,
-	remove_project: remove_project,
-	_trash:_trash,
-	onDragOut: onDragOut,
-	update:update,
-	selected:config.selected
+    	config : config,
+    	load:load,
+    	add : add,
+    	set : set_project,
+    	remove_project: remove_project,
+    	_trash:_trash,
+    	onDragOut: onDragOut,
+    	update:update,
+    	selected:config.selected
     };
- return {
-   
-   
-   
-   }
+
   })();
 // todo -- put this stuff at the end!!!
 window.ure_project_strip = project_strip;

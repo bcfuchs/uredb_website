@@ -1,145 +1,176 @@
-/** 
-* EU COMPARANDA 
-exports are: 
-  window.EuComparanda = EuComparanda;
-  window.comparanda_getEUdata = getEUdata;
-
-*/
+/**
+ * EU COMPARANDA functions for the projects strip and dnd of search items
+ * into/out of the strip
+ * 
+ * exports are: window.EuComparanda = EuComparanda; window.comparanda_getEUdata =
+ * getEUdata;
+ * 
+ */
 window.ure_eu_comparanda = {}
 
-! function() {
+!function() {
 
   /**
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
    */
-  
+
   var EuComparanda = function(accnum) {
-    var msg_json_broken = "can't read comparanda file...";
-    console.log("EuComparanda");
-    
+
+    var storage, eu_items, this_accnum, projects, config;
+    projects = {};
+    storage = $.localStorage;
+    eu_items = 'eu_items'
+    this_accnum = accnum; // from params
+    var myprojects = window.ure_projects; // projects DAO
+    config = {
+      msg_json_broken : "can't read comparanda file...",
+      eu_draggable_sel : "#euwidget .cell",
+
+      viewCompsSelector : "#view-comps",
+      saveCompsAsHtmlSelector : "#save-comps-as-html",
+      saveCompsAsJsonSelector : "#save-comps-as-json",
+      loadCompsSelector : "#load-comps",
+      clearCompsSelector : "#clear-comps",
+      manageCompsSelector : "#manage-related"
+    }
+
     function onSignedIn(cb) {
       var signal = 'ure_gapi_signed_in'
-        $(window).on(signal, function(e, d) {
+      $(window).on(signal, function(e, d) {
         cb();
-         });
-      
+      });
+
     }
 
     $(document)
         .ready(
             function() {
 
-              var storage, eu_items, this_accnum, eu_draggable_sel, projects;
-              projects = {}
-              storage = $.localStorage;
-              eu_draggable_sel = "#euwidget .cell"
-              eu_items = 'eu_items'
-              this_accnum = accnum;
-              var myprojects = window.ure_projects; // projects DAO
-              
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
                * 
                */
-              
-              var init_comp_buttons = function(){
+
+              var init_comp_buttons = function() {
                 /**
                  * bind functions to mini-dashboard
                  */
-                $("#view-comps").click(function() {
+                $(config.viewCompsSelector).click(function() {
                   var proj = myprojects.current();
                   var extra = ""
                   if (proj !== 'undefined')
-                    extra = "?project="+proj;
-                  window.location.href = "/comparanda"+extra;
+                    extra = "?project=" + proj;
+                  window.location.href = "/comparanda" + extra;
 
                 });
 
-                $("#save-comps-as-html").click(function() {
+                $(config.saveCompsAsHtmlSelector).click(function() {
                   save_comparanda_as_html();
                 });
 
-                $("#save-comps-as-json").click(function() {
+                $(config.saveCompsAsJsonSelector).click(function() {
                   save_comparanda_as_json();
                 });
 
-                $("#load-comps").click(function() {
+                $(config.loadCompsSelector).click(function() {
+
+                  $("#comps-file").toggle();
+                  $("#comps-file").show();
                   
-                  $("#comps-file").toggle();  
-                  $("#comps-file").show();  
-                  
-                 
                   document.getElementById('comps-file').addEventListener('change', load_comparanda_from_json, false);
 
                 });
 
-                $("#clear-comps").click(function() {
+                $(config.clearCompsSelector).click(function() {
                   var eu = getEUdata_new();
                   eu.remove_accnum(this_accnum);
-               //   delete eu[this_accnum]; // eu-data 1 
-               //   storage.set(eu_items, eu) // eu-data 2
+                  // delete eu[this_accnum]; // eu-data 1
+                  // storage.set(eu_items, eu) // eu-data 2
                   $("#comparanda-thumbs").html("");
                   $("#comparanda-thumbs").data('thumbs', "");
 
                 });
 
-                $("#manage-related").click(function() {
+                $(config.manageCompsSelector).click(function() {
                   window.location.href = "/manage/related"
 
                 });
 
-                
-                
               }
-            window.ure_init_comp_buttons = init_comp_buttons();
-            
+              window.ure_init_comp_buttons = init_comp_buttons;
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
                * 
                */
-              var init = function() {
-                init_comp_buttons();
-                /**
-                 * init load of data from storage
-                 */
-                // prevent freewall from showing image strip vertically.
-               // $("#europeana-section").delay(200).slideDown(1000);
-                
-                // attach iframeoverlay to body
+              var init_iframe = function() {
                 var ifr = $("#iframeOverlay").remove();
                 $('body').append(ifr);
-                var eu = getEUdata_new().get_all();  // eu-data
-                if (eu !== null) {
-                  load_comparanda(eu)
-                }
 
-                /***************************************************************
-                 * 
-                 * make the images draggable show tooltip on target when drag
-                 * starts
-                 */
+              }
+              /*****************************************************************
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               */
+              var init_tooltips = function() {
+                // TODO add a class to cell and use that
                 $("#euwidget .cell").each(function(v) {
                   $(this).attr("title", "drag me to comparanda to save!");
                   $(this).attr("data-toggle", "tooltip");
 
                 });
+
                 $('#euwidget .cell [data-toggle="tooltip"]').tooltip()
 
                 $("#euwidget .cell").hover(function() {
                   $(this).tooltip("show");
                   $("#comparanda").tooltip('show');
                 })
+
+              }
+              /*****************************************************************
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               */
+              var init_data = function() {
+                var eu = getEUdata_new().get_all(); // eu-data
+                if (eu !== null) {
+                  load_comparanda(eu)
+                }
+
+              }
+              /*****************************************************************
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * 
+               */
+              var init = function() {
+                // docready
+                // init the strip UI
+                init_comp_buttons();
+
+                // attach iframeoverlay to body
+                init_iframe();
+
+                // load the items
+                init_data();
+
+                // tooltips on draggable objects
+                init_tooltips();
+
               }// init
 
+              // run the init routine if the google data has been read.
+              // TODO or continue with local if anon user or timeout.
               var signal = 'ure_gapi_read_complete';
-                $(window).on(signal, function(e, d) {
-                  if (d.file === 'eu_items.js') {
-                    init();
-                  }
-                });
-             
+              $(window).on(signal, function(e, d) {
+                if (d.file === 'eu_items.js') {
+                  init();
+                }
+              });
 
               /**
                * 
@@ -147,34 +178,38 @@ window.ure_eu_comparanda = {}
                * @private
                */
               var moveImage = function(e) {
-                  console.log("moveImage");
-		  
-                  var url = $(this).attr('data-ure-image-url');
+
+                var url = $(this).attr('data-ure-image-url');
                 // var style = "background-image: url('" + url + "')";
                 // add a helper class and hide the text.
                 var out = $(this).clone().addClass("image-drag-helper");
-		
+
                 var a = out.find(".image-infobox");
                 a.hide();
                 // out = "<div>hi there</div>"
                 // out = '<img class="image-drag-helper" src="'+url+'"/>"'
                 // console.log(out)
                 return out;
-              }
-
-              console.log("set draggable");
-              $(eu_draggable_sel).draggable({
-                snap : "#comparanda",
-                // show target tooltip on start hide on finish
-                // start: function() {
-                //                   
-                // $("#comparanda").tooltip('show')},
-                // stop: function() { $("#comparanda").tooltip('hide')},
-                cursor : "hand",
-                snapTolerance : 1000,
-                scope : "comparanda",
-                helper : moveImage
-              });
+              };
+              /**
+               * 
+               * @memberOf eu_comparanda.EuComparanda
+               * @private
+               */
+              function setComparandaDraggable() {
+                $(config.eu_draggable_sel).draggable({
+                  snap : "#comparanda",
+                  // show target tooltip on start hide on finish
+                  // start: function() {
+                  //                   
+                  // $("#comparanda").tooltip('show')},
+                  // stop: function() { $("#comparanda").tooltip('hide')},
+                  cursor : "hand",
+                  snapTolerance : 1000,
+                  scope : "comparanda",
+                  helper : moveImage
+                });
+              }; // setComparandaDraggable
 
               /*****************************************************************
                * @memberOf eu_comparanda.EuComparanda
@@ -185,7 +220,7 @@ window.ure_eu_comparanda = {}
                * takes droppable event params
                */
               var addToComparanda = function(e, ui) {
-                console.log("addToComparanda");
+
                 var d = ui.draggable;
 
                 var eu_link = $(d).attr("data-eu-link");
@@ -202,19 +237,30 @@ window.ure_eu_comparanda = {}
                 addcomp(accnum, eu_item)
 
               }
+              /*****************************************************************
+               * @memberOf eu_comparanda.EuComparanda
+               */
 
-              $("#comparanda").droppable({
-                drop : addToComparanda,
-                scope : "comparanda",
+              function setComparandaDroppable() {
+                $("#comparanda").droppable({
+                  drop : addToComparanda,
+                  scope : "comparanda",
+                  create : function(event, ui) {
+                    // auto-init
+                    // if (!storage.isSet(eu_items))
+                    // storage.set(eu_items, '{}'); // eu-data 3
 
-                create : function(event, ui) {
-                  // auto-init
-//                  if (!storage.isSet(eu_items))
-//                    storage.set(eu_items, '{}'); // eu-data 3
+                  }
+                });
+              };
 
-                }
-              });
-		
+              // docready
+
+              setComparandaDraggable();
+              // docready
+              setComparandaDroppable();
+
+              var removeImage; // for testing
               /*****************************************************************
                * 
                * @memberOf eu_comparanda.EuComparanda
@@ -231,8 +277,6 @@ window.ure_eu_comparanda = {}
                */
               function setRemoveDragComparanda(sel) {
                 var removeImageHelper = function(e) {
-                  console.log("removeImage");
-
                   var url = $(this).attr('src');
                   var style = "background-image: url('" + url + "')";
                   // add a helper class and hide the text.
@@ -243,9 +287,9 @@ window.ure_eu_comparanda = {}
                   // console.log(out)
                   return out;
                 }; // removeImageHelper
+                removeImage = removeImageHelper;
 
                 $(sel).draggable({
-
                   cursor : "pointer",
                   // snapTolerance : 1000,
                   scope : "rm-comparanda",
@@ -278,23 +322,21 @@ window.ure_eu_comparanda = {}
 
                 // add the thumb to the thumb strip
                 addToCompBar = addToCompBar || true;
-		  
-                  var thumb = eu_item.thumb;
+
+                var thumb = eu_item.thumb;
                 // NOTE this makes the addcomp function dependant on
                 // document.ready
 
                 // get the url for the thumb
                 var this_thumb = $($("#record-images .cell")[0]).attr('data-ure-image-url');
                 // save to document
-                  var items = $(document).data('eu-items') || {}
+                var items = $(document).data('eu-items') || {}
                 items[thumb] = eu_item;
 
-            
-         //       var json = storage.get(eu_items); // eu-data 3 
-		  //     var eu_items_ls = json;
-		  
+                // var json = storage.get(eu_items); // eu-data 3
+                // var eu_items_ls = json;
 
-                var eu_items_ls =  ure_eu_items.get_all();
+                var eu_items_ls = ure_eu_items.get_all();
 
                 // start an array for this accnum if none
 
@@ -309,13 +351,13 @@ window.ure_eu_comparanda = {}
                   eu_items_ls[this_accnum][thumb] = eu_item;
                   // store it
 
-
-                    ure_eu_items.put(this_accnum,thumb,eu_item); 
-               //   storage.set(eu_items, JSON.stringify(eu_items_ls)); // eu-data 4.1
+                  ure_eu_items.put(this_accnum, thumb, eu_item);
+                  // storage.set(eu_items, JSON.stringify(eu_items_ls)); //
+                  // eu-data 4.1
                 }
                 // update ure projects
                 // TODO this should be set as a signal -- watch
-               alert("updating projects...") 
+                alert("updating projects...")
                 ure_projects.put(ure_projects.current(), this_accnum, eu_item.thumb);
                 add_to_comp_bar(thumb);
 
@@ -328,8 +370,7 @@ window.ure_eu_comparanda = {}
                */
 
               function add_to_comp_bar(thumb) {
-                
-                
+
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 // init if !
                 if (!thumbs) {
@@ -365,7 +406,7 @@ window.ure_eu_comparanda = {}
                 // items[thumb] = eu_item;
 
                 // remove it from localstorage as well
-                //var json = storage.get(eu_items);  //  eu-data 5
+                // var json = storage.get(eu_items); // eu-data 5
                 // var eu_items_ls = json;
                 var eu_items_ls = ure_eu_items.get_all();
                 // // start an array for this accnum if none
@@ -377,10 +418,10 @@ window.ure_eu_comparanda = {}
                 // }
 
                 // add this eu item to the accnum array
-                // delete eu_items_ls[accnum][thumb];  // eu-data 6
-                ure_eu_items.remove(accnum,thumb)
+                // delete eu_items_ls[accnum][thumb]; // eu-data 6
+                ure_eu_items.remove(accnum, thumb)
                 // store it
-                //storage.set(eu_items, JSON.stringify(eu_items_ls));
+                // storage.set(eu_items, JSON.stringify(eu_items_ls));
 
                 var thumbs = $("#comparanda-thumbs").data('thumbs');
                 if (!thumbs) {
@@ -399,24 +440,21 @@ window.ure_eu_comparanda = {}
 
               } // function removecomp
 
-
-
-             
-
               /**
-               * @memberOf eu_comparanda.EuComparanda
-               *  * load_comparanda
+               * @memberOf eu_comparanda.EuComparanda * load_comparanda
                * @param {Object}
                *          eu -- the eu_items hash from localstorage
                * 
                * load existing comparanda into DOM
-               * @param eu -- the eu items object parsed from file. 
+               * @param eu --
+               *          the eu items object parsed from file.
+               *  Called: -- on init, --on load_comparanda_from_json
                */
               function load_comparanda(eu) {
 
-                var eu_items = getEUdata_new(); // eu-data 5. 
-                var  old_comp = eu_items.get_all_eu_items();
-                
+                var eu_items = getEUdata_new(); // eu-data 5.
+                var old_comp = eu_items.get_all_eu_items();
+
                 for ( var acc in eu) {
                   // add the acc
 
@@ -441,6 +479,7 @@ window.ure_eu_comparanda = {}
 
                 }
                 // save old_comp
+                // docready
                 setRemoveDragComparanda("#comparanda-thumbs img");
               }
 
@@ -468,7 +507,7 @@ window.ure_eu_comparanda = {}
                     console.log("adding to comparanda from file...");
                   } catch (e) {
                     if (e.message.match(/JSON/)) {
-                      pop_msg(msg_json_broken, 'alert-danger');
+                      pop_msg(config.msg_json_broken, 'alert-danger');
                     } else {
                       pop_msg(e, 'alert-danger');
                     }
@@ -501,7 +540,7 @@ window.ure_eu_comparanda = {}
               }
 
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda 
+               * @memberOf eu_comparanda.EuComparanda
                * 
                * make html from the comparanda
                * 
@@ -515,20 +554,18 @@ window.ure_eu_comparanda = {}
                     + ' body { background: #990033 !important; }'
                     + '#info {background:#000;color: silver;height:50px;padding:20px 0 0 20px;font-family:sans-serif}'
                     + ' .lighttable-item {min-height: 50px; border-top: 3px solid silver;border-bottom: 1px solid gray; color: white;}'
-                    + ' .lighttable-item:hover {background: white;color: black;}'
-                    + ' .at1 { color:  #990033 }'
+                    + ' .lighttable-item:hover {background: white;color: black;}' + ' .at1 { color:  #990033 }'
                     + ' .lt-item-left { display:inline; float: left;width: 20%;}'
                     + ' .lt-item-right { display:inline; width: 80%;}' + '#left { width: 20%; float: left; }'
                     + '.lt-save-thumb { height: 30px; margin-right: 40px; }'
-                    + '.eu-thumb { height: 30px; margin-right: 2px; }'
-                    + ' .eu-item{ display:inline; float: left;}'
-                    +   '#left { background: #990033;}'
+                    + '.eu-thumb { height: 30px; margin-right: 2px; }' + ' .eu-item{ display:inline; float: left;}'
+                    + '#left { background: #990033;}'
                     + '#show { height: 100%; width: 100%; position: fixed; background: white; min-height: 1000px;}'
                     + '</style>'
 
                 // get the lighttable as html.-- for later
                 // get the list
-                var eu = getEUdata_new(); //eu-data
+                var eu = getEUdata_new(); // eu-data
                 var divs = [];
                 var domain = document.domain;
                 var html = document.implementation.createHTMLDocument();
@@ -550,7 +587,7 @@ window.ure_eu_comparanda = {}
                 for ( var accnum in eu) {
                   var url = "http://" + document.domain + "/record/" + accnum + "?s=noleftnav";
                   var compHTML = getComparanda(eu[accnum]);
-//                  console.log(compHTML);
+                  // console.log(compHTML);
                   var id = accnum
                   var thumb = eu[accnum]['thumb'];
                   divs.push('<div class="accnum-reference row">' + '<a target="show" href="' + url + '">'
@@ -564,7 +601,7 @@ window.ure_eu_comparanda = {}
                 $(html).find("#left").append(divs.join(""));
                 $(html).find("head").append(style);
                 $(html).find("head").append(bootstrap_css);
-//                console.log(html)
+                // console.log(html)
                 var doc = new XMLSerializer().serializeToString(html);
 
                 var blob = new Blob([ doc ], {
@@ -589,7 +626,7 @@ window.ure_eu_comparanda = {}
                   }
                   var thumb = t;
                   var url = comp[t]['link'];
-                
+
                   var h = '<a target="show" href="' + url + '">' + '<div class="eu-item">' + "\n\t"
                       + '<div class="eu-thumb-item">' + "\n\t\t" + '<img class="eu-thumb" src="' + thumb + '"/>'
                       + "\n\t" + '</div>' + "\n" + '</div>' + '</a>' + "\n";
@@ -601,7 +638,7 @@ window.ure_eu_comparanda = {}
               }
 
               /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda 
+               * @memberOf eu_comparanda.EuComparanda
                * 
                * get object containing collected items
                * 
@@ -609,46 +646,30 @@ window.ure_eu_comparanda = {}
 
               function getEUdata_new() {
                 return ure_eu_items;
-                //return storage.get(eu_items);  // eu-data 7
-
-              } 
-              /*****************************************************************
-               * @memberOf eu_comparanda.EuComparanda 
-               * 
-               * get object containing collected items
-               * 
-               */
-
-              function getEUdata() {
-               
-               return storage.get(eu_items);  // eu-data 8
+                // return storage.get(eu_items); // eu-data 7
 
               }
-              window.comparanda_getEUdata = getEUdata;
 
-		var export_methods = {
-		    onSignedIn:onSignedIn,
-		    addToComparanda: addToComparanda,
-		    moveImage:moveImage,
-		    removecomp:removecomp,
-		    load_comparanda:load_comparanda,
-		    load_comparanda_from_json:load_comparanda_from_json,
-		    save_comparanda_as_json:save_comparanda_as_json,
-		    save_comparanda_as_html:save_comparanda_as_html,
-		    getEUdata_new:getEUdata_new
-		}
+              window.comparanda_getEUdata = getEUdata_new;
 
-		for (var i in export_methods) {
-		    
-		    window.ure_eu_comparanda[i] = export_methods[i];
-		}
-		
+              var export_methods = {
+                onSignedIn : onSignedIn,
+                addToComparanda : addToComparanda,
+                moveImage : moveImage,
+                removecomp : removecomp,
+                removeImage : removeImage,
+                load_comparanda : load_comparanda,
+                load_comparanda_from_json : load_comparanda_from_json,
+                save_comparanda_as_json : save_comparanda_as_json,
+                save_comparanda_as_html : save_comparanda_as_html,
+                getEUdata_new : getEUdata_new
+              }
+
+              for ( var i in export_methods) {
+
+                window.ure_eu_comparanda[i] = export_methods[i];
+              }
             }); // $(document).ready()
-
-
-
-
-      
   }; // EuComparanda
 
   /**
@@ -656,41 +677,37 @@ window.ure_eu_comparanda = {}
    */
   EuComparanda_call = function(accnum) {
     // wait for logged in signal
-    // TODO -- add timeout + local switch. 
+    // TODO -- add timeout + local switch.
     EuComparanda(accnum);
-    
-    
-    
+
   }
-  
+
   window.EuComparanda = EuComparanda_call;
 
 }();
 
-
 /** guick nav for comparanda */
 
-! function() {
-  /*****************************************************************
-   * @memberOf eu_comparanda.EuComparanda 
-   * set up the navigation strip
+!function() {
+  /*****************************************************************************
+   * @memberOf eu_comparanda.EuComparanda set up the navigation strip
    * 
    */
-  
+
   var my_eu_items = window.ure_eu_items;
-  
+
   var setup_compNavList = function(listsel, observesel) {
 
     var eu_items_store = "eu_items";
     var storage = $.localStorage;
-    /*****************************************************************
-     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+    /***************************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList
      * 
      * 
      */
-    
-    /*****************************************************************
-     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+
+    /***************************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList
      * 
      * 
      */
@@ -718,8 +735,8 @@ window.ure_eu_comparanda = {}
 
       $(listsel).html(ul);
     };
-    /*****************************************************************
-     * @memberOf eu_comparanda.EuComparanda.setup_compNavList 
+    /***************************************************************************
+     * @memberOf eu_comparanda.EuComparanda.setup_compNavList
      * 
      * 
      */
@@ -750,33 +767,31 @@ window.ure_eu_comparanda = {}
 
     });
   }; // setup_compNavList
-  /*****************************************************************
+  /*****************************************************************************
    * @memberOf eu_comparanda.EuComparanda
    * 
    * 
    */
-    var init_comNavList = function(){};
-    var listSelector = "#comparanda-nav-list";
-    var observeSelector = "#comparanda-thumbs";
-    
- $(document).ready(function(){
- 
-  setup_compNavList(listSelector, observeSelector);
- });
+  var init_comNavList = function() {
+  };
+  var listSelector = "#comparanda-nav-list";
+  var observeSelector = "#comparanda-thumbs";
 
-    var eu_comparanda = {
-	setup_compNavList: setup_compNavList,
-	listSelector:listSelector,
-	observeSelector:observeSelector
+  $(document).ready(function() {
 
-    }
+    setup_compNavList(listSelector, observeSelector);
+  });
 
-    for (var i in eu_comparanda) {
+  var eu_comparanda = {
+    setup_compNavList : setup_compNavList,
+    listSelector : listSelector,
+    observeSelector : observeSelector
 
-	window.ure_eu_comparanda[i] = eu_comparanda[i];
-    }
+  }
+
+  for ( var i in eu_comparanda) {
+
+    window.ure_eu_comparanda[i] = eu_comparanda[i];
+  }
 
 }();
-
-
-
