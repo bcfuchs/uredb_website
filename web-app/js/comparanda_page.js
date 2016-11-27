@@ -1,7 +1,7 @@
-! function() {
+!function() {
 
   /**
-   * outline eu_items object for data.js
+   * -Project strip, containing projects -C
    * 
    */
   // eu items Data
@@ -18,16 +18,18 @@
    * 
    * 
    */
-  
+
   var grid_component = (function() {
     var config = {
-      component_selector : "#comparanda"
+      component_selector : "#comparanda",
+      compDraggableSelector : ".comp-draggable",
+      compDroppableSelector : ".comparanda-target-container"
     }
 
     /***************************************************************************
      * 
-     * @memberOf comparanda_page.grid_component
-     * 
+     * @memberOf comparanda_page.grid_component build the grid of items for a
+     *           project
      * 
      */
 
@@ -36,9 +38,7 @@
       $(grid_sel).hide();
       var eu = ure_eu_items.get_all();
 
-
-	
-	// TEST eu is undefined or length 0
+      // TEST eu is undefined or length 0
       for ( var k in eu) {
         var div = document.createElement('div');
         $(div).addClass("comparanda-target-container");
@@ -52,13 +52,12 @@
             continue;
           }
 
-	    
           var link = eu[k][i]['link'];
           var provider = eu[k][i]['provider'];
 
           var item = '<div class="row"><img src="' + i + '"/></div>';
           var title = '<div class="row"><a href="' + link + '"><span>' + provider + '</span></a></div>'
-          var container = '<div class="container comparanda-container">' + item + title + '</div>';
+          var container = '<div class="container comparanda-container comp-draggable">' + item + title + '</div>';
           $(div).append(container);
 
         }
@@ -67,23 +66,106 @@
 
       }
     }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.grid_component
+     */
+
+    function moveComp(e) {
+      // bit to show in the drag.
+      var img = $(this).find("img");
+      var url = $(img).attr('src');
+      // var style = "background-image: url('" + url + "')";
+      // add a helper class and hide the text.
+      var out = $(this).clone().addClass("image-drag-helper");
+      // bits to hide...
+      // var a = out.find(".image-infobox");
+      // a.hide();
+      // out = "<div>hi there</div>"
+      // out = '<img class="image-drag-helper" src="'+url+'"/>"'
+      // console.log(out)
+      return out;
+    }
+    ;
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.grid_component
+     */
+    
+    function addToCompContainer(e,ui){
+      console.log("addtocompcontainer")
+      var d = ui.draggable;
+     try {
+      $(e.toElement).append(d[0]);
+     }
+     catch(e) {
+       alert("problem!!")
+       throw new Error("cant move element...")
+     }
+     
+      
+    }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.grid_component
+     * 
+     * Let user move comparandum to another Ure Item.
+     */
+    function setCompDraggable() {
+      console.log("setCompDraggable")
+      console.log($(config.compDraggableSelector).length)
+      $(config.compDraggableSelector).draggable({
+     //   snap : ".comparanda-target-container",
+        // show target tooltip on start hide on finish
+        // start: function() {
+        //                   
+        // $("#comparanda").tooltip('show')},
+        // stop: function() { $("#comparanda").tooltip('hide')},
+        cursor : "hand",
+        snapTolerance : 1000,
+        scope : "comp",
+        helper : moveComp
+      });
+    }
+    ;
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.grid_component
+     * 
+     * Let user move comparandum to another Ure Item.
+     */
+    
+    function setCompDroppable() {
+      console.log("setCompDroppable")
+      console.log($(config.compDroppableSelector).length)
+      $(config.compDroppableSelector).droppable({
+        drop : addToCompContainer,
+        scope : "comp",
+        create : function(event, ui) {
+          // auto-init
+
+        }
+      });
+    }
     function load() {
       build_grid();
+      setCompDraggable();
+      setCompDroppable();
     }
     return {
       load : load,
-	config : config,
-	
+      config : config,
+
     }
   })();
-    
-  /***************************************************************************
+
+  /*****************************************************************************
    * 
    * @memberOf comparanda_page.project_strip_component
    * 
    * 
    */
-  
+
   var project_strip = (function() {
     var myprojects = window.ure_projects;
     var trash = [];
@@ -106,13 +188,13 @@
      * 
      */
     function show_project_items(project) {
-      
+
       console.log("project: " + project);
       // set the selected project in the persistent object
       myprojects.current(project);
 
       // get all the accnums for this project.
-      var accnums =  myprojects.get_accnums(project);
+      var accnums = myprojects.get_accnums(project);
       console.log(accnums);
       $(".comparanda-target-container").show();
       if (project === "--all--" || typeof project === 'undefined')
@@ -123,79 +205,78 @@
         // hide all the objects that aren't in this project
         if (typeof accnums !== 'undefined' && accnums.indexOf(accnum) < 0) {
 
-            $(this).hide();
+          $(this).hide();
         }
-	  
+
       });
     }
-      
-      window.ure_comp_show_project_items = show_project_items;
-      /***************************************************************************
-       * 
-       * @memberOf comparanda_page.project_strip_component
-       * 
-       */
-      
-      function update() {
-        
-        
-      }
-      /***************************************************************************
-       * 
-       * @memberOf comparanda_page.project_strip_component
-       * -remove the project
-       * -warn  
-       * -update the component
-       * 
-       */
-      
-      function onDragOut(e){
-          console.log("onDragOut")
-          var project; 
-          project = $(this).data('ure-project');
 
-          //TODO warn-modal promise. 
-          // data change + UI change
-          var project_el = $(this);
-      
-          // TODO project_el shoudl be focus. 
-	  
-          remove_project(project,project_el);
+    window.ure_comp_show_project_items = show_project_items;
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * 
+     */
 
-        
-      }
-      /***************************************************************************
-       * 
-       * @memberOf comparanda_page.project_strip_component
-       */
-      
-      function _trash(el,data,type) {
-        var millis = new Date().getTime();
-        trash.push({el:el,time:millis,data:data, type:type});
-        return millis; 
-      }
-      /***************************************************************************
-       * 
-       * @memberOf comparanda_page.project_strip_component
-       * 
-       * puts project in the trash. 
-       * data: tag project as trash. Keep the data until trash is emptied. 
-       */
-      
-      function remove_project(project,el) {
-	  if (typeof project === 'undefined')
-	      throw new TypeError('no project specified');
-	  
-          var type = 'project';
-	  // exception --- project not found. Unlikely
-          var data = ure_projects.get(project);
-          _trash(el.clone(),data,type);
-	  el.remove();
-          el = null;
-	  
-	  
-        
-      }
+    function update() {
+
+    }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component -remove the project
+     *           -warn -update the component
+     * 
+     */
+
+    function onDragOut(e) {
+      console.log("onDragOut")
+      var project;
+      project = $(this).data('ure-project');
+
+      // TODO warn-modal promise.
+      // data change + UI change
+      var project_el = $(this);
+
+      // TODO project_el shoudl be focus.
+
+      remove_project(project, project_el);
+
+    }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     */
+
+    function _trash(el, data, type) {
+      var millis = new Date().getTime();
+      trash.push({
+        el : el,
+        time : millis,
+        data : data,
+        type : type
+      });
+      return millis;
+    }
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page.project_strip_component
+     * 
+     * puts project in the trash. data: tag project as trash. Keep the data
+     * until trash is emptied.
+     */
+
+    function remove_project(project, el) {
+      if (typeof project === 'undefined')
+        throw new TypeError('no project specified');
+
+      var type = 'project';
+      // exception --- project not found. Unlikely
+      var data = ure_projects.get(project);
+      _trash(el.clone(), data, type);
+      el.remove();
+      el = null;
+
+    }
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
@@ -205,12 +286,10 @@
     function display_selected_project(sel) {
       // get the selected project from the selected element
       var project = $(sel).data('ure-project');
-      
+
       // highlight the correct project in the strip
       $(".project-box").removeClass("project-box-selected");
       $(sel).addClass("project-box-selected");
-
-     
 
       // display the items for this project
       show_project_items(project);
@@ -226,7 +305,7 @@
      * 
      * 
      */
-    function make_projects_strip () {
+    function make_projects_strip() {
 
       var myprojects = window.ure_projects;
       var projects = myprojects.list();
@@ -240,17 +319,16 @@
         $("#project-strip-container").show();
       }
       for (var i = 0, z = projects.length; i < z; i++) {
-        
+
         var box = $("#project-box").clone().attr('id', '');
         var project = projects[i];
         var project_title = project
         if (project === "null") {
           project_title = "unassigned"
         }
-        $(box).attr('id',project+"_box");
+        $(box).attr('id', project + "_box");
         $(box).attr('data-ure-project', project);
         $(box).find(".project-box-title").html(project_title);
-
 
         // accession numbers
         var accs = myprojects.get(project);
@@ -268,77 +346,75 @@
       }
 
       setup_project_strip();
-      
-    }; // make_projects_strip
+
+    }
+    ; // make_projects_strip
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
      * 
      * 
      */
-    function _project_mover(e){
-   
+    function _project_mover(e) {
+
       var out = $(this).clone().addClass("image-drag-helper");
       return out;
-      
-      
+
     }
     /***************************************************************************
      * 
-     * @memberOf comparanda_page.project_strip_component
-     * -- prototype. 
+     * @memberOf comparanda_page.project_strip_component -- prototype.
      * 
      */
-    function setDraggable(selector,stop, snapto_selector) {
-//      console.log('setting draggable  for ' + selector)
+    function setDraggable(selector, stop, snapto_selector) {
+      // console.log('setting draggable for ' + selector)
       $(selector).draggable({
         snap : snapto_selector,
-        stop: stop,
+        stop : stop,
         cursor : "hand",
         snapTolerance : 1000,
         scope : "project_strip",
         helper : _project_mover
       });
     }
-    
+
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
      * 
      * 
      */
-    function setup_project_strip () {
-    
-      $(document).ready(function() {
-	  
-          $(".project-box").click(function() {
-              var el = $(this)
+    function setup_project_strip() {
 
-         if (this.constructor.name === 'jQuery.Event') {
+      $(document).ready(function() {
+
+        $(".project-box").click(function() {
+          var el = $(this)
+
+          if (this.constructor.name === 'jQuery.Event') {
             el = $(this).currentTarget;
           }
           display_selected_project(el);
 
         });
-        setDraggable(".project-box",onDragOut, "#comparanda-main")
+        setDraggable(".project-box", onDragOut, "#comparanda-main")
       });
 
     }
     /***************************************************************************
      * 
-     * @memberOf comparanda_page.project_strip_component
-     * add a project to the strip
+     * @memberOf comparanda_page.project_strip_component add a project to the
+     *           strip
      * 
      */
     function add(project) {
       make_projects_strip();
       set_project(project);
     }
-    
+
     /***************************************************************************
      * 
-     * @memberOf comparanda_page.project_strip_component
-     *  set the current project
+     * @memberOf comparanda_page.project_strip_component set the current project
      * 
      */
     function set_project(project) {
@@ -346,115 +422,111 @@
         // test -- empty sel set
         var sel = $(".project-box[data-ure-project='" + project + "']");
         display_selected_project(sel);
-        
+
       }
-      
+
     }
-    
+
     /***************************************************************************
      * 
      * @memberOf comparanda_page.project_strip_component
      * 
      * 
      */
-    function load(){
-      make_projects_strip(); 
+    function load() {
+      make_projects_strip();
     }
-   
+
     return {
-    	config : config,
-    	load:load,
-    	add : add,
-    	set : set_project,
-    	remove_project: remove_project,
-    	_trash:_trash,
-    	onDragOut: onDragOut,
-    	update:update,
-    	selected:config.selected
+      config : config,
+      load : load,
+      add : add,
+      set : set_project,
+      remove_project : remove_project,
+      _trash : _trash,
+      onDragOut : onDragOut,
+      update : update,
+      selected : config.selected
     };
 
   })();
-// todo -- put this stuff at the end!!!
-window.ure_project_strip = project_strip;
-  
+  // todo -- put this stuff at the end!!!
+  window.ure_project_strip = project_strip;
 
-var project_toggle = function(){
-  /***************************************************************************
-   * 
-   * @memberOf comparanda_page
-   */
-  var make_project_toggle_impl = function(sel) {
-    var prs = window.ure_projects;
-    console.log("making project toggle...");
-    var projects = prs.list();
-    projects.forEach(function(project) {
-      $(sel).append('<option value="' + project + '">' + project + "</option>");
+  var project_toggle = function() {
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page
+     */
+    var make_project_toggle_impl = function(sel) {
+      var prs = window.ure_projects;
+      console.log("making project toggle...");
+      var projects = prs.list();
+      projects.forEach(function(project) {
+        $(sel).append('<option value="' + project + '">' + project + "</option>");
 
-    });
+      });
 
       $(sel).change(function() {
-	  console.log(this);
-	  var project = $(this).val();
-	  ure_comp_show_project_items(project);
+        console.log(this);
+        var project = $(this).val();
+        ure_comp_show_project_items(project);
 
-    })
-  };
-  /***************************************************************************
-   * 
-   * @memberOf comparanda_page
-   */
-  var make_project_toggle = function(sel) {
-    $(document).ready(function() {
-      make_project_toggle_impl(sel);
-    })
+      })
+    };
+    /***************************************************************************
+     * 
+     * @memberOf comparanda_page
+     */
+    var make_project_toggle = function(sel) {
+      $(document).ready(function() {
+        make_project_toggle_impl(sel);
+      })
+    }
+    make_project_toggle("#project-selector");
+
   }
-  make_project_toggle("#project-selector");
-  
- 
-  
-  
-}
-/***************************************************************************
- * 
- * @memberOf comparanda_page.dummy_projects
- */
+  /*****************************************************************************
+   * 
+   * @memberOf comparanda_page.dummy_projects
+   */
 
-var dummy_projects  = function() {
+  var dummy_projects = function() {
 
     /***************************************************************************
      * 
      * @memberOf comparanda_page.dummy_projects
      */
     var make_dummy_projects2 = function() {
-	var pr = window.ure_projects;
-	pr.reset();
-	var items = ure_eu_items.get_all_eu_items();
-	var proj = [ 'Dionysus', 'Skyphos', 'Mythology', 'Peplos', "Athens", "Classics 110" ];
-	for (var i = 0,j = proj.length; i < j; i++) {
-	    pr.create(proj[i]);
-	}
-	var proj_len = proj.length;
-	var max = 4;
-	for (var i = 0; i < max; i++) {
-            for ( var item in items) {
+      var pr = window.ure_projects;
+      pr.reset();
+      var items = ure_eu_items.get_all_eu_items();
+      var proj = [ 'Dionysus', 'Skyphos', 'Mythology', 'Peplos', "Athens", "Classics 110" ];
+      for (var i = 0, j = proj.length; i < j; i++) {
+        pr.create(proj[i]);
+      }
+      var proj_len = proj.length;
+      var max = 4;
+      for (var i = 0; i < max; i++) {
+        for ( var item in items) {
 
-		var p = proj[Math.floor(Math.random() * proj_len)];
-		
-		for (eupic in items[item]) {
+          var p = proj[Math.floor(Math.random() * proj_len)];
 
-		    if (eupic !== 'thumb') {
-			pr.put(p, item, eupic);
-			//console.log(p + ":" + ":" + item + " : " + eupic);
-		    }
-		}
-		
+          for (eupic in items[item]) {
+
+            if (eupic !== 'thumb') {
+              pr.put(p, item, eupic);
+              // console.log(p + ":" + ":" + item + " : " + eupic);
             }
-	}
+          }
+
+        }
+      }
 
     };
 
     window.make_dummy_projects2 = make_dummy_projects2;
-}
+  }
 
   /*****************************************************************************
    * 
@@ -463,28 +535,30 @@ var dummy_projects  = function() {
    * This calls components for the page.
    */
   var make_comparanda_page = function() {
-   
+
     // onLoad
     grid_component.load();
-    //make_projects_list(); 
+    // make_projects_list();
     project_strip.load();
-    project_strip.set((function(){return $.qs('project') || ""})());
+    project_strip.set((function() {
+      return $.qs('project') || ""
+    })());
     project_toggle();
 
     return 0;
   };
-  
+
   $(document).ready(function() {
-    ure_gapi('eu_items.js').onReadComplete(function(){
+    ure_gapi('eu_items.js').onReadComplete(function() {
       make_comparanda_page();
     });
 
   });
-    window.comparanda_page = {
-	grid_component:grid_component,
-	dummy_projects: dummy_projects,
-	project_strip:project_strip,
-	project_toggle:project_toggle,
-	Component:Component
-    }
+  window.comparanda_page = {
+    grid_component : grid_component,
+    dummy_projects : dummy_projects,
+    project_strip : project_strip,
+    project_toggle : project_toggle,
+    Component : Component
+  }
 }();
