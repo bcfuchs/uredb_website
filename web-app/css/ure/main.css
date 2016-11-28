@@ -1133,6 +1133,10 @@ span.glyphicon.ure-control-btn:hover {
 	cursor: pointer;
 }
 
+.comparanda-target-container.ui-droppable-hover {
+	background:orange;
+}
+
 ._________________________ Comparanda Page project strip_________________________
 	{
 	

@@ -7,10 +7,7 @@
   // eu items Data
   // import singleton from global scope.
   var my_eu_items = ure_eu_items;
-  function Component(selector, config) {
-    this.config = config || {};
-    this.selector = selector;
-  }
+ 
 
   /*****************************************************************************
    * 
@@ -23,9 +20,9 @@
     var config = {
       component_selector : "#comparanda",
       compDraggableSelector : ".comp-draggable",
-      compDroppableSelector : ".comparanda-target-container"
-    }
-
+      compDroppableSelector : ".comp-droppable"
+    };
+    var component = new ure_component();
     /***************************************************************************
      * 
      * @memberOf comparanda_page.grid_component build the grid of items for a
@@ -42,6 +39,7 @@
       for ( var k in eu) {
         var div = document.createElement('div');
         $(div).addClass("comparanda-target-container");
+        $(div).addClass("comp-droppable");
         $(div).attr("data-ure-accnum", k);
         $(div).append("<div style='clear:both;'></div><hr></hr>");
         $(div).append('<a href="/record/' + k + '">' + "<h2>" + k + "</h2></a>");
@@ -75,15 +73,8 @@
       // bit to show in the drag.
       var img = $(this).find("img");
       var url = $(img).attr('src');
-      // var style = "background-image: url('" + url + "')";
-      // add a helper class and hide the text.
       var out = $(this).clone().addClass("image-drag-helper");
-      // bits to hide...
-      // var a = out.find(".image-infobox");
-      // a.hide();
-      // out = "<div>hi there</div>"
-      // out = '<img class="image-drag-helper" src="'+url+'"/>"'
-      // console.log(out)
+    
       return out;
     }
     ;
@@ -95,66 +86,42 @@
     function addToCompContainer(e,ui){
       console.log("addtocompcontainer")
       var d = ui.draggable;
-     try {
-      $(e.toElement).append(d[0]);
-     }
-     catch(e) {
-       alert("problem!!")
-       throw new Error("cant move element...")
+      
+      console.log(target)
+      console.log(this)
+      try {
+        $(this).append(d[0]);
+      }
+      catch(e) {
+        alert("problem!!")
+        throw new Error("cant move element...")
      }
      
       
     }
-    /***************************************************************************
-     * 
-     * @memberOf comparanda_page.grid_component
-     * 
-     * Let user move comparandum to another Ure Item.
-     */
-    function setCompDraggable() {
-      console.log("setCompDraggable")
-      console.log($(config.compDraggableSelector).length)
-      $(config.compDraggableSelector).draggable({
-     //   snap : ".comparanda-target-container",
-        // show target tooltip on start hide on finish
-        // start: function() {
-        //                   
-        // $("#comparanda").tooltip('show')},
-        // stop: function() { $("#comparanda").tooltip('hide')},
-        cursor : "hand",
-        snapTolerance : 1000,
-        scope : "comp",
-        helper : moveComp
-      });
+    function zeroDrag() {
+      component.zeroDrag("comp")
     }
-    ;
-    /***************************************************************************
-     * 
-     * @memberOf comparanda_page.grid_component
-     * 
-     * Let user move comparandum to another Ure Item.
-     */
-    
-    function setCompDroppable() {
-      console.log("setCompDroppable")
-      console.log($(config.compDroppableSelector).length)
-      $(config.compDroppableSelector).droppable({
-        drop : addToCompContainer,
-        scope : "comp",
-        create : function(event, ui) {
-          // auto-init
-
-        }
-      });
+    function setDrag() {
+      component.setDrag(
+          config.compDraggableSelector,
+          config.compDroppableSelector,
+          "comp",
+          moveComp,
+          addToCompContainer
+          );
     }
     function load() {
       build_grid();
-      setCompDraggable();
-      setCompDroppable();
+      setDrag();
+  
     }
     return {
       load : load,
       config : config,
+      setDrag:setDrag,
+      zeroDrag:zeroDrag
+  
 
     }
   })();
@@ -168,6 +135,7 @@
 
   var project_strip = (function() {
     var myprojects = window.ure_projects;
+    var grid = grid_component;
     var trash = [];
     var config = {
       component_selector : "#project-strip"
@@ -196,6 +164,7 @@
       // get all the accnums for this project.
       var accnums = myprojects.get_accnums(project);
       console.log(accnums);
+      var dropClass = "comp-droppable"
       $(".comparanda-target-container").show();
       if (project === "--all--" || typeof project === 'undefined')
         return 0;
@@ -206,9 +175,15 @@
         if (typeof accnums !== 'undefined' && accnums.indexOf(accnum) < 0) {
 
           $(this).hide();
+          $(this).removeClass(dropClass);
+        }
+        else {
+          $(this).addClass(dropClass);
         }
 
       });
+      grid.zeroDrag("comp");
+      grid.setDrag();
     }
 
     window.ure_comp_show_project_items = show_project_items;
@@ -558,7 +533,7 @@
     grid_component : grid_component,
     dummy_projects : dummy_projects,
     project_strip : project_strip,
-    project_toggle : project_toggle,
-    Component : Component
+    project_toggle : project_toggle
+   
   }
 }();
