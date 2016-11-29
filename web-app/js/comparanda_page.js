@@ -64,6 +64,7 @@
 
       }
     }
+   
     /***************************************************************************
      * 
      * @memberOf comparanda_page.grid_component
@@ -86,11 +87,13 @@
     function addToCompContainer(e,ui){
       console.log("addtocompcontainer")
       var d = ui.draggable;
-      
-      console.log(target)
+      var target = $(event.target);
+    
+
       console.log(this)
       try {
-        $(this).append(d[0]);
+        $(ui.draggable).detach().appendTo(this)
+        //$(this).append($(d[0]).detach());
       }
       catch(e) {
         alert("problem!!")
@@ -120,12 +123,15 @@
       load : load,
       config : config,
       setDrag:setDrag,
-      zeroDrag:zeroDrag
+      zeroDrag:zeroDrag,
+      component:component
   
 
     }
   })();
-
+  if (!('ure' in window)) 
+    window.ure = {}
+  window.ure.comparanda_grid_component = grid_component
   /*****************************************************************************
    * 
    * @memberOf comparanda_page.project_strip_component
