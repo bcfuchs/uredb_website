@@ -51,7 +51,10 @@ body {
 	padding: 0;
 	border: 0;
 }
-
+.hand  {
+	cursor: hand;
+	
+}
 div#wrapper {
 	height: 100%;
 	width: 100%;
@@ -1630,7 +1633,14 @@ a#extlink:link {
 	{
 	
 }
-
+#save-project-edits {
+	text-decoration: underline;
+	
+}
+#save-project-edits:hover {
+	
+	
+}
 #comparanda-nav-list { //
 	margin-top: 10px;
 }
@@ -1822,6 +1832,7 @@ a#extlink:link {
 	
 }
 // hide the gplus welcome back pop-up
+
 iframe[src^="https://apis.google.com"] {
   display: none;
 }

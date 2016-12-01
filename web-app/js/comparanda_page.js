@@ -21,7 +21,10 @@
       component_selector : "#comparanda",
       compDraggableSelector : ".comp-draggable",
       compDroppableSelector : ".comp-droppable",
-      gridSelector : "#comparanda-list"
+      gridSelector : "#comparanda-list",
+      saveEditSelector: "#save-project-edits",
+      periodSaveSeconds: 20,
+      setPeriodSave:true
     };
     var component = new ure_component();
     /***************************************************************************
@@ -35,7 +38,7 @@
       var grid_sel = config.component_selector;
       $(grid_sel).hide();
       var eu = ure_eu_items.get_all();
-
+      
       // TEST eu is undefined or length 0
       for ( var k in eu) {
         var div = document.createElement('div');
@@ -62,10 +65,31 @@
         }
 
         $(gridsel).append(div);
+        $(config.saveEditSelector).click(function(){
+          
+          save_edits();
+        });
+        if (config.setPeriodSave === true) {
+          set_period_save();
+        }
 
       }
     }
-
+    // toggle the save switch. 
+    // check if no edits
+    // save if there's been an edit. 
+    function toggle_save() {
+      
+      
+    }
+    function set_period_save() {
+     
+      setInterval(save_edits,config.periodSaveSeconds *1000);
+    }
+    // save edits if they've changed. 
+    function save_edits() {
+      alert("saving edits....");
+    }
     /***************************************************************************
      * 
      * @memberOf comparanda_page.grid_component
