@@ -15,10 +15,8 @@
  -->
 <script src="//cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
 <script src="//code.jquery.com/jquery-1.11.3.js"></script>
-<script
-  src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"
-  integrity="sha256-0vBSIAi/8FxkNOSKyPEfdGQzFDak1dlqFKBYqBp1yC4="
-  crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js" integrity="sha256-0vBSIAi/8FxkNOSKyPEfdGQzFDak1dlqFKBYqBp1yC4="
+	crossorigin="anonymous"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 	integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A=="
@@ -99,7 +97,7 @@ window.ure.isAnonUser = false;  // set to false in ure_gapi if user logs in.
 		}();
 	</script>
 	<!-- 
-	DBO
+	
 <%
     
  flash.lastURI = request.forwardURI 
@@ -116,7 +114,6 @@ window.ure.isAnonUser = false;  // set to false in ure_gapi if user logs in.
 	</div>
 	<div id="templates-main" style="display: none">
 		<div id="template-comp-dropdown" class="dropdown"></div>
-	</div>
 	</div>
 	<%  
 		def ga_script = System.getenv("GA_SCRIPT").toBoolean();

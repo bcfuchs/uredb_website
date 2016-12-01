@@ -6,20 +6,7 @@
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 </head>
 <body>
-	<style>
-	.comparanda-container {
-		display: inline-block;
-		width: 20%;
-	}
-		#comparanda-list img {
-			max-height: 100px;
-		}
-		
-		#projects-main {
-			display: none;
-		}
-		
-	</style>
+	
 	<div id="project-strip-container" style="display:none">
 		<div id="project-strip"></div>
 	</div>
@@ -33,25 +20,27 @@
 	<div id="comparanda-page-wrapper">
 		<div id="comparanda-main" class="comp-toggle">
 			<h2 class="toggler">Projects</h2>
-			
 			<g:render template="/ure/project_title_display_widget">
 			</g:render>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
-			<div id="comparanda-list"></div>
+			<div id="comparanda-list">
+				
+			</div>
 		</div>
 		<div id="projects-main" class="comp-toggle">
 			<h2 class="toggler">Projects</h2>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
-			<div id="projects-list"></div>
+			<div id="projects-list">
+			</div>
 		</div>
 	</div>
 	
 	<script>
     $(document).ready(function() {
-      $(".toggler").click(function() {
-        $(".comp-toggle").toggle();
-        window.make_projects_list();
-      })
+   //   $(".toggler").click(function() {
+   //     $(".comp-toggle").toggle();
+  //      window.make_projects_list();
+   //   })
     })
   </script>
 	<div id="comp-templates" style="display: none">
@@ -64,13 +53,12 @@
 		<div id="project-box-item" class="project-box-item">
 	
 					<div class="project-box-item-image-container">
-					<img src=""/></img>
+					<img src=""/>
 					</div>
 					<div class="project-box-item-caption"></div>
 				</div>
 	</div>
-	<style>
-	</style>
+	
 	<script src="${resource(dir:'js',file:'eu_comparanda.js')}?v=2	"></script>
 	<script src="${resource(dir:'js',file:'comparanda_page.js')}?v=2"></script>
 	<script>

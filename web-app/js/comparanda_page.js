@@ -7,7 +7,6 @@
   // eu items Data
   // import singleton from global scope.
   var my_eu_items = ure_eu_items;
- 
 
   /*****************************************************************************
    * 
@@ -17,10 +16,12 @@
    */
 
   var grid_component = (function() {
+
     var config = {
       component_selector : "#comparanda",
       compDraggableSelector : ".comp-draggable",
-      compDroppableSelector : ".comp-droppable"
+      compDroppableSelector : ".comp-droppable",
+      gridSelector : "#comparanda-list"
     };
     var component = new ure_component();
     /***************************************************************************
@@ -30,7 +31,7 @@
      * 
      */
 
-    function build_grid() {
+    function build_grid(gridsel) {
       var grid_sel = config.component_selector;
       $(grid_sel).hide();
       var eu = ure_eu_items.get_all();
@@ -60,11 +61,11 @@
 
         }
 
-        $("#comparanda-list").append(div);
+        $(gridsel).append(div);
 
       }
     }
-   
+
     /***************************************************************************
      * 
      * @memberOf comparanda_page.grid_component
@@ -75,7 +76,7 @@
       var img = $(this).find("img");
       var url = $(img).attr('src');
       var out = $(this).clone().addClass("image-drag-helper");
-    
+
       return out;
     }
     ;
@@ -83,53 +84,48 @@
      * 
      * @memberOf comparanda_page.grid_component
      */
-    
-    function addToCompContainer(e,ui){
+
+    function addToCompContainer(e, ui) {
       console.log("addtocompcontainer")
       var d = ui.draggable;
-      var target = $(event.target);
-    
+      var target = $(e.target);
 
       console.log(this)
       try {
         $(ui.draggable).detach().appendTo(this)
-        //$(this).append($(d[0]).detach());
-      }
-      catch(e) {
+        // $(this).append($(d[0]).detach());
+      } catch (e) {
         alert("problem!!")
         throw new Error("cant move element...")
-     }
-     
-      
+      }
+
     }
     function zeroDrag() {
       component.zeroDrag("comp")
     }
     function setDrag() {
-      component.setDrag(
-          config.compDraggableSelector,
-          config.compDroppableSelector,
-          "comp",
-          moveComp,
-          addToCompContainer
-          );
+      component.setDrag(config.compDraggableSelector, config.compDroppableSelector, "comp", moveComp,
+          addToCompContainer);
     }
     function load() {
-      build_grid();
-      setDrag();
-  
+      $(document).ready(function() {
+        
+          build_grid(config.gridSelector);
+          setDrag();
+    
+
+      })
     }
     return {
       load : load,
       config : config,
-      setDrag:setDrag,
-      zeroDrag:zeroDrag,
-      component:component
-  
+      setDrag : setDrag,
+      zeroDrag : zeroDrag,
+      component : component
 
     }
   })();
-  if (!('ure' in window)) 
+  if (!('ure' in window))
     window.ure = {}
   window.ure.comparanda_grid_component = grid_component
   /*****************************************************************************
@@ -182,8 +178,7 @@
 
           $(this).hide();
           $(this).removeClass(dropClass);
-        }
-        else {
+        } else {
           $(this).addClass(dropClass);
         }
 
@@ -540,6 +535,6 @@
     dummy_projects : dummy_projects,
     project_strip : project_strip,
     project_toggle : project_toggle
-   
+
   }
 }();

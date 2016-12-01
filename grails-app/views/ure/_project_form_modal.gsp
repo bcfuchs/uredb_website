@@ -81,9 +81,9 @@ $(document).ready(function(){
                         <input type="checkbox"/> Check me out
                     </label>
                   </div>
-                
+                 --> 
                 </form>
-                -->
+              
                 
                 
             </div>

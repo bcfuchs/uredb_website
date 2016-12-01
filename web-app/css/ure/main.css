@@ -38,8 +38,7 @@
 }
 
 html,.container,body {
-	height: 100%;
-	width: 100%;
+
 }
 
 body {
@@ -1118,7 +1117,7 @@ ure-record-col-left:after {
 }
 
 /** -- END Browseimageresult.gsp -- */
-._________________________ Comparanda _________________________ {
+._________________________ Comparanda  Widget_________________________ {
 	
 }
 
@@ -1134,10 +1133,28 @@ span.glyphicon.ure-control-btn:hover {
 }
 
 .comparanda-target-container.ui-droppable-hover {
-	background:orange;
+	background: #4d0202;
+}
+._________________________ Comparanda Page_________________________ {
+	
+}
+.comparanda-container {
+		display: inline-block;
+		width: 20%;
+	}
+#comparanda-list img {
+	max-height: 100px;
 }
 
-._________________________ Comparanda Page project strip_________________________
+#projects-main {
+//	display: none;
+}
+
+#comparanda-main {
+
+	
+}
+._________________________ Comparanda Page: project strip_________________________
 	{
 	
 }
@@ -1240,7 +1257,7 @@ span.glyphicon.ure-control-btn:hover {
 	display: none !important;
 }
 
-.image-drag-helper { //
+.image-drag-helper { 
 	background-size: cover;
 	clip: rect(0px, 60px, 60px, 0px);
 }
@@ -1259,7 +1276,116 @@ span.glyphicon.ure-control-btn:hover {
 	font-size: 20px;
 	padding-left: 20%;
 }
+._________________________ Login modal_________________________
+{
+	
+}
+#login-link-container {
+	position: relative;
+	display: inline;
+	width: 100%;
+	font-size: 12px;
+	background-color: black;
+	color: grey;
+	height: 10px;
+	margin: 10px 10px 10px 10px;
+	margin: 10px 10px 10px 40px;
+	top: 20px;
+	cursor: pointer;
+}
 
+.login-link {
+	display: inline-block;
+}
+
+#login-modal {
+	color: black;
+}
+
+.login-modal-body .form-horizontal .col-sm-2,.login-modal-body .form-horizontal .col-sm-10
+	{
+	width: 100%
+}
+
+.login-modal-body .form-horizontal .control-label {
+	text-align: left;
+}
+
+.login-modal-body .form-horizontal .col-sm-offset-2 {
+	margin-left: 15px;
+}
+
+#login-modal-label {
+	color: black;
+	font-size: 24pt;
+	margin: 0 auto;
+	width: 500px;
+	text-align: center;
+}
+
+#logged-in-info {
+	display: none;
+}
+
+.login-choice {
+	display: inline-block; //
+	text-decoration: underline;
+}
+
+.login-choice-container {
+	margin: 0 auto;
+	width: 500px;
+}
+
+.login-choice:hover {
+	cursor: pointer;
+}
+
+#no-login {
+	position: absolute;
+	margin-left: 40px;
+	font-size: 16px;
+	height: 50px;
+	width: 200px;
+	background: #4285f4 !important;
+}
+
+#no-login:hover {
+	border-color: rgba(82, 168, 236, 0.8);
+	box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+	background: #286090 !important;
+}
+
+#no-login span {
+	display: inline-block;
+	position: absolute;
+	left: 60px;
+	top: 13px;
+}
+
+.abcRioButton.abcRioButtonBlue {
+	/* background: pink; */
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.abcRioButtonContentWrapper:hover {
+	background: #286090;
+	border-color: rgba(82, 168, 236, 0.8) !important;
+	box-shadow: 0px 0px 8px rgba(82, 168, 236, 0.6);
+}
+
+#g-signin2 {
+	display: inline-block;
+}
+
+#g-signin2  div {
+	display: inline=block;
+}
 ._________________________ Lighttable _________________________ {
 	
 }
