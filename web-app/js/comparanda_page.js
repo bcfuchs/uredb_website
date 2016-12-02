@@ -113,6 +113,9 @@
       console.log("addtocompcontainer")
       var d = ui.draggable;
       var target = $(e.target);
+      // keep a local record of the change
+      var accnum = $(target).data('ure-accnum');
+      // need to know where it came from....
 
       console.log(this)
       try {
