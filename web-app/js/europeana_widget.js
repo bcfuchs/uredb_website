@@ -322,6 +322,7 @@ var image_preloader = function(url,sel) {
   var set_query_display = function(qs) {
     $("#query-display").html(qs);
   };
+  
   /**
    * @memberOf europeana_widget.doEuRelated
    * control pagination display based on state of pagination data
