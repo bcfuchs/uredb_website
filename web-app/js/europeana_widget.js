@@ -74,6 +74,78 @@
 *  START doEuRelated 
 **/
 (function() {
+var pager = function(){
+  var config;
+  config = {page_size: 100}
+  function next(){
+    
+  }
+  function previous(){
+    
+  }
+  function first(){
+    
+  }
+  function last(){
+    
+  }
+  return {
+    next:next,
+    previous:previous,
+    first:fist,
+    last:last,
+    go_to:go_to,
+    cursor:cursor,
+    config:config
+  }
+}  
+  
+var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
+    paginationSize = 100;
+    $(".pagination-widget .eumore").show();
+    $(".pagination-widget .euless").show();  
+    // increment the cursor if there is one. 
+    
+    if ('eu_cursor' in window) {
+      if (incrementCursor === true) {
+        window.eu_cursor += itemsCount;
+    } 
+    else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
+       
+      window.eu_cursor -= itemsCount
+      }
+    }
+     else {
+      window.eu_cursor = itemsCount;
+      
+    }
+    
+    $(".pagination-widget .itemsCount").html(window.eu_cursor);
+    
+    $(".pagination-widget .total-results").html(totalResults);
+    // itemsCount = totalResults
+    // hide eumore
+    // if the cursor is at the end 
+    if (window.eu_cursor === totalResults) {
+        $(".pagination-widget .eumore").hide();
+        $(".pagination-widget .euless").show(); 
+        
+    }
+    // if the cursor is beyond end of data
+    if (window.eu_cursor > totalResults) {
+      $(".pagination-widget .eumore").hide();
+      $(".pagination-widget .euless").show();  
+      $(".pagination-widget .itemsCount").html(totalResults);
+  }
+    // if the batch is <= paginationSize or we are on the first batch..
+    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
+      $(".pagination-widget .euless").hide();
+    
+    
+    
+    
+  }; // update_pagination. 
+  // TODO put this at top
 /**
  * @memberOf europeana_widget.doEuRelated
  */
@@ -327,52 +399,8 @@ var image_preloader = function(url,sel) {
    * @memberOf europeana_widget.doEuRelated
    * control pagination display based on state of pagination data
    */
-  var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
-    paginationSize = 100;
-    $(".pagination-widget .eumore").show();
-    $(".pagination-widget .euless").show();  
-    // increment the cursor if there is one. 
-    
-    if ('eu_cursor' in window) {
-      if (incrementCursor === true) {
-        window.eu_cursor += itemsCount;
-    } 
-    else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
-       
-      window.eu_cursor -= itemsCount
-      }
-    }
-     else {
-      window.eu_cursor = itemsCount;
-      
-    }
-    
-    $(".pagination-widget .itemsCount").html(window.eu_cursor);
-    
-    $(".pagination-widget .total-results").html(totalResults);
-    // itemsCount = totalResults
-    // hide eumore
-    // if the cursor is at the end 
-    if (window.eu_cursor === totalResults) {
-        $(".pagination-widget .eumore").hide();
-        $(".pagination-widget .euless").show(); 
-        
-    }
-    // if the cursor is beyond end of data
-    if (window.eu_cursor > totalResults) {
-      $(".pagination-widget .eumore").hide();
-      $(".pagination-widget .euless").show();  
-      $(".pagination-widget .itemsCount").html(totalResults);
-  }
-    // if the batch is <= paginationSize or we are on the first batch..
-    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
-      $(".pagination-widget .euless").hide();
-    
-    
-    
-    
-  }; // update_pagination. 
-  // TODO put this at top
+  
+  // --- update_pagination
   
   String.prototype.hexEncode = function(){
     var hex, i;
