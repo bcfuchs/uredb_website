@@ -74,32 +74,7 @@
 *  START doEuRelated 
 **/
 (function() {
-var pager = function(){
-  var config;
-  config = {page_size: 100}
-  function next(){
-    
-  }
-  function previous(){
-    
-  }
-  function first(){
-    
-  }
-  function last(){
-    
-  }
-  return {
-    next:next,
-    previous:previous,
-    first:fist,
-    last:last,
-    go_to:go_to,
-    cursor:cursor,
-    config:config
-  }
-}  
-  
+
 var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
     paginationSize = 100;
     $(".pagination-widget .eumore").show();
@@ -119,33 +94,69 @@ var update_pagination = function(incrementCursor, itemsCount,totalResults, pagin
       window.eu_cursor = itemsCount;
       
     }
-    
+ 
     $(".pagination-widget .itemsCount").html(window.eu_cursor);
-    
+
     $(".pagination-widget .total-results").html(totalResults);
     // itemsCount = totalResults
     // hide eumore
     // if the cursor is at the end 
+    
     if (window.eu_cursor === totalResults) {
+        console.log("pager.previous")
         $(".pagination-widget .eumore").hide();
         $(".pagination-widget .euless").show(); 
         
     }
     // if the cursor is beyond end of data
     if (window.eu_cursor > totalResults) {
+      console.log("pager.next")
       $(".pagination-widget .eumore").hide();
       $(".pagination-widget .euless").show();  
       $(".pagination-widget .itemsCount").html(totalResults);
   }
     // if the batch is <= paginationSize or we are on the first batch..
-    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize) 
+    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)  
       $(".pagination-widget .euless").hide();
     
     
     
     
   }; // update_pagination. 
-  // TODO put this at top
+  // TODO put this inside pager
+  var pager = (function(){
+    var config,chunk,chunks,cursor;
+    config = {page_size: 100,
+          chunk_size: 99
+        }
+    function next(){
+      
+    }
+    function previous(){
+      
+    }
+    function first(){
+      
+    }
+    function last(){
+      
+    }
+    // refactoring...
+    function update(incCursor,itemsCount,total,pageSize) {
+    
+      update_pagination(incCursor, itemsCount,total, pageSize)
+    }
+    return {
+      next:next,
+      previous:previous,
+      first:fist,
+      last:last,
+      go_to:go_to,
+      cursor:cursor,
+      config:config
+    }
+  });  
+
 /**
  * @memberOf europeana_widget.doEuRelated
  */
