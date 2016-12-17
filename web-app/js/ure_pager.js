@@ -142,16 +142,18 @@
     }
     return box
   }
-  
+ // instantiate the content display tool... 
   var cw = content_widget("#content");
-
+  // add content 
   cw.content(content);
+  // add a template for displaying each content item.
   cw.template(template)
-// pager takes a ref to the instantiated content tool...
-  pager(cw);
   
-  // widget for page navigation; 
-  function pager(cw) {
+// pager takes a ref to the instantiated content tool...
+  var pager = new Pager(cw);
+  
+  // widget for page navigation of a content tool 
+  function Pager(cw) {
     var n = cw.chunks.length - 1;
     var chunk = 1;
 
