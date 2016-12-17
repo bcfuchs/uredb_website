@@ -1,3 +1,4 @@
+//generate some content....
 var content_gen = function(n) {
 
   var n2w = {
@@ -26,19 +27,25 @@ var content_gen = function(n) {
   }
   return out;
 }
-var content = content_gen(500);
+
+var content = content_gen(10000);
 
 
 var content_widget = function(selector) {
   var content, template, chunks, config, current_chunk, windows;
-  var
-    current_chunk = 1;
+  var current_chunk = 1;
   chunks = []
   config = {
     selector: selector,
     containerSelector: ".container",
     chunkIndexSelector: "#chunkindex-container",
     pageDepth: 20,
+    pageWindow: 10,
+    chunkHatches: true,
+    chunkHatchesMax: 5,
+    hatchFactor: 2,
+    indexOverlap: 1,
+    lastChunkHatch: true,
     selectedClass: "selected-chunk"
   }
   init();
@@ -61,39 +68,58 @@ var content_widget = function(selector) {
 
     if (chunk.length > 0)
       chunks.push(chunk);
-
-
   }
   // make the link index
 
   function _indexify() {
-    var start = 1,
-      end = chunks.length;
+    var w = get_index_window();
+    var start = w[0],
+      end = w[1];
+    $("#current").html(start);
     var out = _indexify_window(start, end);
-    $(config.chunkIndexSelector).append(out.join(''));
+    $(config.chunkIndexSelector).html(out.join(''));
     $(".chunklink").click(function() {
       var this_chunk = $(this).data('chunk');
       chunk(this_chunk);
     })
+
   }
 
   function get_index_window() {
     // what window is the current chunk in? 
-    var this_window = Math.ceiling(current_chunk / config.pageWindow);
+    var this_window = Math.ceil(current_chunk / config.pageWindow);
     // get start, end
-    var end = this_window * config.pageWindow;
-    var start = end - 1;
-
+    var end = (this_window * config.pageWindow) + 1;
+    var start = end - config.pageWindow;
+    if (start === 0)
+      start = 1
+    return [start, end, this_window];
   }
 
   function _indexify_window(start, end) {
-
-    // make a span link for each one
+    var link = function(i) {
+        return '<span class="chunklink" data-chunk="' + i + '">' + i + '</span>';
+      }
+      // make a span link for each one
     var out = [];
-    for (var i = 1, z = chunks.length; i < z; i++) {
-      var link = '<span class="chunklink" data-chunk="' + i + '">' + i + '</span>';
-      out.push(link);
+    end = end + config.indexEndOverlap;
+    for (var i = start; i < end; i++) {
+      out.push(link(i));
     }
+    // add hatch marks for next pages. 
+    // each page is end + pageWindow;
+    if (config.chunkHatches === true) {
+      var hatches = Math.floor((chunks.length - end) / config.pageWindow)
+      hatches = (hatches > config.chunkHatchesMax) ? config.chunkHatchesMax : hatches
+
+      for (var i = 1; i < hatches; i++) {
+        var this_hatch = end + (i * config.pageWindow * config.hatchFactor) - 1;
+        out.push(link(this_hatch));
+      }
+
+    }
+    if (config.lastChunkHatch === true && end !== chunks.length)
+      out.push(link(chunks.length - 1))
     return out;
 
   }
@@ -101,8 +127,6 @@ var content_widget = function(selector) {
   function content(c) {
     content = c // an array of items  
     _chunkify();
-
-    _indexify();
   }
 
   function template(t) {
@@ -130,6 +154,7 @@ var content_widget = function(selector) {
       $(config.containerSelector).append(contentItem)
 
     }
+    _indexify();
     _chunk_style(n);
   }
 
@@ -177,10 +202,10 @@ var template = function(item, selector) {
   return box
 }
 var cw = content_widget("#content");
-cw.test("hi there 3")
 cw.content(content);
 cw.template(template)
 var pager = new Pager(cw);
+
 // widget for page navigation; 
 function Pager(cw) {
   var n = cw.chunks.length - 1;
@@ -198,10 +223,7 @@ function Pager(cw) {
   })
 
   $("#nextchunk").click(function() {
-
-
     chunk = cw.current() + 1;
-
     if (chunk > n) {
       chunk = 1;
     }
@@ -210,11 +232,8 @@ function Pager(cw) {
 
   $("#prevchunk").click(function() {
     chunk = cw.current() - 1;
-
-
     if (chunk == 0) {
       chunk = n;
-
     }
     cw.chunk(chunk);
   })
