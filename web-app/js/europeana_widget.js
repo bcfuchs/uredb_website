@@ -67,7 +67,15 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-
+/**
+ * refactor:
+ *  
+ * pageWindow :  paginationSize
+ * chunks.length : totalResults / paginationSize 
+ * display_chunk(n) :  update_pagintation(Math.floor(window.eu_cursor/paginationSize);
+ * 
+ * 
+ */
 
 /**
 * 
@@ -124,38 +132,7 @@ var update_pagination = function(incrementCursor, itemsCount,totalResults, pagin
     
   }; // update_pagination. 
   // TODO put this inside pager
-  var pager = (function(){
-    var config,chunk,chunks,cursor;
-    config = {page_size: 100,
-          chunk_size: 99
-        }
-    function next(){
-      
-    }
-    function previous(){
-      
-    }
-    function first(){
-      
-    }
-    function last(){
-      
-    }
-    // refactoring...
-    function update(incCursor,itemsCount,total,pageSize) {
-    
-      update_pagination(incCursor, itemsCount,total, pageSize)
-    }
-    return {
-      next:next,
-      previous:previous,
-      first:fist,
-      last:last,
-      go_to:go_to,
-      cursor:cursor,
-      config:config
-    }
-  });  
+ 
 
 /**
  * @memberOf europeana_widget.doEuRelated
@@ -219,28 +196,10 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     });
   };
   search_redo_button(data.keywords);
-  
   //TODO -- is this still necessary? probably not!
   data = JSON.stringify(data); 
  
-var image_preloader = function(url,sel) {
-  console.log('image_preloader')
-  var spin = '/static/images/giphy.gif';
-//  url = spin;
-//  $(sel).css('background-image', 'url('+spin+')');;
-  
-  var img =  $('<img/>');
-  img.attr('src',url);
-  img.on('load',function() { 
-    console.log("loaded");
-        $(this).remove();
-        $(sel).attr('style','width:100px; height:100px;cursor:pointer;background-image: url('+url+');')
-    //    $(sel).css('background-image', 'url('+url+')');
-        });
-  img.onerror =  function(){console.log("fail");};
-    
-  
-};
+
   /**
    * @memberOf europeana_widget.doEuRelated
    */
@@ -306,6 +265,7 @@ var image_preloader = function(url,sel) {
   /**
    * @memberOf europeana_widget.doEuRelated 
    * fill the grid with items
+   * format each item
    * called from ajax success
    */
   
@@ -326,8 +286,7 @@ var image_preloader = function(url,sel) {
       }
       // set the background image
       var style = makeStyle(width, height,item.thumb);
-       
-   //   image_preloader(testpic,t);
+ 
       $(t).attr('data-ure-uri', item.edmPreview);
       $(t).attr('data-eu-provider', item.dataProvider);
       $(t).attr('data-eu-id', item.id);
@@ -544,6 +503,7 @@ var image_preloader = function(url,sel) {
    * callback to run on  data returned by query.
    * calls UI functions defined above as closures. 
    */
+  
   var success = function(data) {
  
     var width, height, displayInfobox, items;
@@ -584,9 +544,6 @@ var image_preloader = function(url,sel) {
     /** make controls */
 
     makeProviderlist(providerlist);
-   
-    /** trigger freewall recompute. */
-    $(window).trigger("resize");
 
     /** run callbacks */
     completed_callback.call(this);
@@ -689,6 +646,7 @@ var image_preloader = function(url,sel) {
       // return kw.join("+AND+");
       return kw.join("+");
     };
+    
     var extras = "";
     extras = get_search_extras();
 
@@ -701,8 +659,7 @@ var image_preloader = function(url,sel) {
     var url_new = url_base + query;
     // add data to success and get new callback. 
     var done = success_new(url_new, qs);
-   
-   
+
     // set up query caching
     var useQueryCache = true; //TODO move to top
     var eucache = {};
@@ -726,7 +683,7 @@ var image_preloader = function(url,sel) {
          done(eucache[url_new]);
        } 
        else {
-         var newdone = function(data) {
+         var new_done = function(data) {
            console.log("NO CACHE!!")
            console.log(url_new);
            eucache[url_new] = data;
@@ -738,7 +695,7 @@ var image_preloader = function(url,sel) {
                 url : url_new,
                 dataType : "json",
                 type : "GET"
-            }).done(newdone).fail(fail).always(complete);
+            }).done(new_done).fail(fail).always(complete);
         
        }
       
@@ -827,6 +784,7 @@ var image_preloader = function(url,sel) {
    * @memberOf europeana_widget
    * 
    * Prepare items for the grid
+   * called in  eu_makegrid
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
     console.log("makeGrid ");
@@ -1237,6 +1195,7 @@ var image_preloader = function(url,sel) {
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
+      
       // invoke the widget
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
