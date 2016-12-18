@@ -29,15 +29,14 @@
     return out;
   }
 
-  var content = content_gen(10000);
+//  var content = content_gen(10000);
 
   // some widget for displaying content 
-  // this can be a wrapper around some actual content display
-  // which exposes: 
-  // -- current_chunk
-  // -- chunks.length
-  // -- display_chunk(n)
-  // -- chunk_width
+  // this can be a wrapper around some actual content display controller
+  // which exposes this interface: 
+  // -- current_chunk -- int index of current chunk 
+  // -- chunks.length  -- int number chunks
+  // -- display_chunk(n) -- int index of chunk to display
 
 
   var content_widget = function(selector) {
@@ -151,10 +150,10 @@
     return box
   }
 
-  var cw = content_widget("#content");
-  cw.content(content);
-  cw.template(template)
-  var pager = new Pager(cw);
+//  var cw = content_widget("#content");
+//  cw.content(content);
+//  cw.template(template)
+//  var pager = new Pager(cw);
 
   // widget for page navigation; 
   // Note: in this set-up, chunk length is static.
@@ -291,5 +290,5 @@
       chunkSelect: chunkSelect
     }
   }
-
+window.ure_pager = Pager;
 }()
