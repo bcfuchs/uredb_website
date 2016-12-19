@@ -89,25 +89,15 @@
    function current() {
       return current_chunk;
     }
-    function _calculate_chunk() {
-      var cursor = 1;
-      if (!('eu_cursor'  in window)) {
-        cursor = 1
-      }
-      else {
-        cursor = window.eu_cursor 
-      }
-      current_chunk = Math.floor(cursor/paginationSize) ;
-      if (Math.floor(cursor/paginationSize) < 1)
-        current_chunk = 1
-        set_chunks_length(Math.ceil(totalResults / paginationSize));
-        set_current_chunk(current_chunk);
-    }
+   
     function chunk(n) {
       // TODO this needs to come from cursor info
-      
+	// increment cursor
+	if (n===1)
+	    n = 2
+	window.eu_cursor = (n  - 1)* config.paginationSize; 
       window.ure_makeEuRelatedItems(true)
-      _calculate_chunk();
+     
     }
     function chunks_length(){
       return chunks_length;
@@ -147,7 +137,7 @@
        cursor = 1
      }
      else {
-       cursor = window.eu_cursor 
+       cursor = window.eu_cursor
      }
      current_chunk = Math.floor(cursor/paginationSize) ;
      if (Math.floor(cursor/paginationSize) < 1)
@@ -1293,13 +1283,15 @@ var image_preloader = function(url,sel) {
         data.keywords = window.europeanaWidget_keywords;
       }
 
-      // set up freewall grid and some other stuff
+      // set up grid and some other stuff
       // TODO has to be called at end of eu ajax, so we'll pass it in as a
-      // callback
+	// callback
+	
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
-      // invoke the widget
+	
+      // invoke the widget, with the callback
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.

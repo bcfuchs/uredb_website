@@ -159,7 +159,8 @@
   // Note: in this set-up, chunk length is static.
   function Pager(cw) {
     var n = cw.chunks_length() - 1;
-    var chunk = 1;
+      var chunk = 1;
+      var count = 1;
     // override in config
     var chunk_link = function(i) {
           return '<span class="chunklink" data-chunk="' + i + '">' + i + '</span>';
@@ -171,7 +172,7 @@
       lastChunkSel: "#lastchunk",
       nextChunkSel: "#nextchunk",
       prevChunkSel: "#prevchunk",
-      pageWindow: 10, // number of steps in an index
+      pageWindow:  5, // number of steps in an index
       chunkIndexSelector: "#chunkindex-container",
       chunkHatches: true,
       chunkHatchesMax: 5,
@@ -238,13 +239,17 @@
 
       var w = get_index_window();
       var start = w[0],
-        end = w[1];
+          end = w[1];
+	var deb = "current chunk: " + cw.current() + " window: " + w[2] + " " + cw.current() + " / " +  config.pageWindow  + " ||| "
       if (config.debug === true) 
-        $("#current").html(w.join("-")); // debug
-      
+        $("#current").html(count + ": " + deb +  " " + w.join("-")); // debug
+
+      count = count + 1
       $(config.chunkIndexSelector).html(_indexify_window(start, end).join(''));     
+
       $(".chunklink").click(function() {
         console.log(cw)
+        
         chunkSelect($(this).data('chunk'))
       })
 
@@ -256,7 +261,8 @@
 
       // what window is the current chunk in? 
       var this_window = Math.ceil(cw.current() / config.pageWindow);
-      // get start, end
+
+	// get start, end
       var end = (this_window * config.pageWindow) + 1;
       var start = end - config.pageWindow;
       if (start === 0)
