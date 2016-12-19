@@ -158,7 +158,7 @@
   // widget for page navigation; 
   // Note: in this set-up, chunk length is static.
   function Pager(cw) {
-    var n = cw.chunks().length - 1;
+    var n = cw.chunks_length() - 1;
     var chunk = 1;
     // override in config
     var chunk_link = function(i) {
@@ -171,13 +171,14 @@
       lastChunkSel: "#lastchunk",
       nextChunkSel: "#nextchunk",
       prevChunkSel: "#prevchunk",
-      pageWindow: 5,
+      pageWindow: 10, // number of steps in an index
       chunkIndexSelector: "#chunkindex-container",
       chunkHatches: true,
       chunkHatchesMax: 5,
       hatchFactor: 2,
       indexOverlap: 1,
       lastChunkHatch: true,
+      debug:true,
       chunk_link:chunk_link,
       selectedClass: "selected-chunk"
 
@@ -187,14 +188,17 @@
 
     // bind paging to buttons...
     function init() {
-      chunkSelect(chunk)
+      
+      //chunkSelect(chunk)
+      _indexify();
+      
       $(config.firstChunkSel).click(function() {
 
         chunkSelect(1)
       });
 
       $(config.lastChunkSel).click(function() {
-        chunkSelect(cw.chunks().length - 1)
+        chunkSelect(cw.chunks_length() - 1)
       })
 
       $(config.nextChunkSel).click(function() {
@@ -235,8 +239,12 @@
       var w = get_index_window();
       var start = w[0],
         end = w[1];
-      $("#current").html(w.join("-")); // debug
-      $(config.chunkIndexSelector).html(_indexify_window(start, end).join(''));     $(".chunklink").click(function() {
+      if (config.debug === true) 
+        $("#current").html(w.join("-")); // debug
+      
+      $(config.chunkIndexSelector).html(_indexify_window(start, end).join(''));     
+      $(".chunklink").click(function() {
+        console.log(cw)
         chunkSelect($(this).data('chunk'))
       })
 
@@ -259,7 +267,7 @@
    
 
     function _indexify_window(start, end) {
-      var chunk_length = cw.chunks().length;
+      var chunk_length = cw.chunks_length();
       var link = config.chunk_link;
       var out = [];
      
@@ -287,7 +295,8 @@
 
     }
     return {
-      chunkSelect: chunkSelect
+      chunkSelect: chunkSelect,
+      config:config
     }
   }
 window.ure_pager = Pager;

@@ -34,6 +34,7 @@
 		<!--  code from static grid in git master < commit ae8e06530236e16e8e0b411e43b7bd99b98ac325  -->
 	</div>
 </div>
+<script id="europeana_widget_js" src="${resource(dir:'js',file:'ure_pager.js?v=2')}"></script>
 <script id="europeana_widget_js" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
 
 <div id="gridTemplate" style="display: none;">

@@ -67,24 +67,111 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-/**
- * refactor:
- *  
- * pageWindow :  paginationSize
- * chunks.length : totalResults / paginationSize 
- * display_chunk(n) :  update_pagintation(Math.floor(window.eu_cursor/paginationSize);
- * 
- * 
- */
+
 
 /**
 * 
 *  START doEuRelated 
 **/
 (function() {
+  
+  /**
+   * Refactor
+   * Content wrapper interface to expose fields for ure_pager
+   */
+  function eu_content_wrapper()  {
+    var config,chunk,chunks,current_chunk,chunks_length_val; 
+    current_chunk = 1;
+    config = {
+        paginationSize: 100,
+        
+    }
+   function current() {
+      return current_chunk;
+    }
+    function _calculate_chunk() {
+      var cursor = 1;
+      if (!('eu_cursor'  in window)) {
+        cursor = 1
+      }
+      else {
+        cursor = window.eu_cursor 
+      }
+      current_chunk = Math.floor(cursor/paginationSize) ;
+      if (Math.floor(cursor/paginationSize) < 1)
+        current_chunk = 1
+        set_chunks_length(Math.ceil(totalResults / paginationSize));
+        set_current_chunk(current_chunk);
+    }
+    function chunk(n) {
+      // TODO this needs to come from cursor info
+      
+      window.ure_makeEuRelatedItems(true)
+      _calculate_chunk();
+    }
+    function chunks_length(){
+      return chunks_length;
+    }
+    function set_current_chunk(n) {
+    
+      current_chunk = n;
+    }
+    function set_chunks_length(n) {
+      chunks_length = n;
+    }
+    
+    return {
+      chunk: chunk, 
+      current:current,
+      set_current_chunk:set_current_chunk,
+      set_chunks_length:set_chunks_length,
+      chunks_length:chunks_length,
+      paginationSize: config.paginationSize
+     
+   //   pageWindow: paginationSize 
+    }
+  }
+ // test for wrapper
+ var test_code_run = false;
+ var euwrap = new eu_content_wrapper();  
+ var pager;
+ var counter = 1;
+ 
+ var test_code = function(totalResults,paginationSize) {
+   var cursor = 1, current_chunk;
+   $(document).ready(function(){
 
+     
+     // st cursor to one if no cursor yet.
+     if (!('eu_cursor'  in window)) {
+       cursor = 1
+     }
+     else {
+       cursor = window.eu_cursor 
+     }
+     current_chunk = Math.floor(cursor/paginationSize) ;
+     if (Math.floor(cursor/paginationSize) < 1)
+       current_chunk = 1
+    euwrap.set_chunks_length(Math.ceil(totalResults / paginationSize));
+    euwrap.set_current_chunk(current_chunk);
+    if (test_code_run === false) {
+     pager = window.ure_pager(euwrap);
+     test_code_run = true;
+    }
+    console.log(euwrap);
+    console.log(euwrap.current())
+   });
+   
+ }
+  $(document).ready(function(){
+    $("span#query-display").after('<div id="chunkindex-container"></div><div id="current"></div>')
+  })
 var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
     paginationSize = 100;
+    
+    console.log("EUWRAP REFACTOR")
+    test_code(totalResults,paginationSize);
+
     $(".pagination-widget .eumore").show();
     $(".pagination-widget .euless").show();  
     // increment the cursor if there is one. 
@@ -196,10 +283,28 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     });
   };
   search_redo_button(data.keywords);
+  
   //TODO -- is this still necessary? probably not!
   data = JSON.stringify(data); 
  
-
+var image_preloader = function(url,sel) {
+  console.log('image_preloader')
+  var spin = '/static/images/giphy.gif';
+//  url = spin;
+//  $(sel).css('background-image', 'url('+spin+')');;
+  
+  var img =  $('<img/>');
+  img.attr('src',url);
+  img.on('load',function() { 
+    console.log("loaded");
+        $(this).remove();
+        $(sel).attr('style','width:100px; height:100px;cursor:pointer;background-image: url('+url+');')
+    //    $(sel).css('background-image', 'url('+url+')');
+        });
+  img.onerror =  function(){console.log("fail");};
+    
+  
+};
   /**
    * @memberOf europeana_widget.doEuRelated
    */
@@ -265,7 +370,6 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
   /**
    * @memberOf europeana_widget.doEuRelated 
    * fill the grid with items
-   * format each item
    * called from ajax success
    */
   
@@ -286,7 +390,8 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       }
       // set the background image
       var style = makeStyle(width, height,item.thumb);
- 
+       
+   //   image_preloader(testpic,t);
       $(t).attr('data-ure-uri', item.edmPreview);
       $(t).attr('data-eu-provider', item.dataProvider);
       $(t).attr('data-eu-id', item.id);
@@ -646,7 +751,6 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       // return kw.join("+AND+");
       return kw.join("+");
     };
-    
     var extras = "";
     extras = get_search_extras();
 
@@ -659,7 +763,8 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
     var url_new = url_base + query;
     // add data to success and get new callback. 
     var done = success_new(url_new, qs);
-
+   
+   
     // set up query caching
     var useQueryCache = true; //TODO move to top
     var eucache = {};
@@ -683,7 +788,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
          done(eucache[url_new]);
        } 
        else {
-         var new_done = function(data) {
+         var newdone = function(data) {
            console.log("NO CACHE!!")
            console.log(url_new);
            eucache[url_new] = data;
@@ -695,7 +800,7 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
                 url : url_new,
                 dataType : "json",
                 type : "GET"
-            }).done(new_done).fail(fail).always(complete);
+            }).done(newdone).fail(fail).always(complete);
         
        }
       
@@ -784,7 +889,6 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
    * @memberOf europeana_widget
    * 
    * Prepare items for the grid
-   * called in  eu_makegrid
    */
   var makeGrid = function(gridid, width, height, displayInfobox, wallWidth, accnum) {
     console.log("makeGrid ");
@@ -1195,14 +1299,13 @@ doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_ca
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
-      
       // invoke the widget
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.
       europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
     }; // makeEuRelatedItems
-    
+    window.ure_makeEuRelatedItems = makeEuRelatedItems;
     
     // call the the setup when the window is ready. 
     $(document).ready(function() {

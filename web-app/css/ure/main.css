@@ -1717,6 +1717,26 @@ a#extlink:link {
 * Europeana Widget
 * 
 */
+
+
+.selected-chunk {
+  color: red;
+}
+
+.chunklink:hover {
+  cursor: pointer;
+  color: blue;
+}
+
+.chunklink {
+  margin-left: 5px;
+  text-decoration: underline;
+}
+
+#chunkindex-container {
+  display: inline
+}
+
 .pagination-widget {
 	display: inline;
 	padding-left: 12px;
