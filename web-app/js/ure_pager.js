@@ -1,159 +1,5 @@
 ! function() {
-//generate some content....
-  var content_gen = function(n) {
 
-    var n2w = {
-      1: 'one',
-      2: 'two',
-      3: 'three',
-      4: 'four',
-      5: 'five',
-      6: 'six',
-      7: 'seven',
-      8: 'eight',
-      9: 'nine',
-      0: 'oh'
-    }
-    out = []
-
-    for (var i = 1; i < n; i++) {
-      var outa = {}
-      var s = i.toString().split('')
-      var outs = [];
-      for (var j in s) {
-        outs.push(n2w[s[j]]);
-      }
-      outa[i] = outs.join('-');
-      out.push(outa)
-    }
-    return out;
-  }
-
-//  var content = content_gen(10000);
-
-  // some widget for displaying content 
-  // this can be a wrapper around some actual content display controller
-  // which exposes this interface: 
-  // -- current_chunk -- int index of current chunk 
-  // -- chunks.length  -- int number chunks
-  // -- display_chunk(n) -- int index of chunk to display
-
-
-  var content_widget = function(selector) {
-    var content, template, chunks, config, current_chunk, windows;
-    var current_chunk = 1;
-    chunks = []
-    config = {
-      selector: selector,
-      containerSelector: ".container",
-      pageDepth: 20,
-      pageWindow: 5
-      
-    }
-    init();
-
-    function init() {
-
-      $(config.selector).append('<div class="container"></div>')
-
-    }
-
-    function _chunkify() {
-      var chunk = [];
-      for (var i = 0; i < content.length; i++) {
-        chunk.push(content[i])
-        if (i % config.pageDepth === 0) {
-          chunks.push(chunk)
-          chunk = []
-        }
-      }
-
-      if (chunk.length > 0)
-        chunks.push(chunk);
-    }
-
-   
-    function content(c) {
-      content = c // an array of items  
-      _chunkify();
-    }
-
-    function template(t) {
-      template = t // a callback for formatting the items in a chunk
-    }
-
-    function test(m) {
-      $(config.containerSelector).append("<div>" + m + "</div>")
-    }
-
-
-    function chunk(n) {
-
-      var this_chunk = chunks[n]
-      current_chunk = n;
-      $(config.containerSelector).empty();
-      for (var i = 0, z = this_chunk.length; i < z; i++) {
-
-        var item = this_chunk[i];
-        var contentItem = template(item)
-        $(config.containerSelector).append(contentItem)
-
-      }
-
-
-    }
-
-    function current() {
-      return current_chunk;
-    }
-
-    function get_chunks() {
-      return chunks;
-    }
-
-    function fill() {
-
-      for (var i = 0; i < content.length; i++) {
-
-        var item = content[i]
-        var contentItem = template(item)
-        $(config.containerSelector).append(contentItem);
-
-      }
-
-    }
-
-    return {
-      test: test,
-      config: config,
-      content: content,
-      template: template,
-      fill: fill,
-      chunk: chunk,
-      chunks: get_chunks,
-      current: current,
-      current_chunk: current_chunk,
-
-
-    }
-
-  }
-  // display template for each content item
-  var template = function(item, selector) {
-
-    for (key in item) {
-      var box = $('<div class="item-container"></div>')
-      $(box).append('<div class="title">' + key + "</div>");
-      $(box).append('<div class="content">' + item[key] + "</div>");
-
-    }
-    return box
-  }
-
-//  var cw = content_widget("#content");
-//  cw.content(content);
-//  cw.template(template)
-//  var pager = new Pager(cw);
 
   // widget for page navigation; 
   // Note: in this set-up, chunk length is static.
@@ -172,7 +18,7 @@
       lastChunkSel: "#lastchunk",
       nextChunkSel: "#nextchunk",
       prevChunkSel: "#prevchunk",
-      pageWindow:  5, // number of steps in an index
+      pageWindow:  5 , // number of steps in an index
       chunkIndexSelector: "#chunkindex-container",
       chunkHatches: true,
       chunkHatchesMax: 5,
@@ -194,7 +40,6 @@
       _indexify();
       
       $(config.firstChunkSel).click(function() {
-
         chunkSelect(1)
       });
 
@@ -222,7 +67,8 @@
   *  @param chunk -- chunk index
   */
     function chunkSelect(chunk) {
-      cw.chunk(chunk);
+	alert("asked for chunk " + chunk);
+	cw.chunk(chunk);
       _indexify();
     }
    /**
@@ -236,11 +82,11 @@
     }
     
     function _indexify() {
-
+	var current_chunk = cw.current();
       var w = get_index_window();
       var start = w[0],
           end = w[1];
-	var deb = "current chunk: " + cw.current() + " window: " + w[2] + " " + cw.current() + " / " +  config.pageWindow  + " ||| "
+	var deb = "current chunk: " + current_chunk + " window: " + w[2] + " " + current_chunk + " / " +  config.pageWindow  + " ||| "
       if (config.debug === true) 
         $("#current").html(count + ": " + deb +  " " + w.join("-")); // debug
 
@@ -249,8 +95,8 @@
 
       $(".chunklink").click(function() {
         console.log(cw)
-        
-        chunkSelect($(this).data('chunk'))
+        var n = $(this).data('chunk');
+        chunkSelect(n)
       })
 
       _index_style(cw.current());

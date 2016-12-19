@@ -18,9 +18,9 @@
 !function() {
   'use strict';
   // reset the cache
-  var eu_querycache_store = 'eu_querycache'; 
-  if ( $.localStorage.isSet(eu_querycache_store))  {
-      $.localStorage.set(eu_querycache_store,{});
+  var eu_querycache_store = 'eu_querycache';
+  if ($.localStorage.isSet(eu_querycache_store)) {
+    $.localStorage.set(eu_querycache_store, {});
   }
 
   /**
@@ -40,7 +40,7 @@
     return out;
 
   };
-  
+
   window.get_search_extras = get_search_extras;
   /**
    * @memberOf europeana_widget.init_euRelated
@@ -52,7 +52,7 @@
     // so use +OR+
     // http://www.europeana.eu/api/v2/search.json?wskey=api2demo&query=Corinthian+OR+late+OR+corinthian+OR+aryballos&thumbnail=true&rows=200&profile=rich&start=1&qf=provider_aggregation_edm_dataProvider:%22Fitzwilliam+Museum%22+OR+provider_aggregation_edm_dataProvider:%22The+European+Library%22
     console.log(providers);
-    for (var i = 0,z = providers.length; i < z; i++) {
+    for (var i = 0, z = providers.length; i < z; i++) {
       var provider = providers[i];
       // provider = provider.replaceAll(/\s/,"%20")
       var provider_enc = encodeURIComponent(provider);
@@ -67,478 +67,488 @@
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
 }();
 
-
-
 /**
-* 
-*  START doEuRelated 
-**/
+ * 
+ * START doEuRelated
+ */
 (function() {
-  
+
   /**
-   * Refactor
-   * Content wrapper interface to expose fields for ure_pager
+   * Refactor Content wrapper interface to expose fields for ure_pager
+   * 
+   * wrapper to expose interface for pager component. 
    */
-  function eu_content_wrapper()  {
-    var config,chunk,chunks,current_chunk,chunks_length_val; 
+  function eu_content_wrapper() {
+    var config, chunk, chunks, current_chunk, chunks_length_val;
     current_chunk = 1;
     config = {
-        paginationSize: 100,
-        
+      paginationSize : 100,
+
     }
-   function current() {
+    function current() {
       return current_chunk;
     }
-   
+    function _increment_cursor(n) {
+      // increment cursor
+      if (n === 1)
+        n = 2
+      window.eu_cursor = (n - 1) * config.paginationSize;
+    }
+    // display chunk $n , run the new query, set chunk to $n
     function chunk(n) {
       // TODO this needs to come from cursor info
-	// increment cursor
-	if (n===1)
-	    n = 2
-	window.eu_cursor = (n  - 1)* config.paginationSize; 
+      _increment_cursor(n);
       window.ure_makeEuRelatedItems(true)
-     
+      set_current_chunk(n)
+
     }
-    function chunks_length(){
+    function chunks_length() {
       return chunks_length;
     }
     function set_current_chunk(n) {
-    
+
       current_chunk = n;
     }
     function set_chunks_length(n) {
       chunks_length = n;
     }
-    
+
     return {
-      chunk: chunk, 
-      current:current,
-      set_current_chunk:set_current_chunk,
-      set_chunks_length:set_chunks_length,
-      chunks_length:chunks_length,
-      paginationSize: config.paginationSize
-     
-   //   pageWindow: paginationSize 
+      chunk : chunk,
+      current : current,
+      set_current_chunk : set_current_chunk,
+      set_chunks_length : set_chunks_length,
+      chunks_length : chunks_length,
+      paginationSize : config.paginationSize
+
+    // pageWindow: paginationSize
     }
   }
- // test for wrapper
- var test_code_run = false;
- var euwrap = new eu_content_wrapper();  
- var pager;
- var counter = 1;
- 
- var test_code = function(totalResults,paginationSize) {
-   var cursor = 1, current_chunk;
-   $(document).ready(function(){
+  // test for wrapper
+  var test_code_run = false;
+  var euwrap = new eu_content_wrapper();
+  var pager;
+  var counter = 1;
+  
+// test code for the pager
+  var test_code = function(totalResults, paginationSize) {
 
-     
-     // st cursor to one if no cursor yet.
-     if (!('eu_cursor'  in window)) {
-       cursor = 1
-     }
-     else {
-       cursor = window.eu_cursor
-     }
-     current_chunk = Math.floor(cursor/paginationSize) ;
-     if (Math.floor(cursor/paginationSize) < 1)
-       current_chunk = 1
-    euwrap.set_chunks_length(Math.ceil(totalResults / paginationSize));
-    euwrap.set_current_chunk(current_chunk);
-    if (test_code_run === false) {
-     pager = window.ure_pager(euwrap);
-     test_code_run = true;
-    }
-    console.log(euwrap);
-    console.log(euwrap.current())
-   });
-   
- }
-  $(document).ready(function(){
-    $("span#query-display").after('<div id="chunkindex-container"></div><div id="current"></div>')
-  })
-var update_pagination = function(incrementCursor, itemsCount,totalResults, paginationSize) {
-    paginationSize = 100;
+    var cursor = 1, current_chunk = 1;
+    $(document).ready(function() {
+      
+      // st cursor to one if no cursor yet.
+      if (!('eu_cursor' in window)) {
+        cursor = 1
+      } else {
+        cursor = window.eu_cursor
+      }
+
+      euwrap.set_chunks_length(Math.ceil(totalResults / paginationSize));
+
+      if (test_code_run === false) {
+        pager = window.ure_pager(euwrap);
+        test_code_run = true;
+        euwrap.set_current_chunk(current_chunk);
+      }
+      console.log(euwrap);
+      console.log(euwrap.current())
+    });
+
+  };
+// div for pager test
+  $(document).ready(function() {
+    var bebut = '<button class="btn btn-xs btn-default" id="firstchunk">\
+  << \
+</button>\
+<button  class="btn btn-xs  btn-default"  id="prevchunk">\
+  <\
+</button>';
     
+    var afbut = '<button class="btn btn-xs btn-default" id="nextchunk">\
+      > \
+    </button>\
+    <button  class="btn btn-xs  btn-default"  id="lastchunk">\
+      >>\
+    </button>';
+    
+    $("span#query-display").after(bebut + '<div id="chunkindex-container"></div>'+afbut+'<div id="current"></div>')
+  })
+  
+  var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
+    paginationSize = 100;
+
     console.log("EUWRAP REFACTOR")
-    test_code(totalResults,paginationSize);
+    test_code(totalResults, paginationSize);
+    console.log("EUWRAP REFACTOR END -----")
 
     $(".pagination-widget .eumore").show();
-    $(".pagination-widget .euless").show();  
-    // increment the cursor if there is one. 
-    
+    $(".pagination-widget .euless").show();
+    // increment the cursor if there is one.
+
     if ('eu_cursor' in window) {
       if (incrementCursor === true) {
         window.eu_cursor += itemsCount;
-    } 
-    else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
-       
-      window.eu_cursor -= itemsCount
+      } else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
+
+        window.eu_cursor -= itemsCount
       }
-    }
-     else {
+    } else {
       window.eu_cursor = itemsCount;
-      
+
     }
- 
+
     $(".pagination-widget .itemsCount").html(window.eu_cursor);
 
     $(".pagination-widget .total-results").html(totalResults);
     // itemsCount = totalResults
     // hide eumore
-    // if the cursor is at the end 
-    
+    // if the cursor is at the end
+
     if (window.eu_cursor === totalResults) {
-        console.log("pager.previous")
-        $(".pagination-widget .eumore").hide();
-        $(".pagination-widget .euless").show(); 
-        
+      console.log("pager.previous")
+      $(".pagination-widget .eumore").hide();
+      $(".pagination-widget .euless").show();
+
     }
     // if the cursor is beyond end of data
     if (window.eu_cursor > totalResults) {
       console.log("pager.next")
       $(".pagination-widget .eumore").hide();
-      $(".pagination-widget .euless").show();  
+      $(".pagination-widget .euless").show();
       $(".pagination-widget .itemsCount").html(totalResults);
-  }
+    }
     // if the batch is <= paginationSize or we are on the first batch..
-    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)  
+    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)
       $(".pagination-widget .euless").hide();
-    
-    
-    
-    
-  }; // update_pagination. 
+
+  }; // update_pagination.
   // TODO put this inside pager
- 
 
-/**
- * @memberOf europeana_widget.doEuRelated
- */
-var doEuRelated_retake;
-
-/**
- * @memberOf europeana_widget.doEuRelated
- */
-var doEuRelated = function() {
-};
-
-var doEuRelated_keywords = "";
-var retakeButtonSel = "#retake-button";
-var retake_count = 0;
-var retake_count_max = 2;
-
-doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
-  console.log("doEuRelated...");
-
-  doEuRelated_keywords = data.keywords;
-  window.europeanaWidget_keywords = data.keywords;
-
-  var blank_image_100x100 = "/static/images/blank100x100.png";
-  var titleWordLength = 10;
-  var providerlist = {}; // provider list
-  var template = $($(templateSel + " .gridlist-cell")[0]).clone();
-  var retakeOnZero = true; // TODO move to top
-  var default_keywords = [ 'greek','black', 'figure'];
-  
-  /** 
-   * redo the query with default kws if the supplied kws return 0
-   * 
-   */
-  doEuRelated_retake = function(keywords) {
-    
-    window.europeanaWidget_keywords = keywords;
-
-    var d = JSON.parse(data); // original data
-    d.keywords = keywords;
-    d.startrec=1;
-    data = d; // reset data
-    delete window.eu_cursor; // reset the cursor
-    doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
-  };
-  
-  
   /**
    * @memberOf europeana_widget.doEuRelated
    */
-  var search_redo_button = function(keywords) {
-    $("#retake-button-terms").val(keywords.join(" "));
-    $(retakeButtonSel).click(function() {
-      // get the terms from the input box
-      var terms = $("#retake-button-terms").val();
-      alert("querying Europeana for '" + terms + "'...");
-      var keywords = terms.split(" ");
-     
-      doEuRelated_retake(keywords); // function reference reset w/ new data on each call
-     
-    });
+  var doEuRelated_retake;
+
+  /**
+   * @memberOf europeana_widget.doEuRelated
+   */
+  var doEuRelated = function() {
   };
-  search_redo_button(data.keywords);
-  
-  //TODO -- is this still necessary? probably not!
-  data = JSON.stringify(data); 
- 
-var image_preloader = function(url,sel) {
-  console.log('image_preloader')
-  var spin = '/static/images/giphy.gif';
-//  url = spin;
-//  $(sel).css('background-image', 'url('+spin+')');;
-  
-  var img =  $('<img/>');
-  img.attr('src',url);
-  img.on('load',function() { 
-    console.log("loaded");
+
+  var doEuRelated_keywords = "";
+  var retakeButtonSel = "#retake-button";
+  var retake_count = 0;
+  var retake_count_max = 2;
+
+  doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
+    console.log("doEuRelated...");
+
+    doEuRelated_keywords = data.keywords;
+    window.europeanaWidget_keywords = data.keywords;
+
+    var blank_image_100x100 = "/static/images/blank100x100.png";
+    var titleWordLength = 10;
+    var providerlist = {}; // provider list
+    var template = $($(templateSel + " .gridlist-cell")[0]).clone();
+    var retakeOnZero = true; // TODO move to top
+    var default_keywords = [ 'greek', 'black', 'figure' ];
+
+    /**
+     * redo the query with default kws if the supplied kws return 0
+     * 
+     */
+    doEuRelated_retake = function(keywords) {
+
+      window.europeanaWidget_keywords = keywords;
+
+      var d = JSON.parse(data); // original data
+      d.keywords = keywords;
+      d.startrec = 1;
+      data = d; // reset data
+      delete window.eu_cursor; // reset the cursor
+      doEuRelated(templateSel, gridSel, data, incrementCursor, completed_callback);
+    };
+
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var search_redo_button = function(keywords) {
+      $("#retake-button-terms").val(keywords.join(" "));
+      $(retakeButtonSel).click(function() {
+        // get the terms from the input box
+        var terms = $("#retake-button-terms").val();
+        alert("querying Europeana for '" + terms + "'...");
+        var keywords = terms.split(" ");
+
+        doEuRelated_retake(keywords); // function reference reset w/ new data on
+        // each call
+
+      });
+    };
+    search_redo_button(data.keywords);
+
+    // TODO -- is this still necessary? probably not!
+    data = JSON.stringify(data);
+
+    var image_preloader = function(url, sel) {
+      console.log('image_preloader')
+      var spin = '/static/images/giphy.gif';
+      // url = spin;
+      // $(sel).css('background-image', 'url('+spin+')');;
+
+      var img = $('<img/>');
+      img.attr('src', url);
+      img.on('load', function() {
+        console.log("loaded");
         $(this).remove();
-        $(sel).attr('style','width:100px; height:100px;cursor:pointer;background-image: url('+url+');')
-    //    $(sel).css('background-image', 'url('+url+')');
-        });
-  img.onerror =  function(){console.log("fail");};
-    
-  
-};
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  // make style for each element.
-  var makeStyle = function(w, h, thumburl) {
-    var spin = '/static/images/giphy.gif';
-    // return 'width:' + w + '; height:' + h + '; background-image: url(' + thumburl + ')';
-    return 'background-image: url(' + thumburl + ')';
+        $(sel).attr('style', 'width:100px; height:100px;cursor:pointer;background-image: url(' + url + ');')
+        // $(sel).css('background-image', 'url('+url+')');
+      });
+      img.onerror = function() {
+        console.log("fail");
+      };
 
-    
-  };
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    // make style for each element.
+    var makeStyle = function(w, h, thumburl) {
+      var spin = '/static/images/giphy.gif';
+      // return 'width:' + w + '; height:' + h + '; background-image: url(' +
+      // thumburl + ')';
+      return 'background-image: url(' + thumburl + ')';
 
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * make a date for overlay from europeana metadata return null if metadata
-   * missing.
-   */
-  var getDate = function(item) {
+    };
 
-    var out = "";
-    if ('edmTimespanLabel' in item && item.edmTimespanLabel !== "")
-      out += item.edmTimespanLabel[0].def + " ";
-    if ('edmTimespanBroaderTerm' in item && item.edmTimespanBroaderTerm)
-      out += item.edmTimespanBroaderTerm;
-    return out;
-  };
-  
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * NOT USED!!!
-   */
-  var getTitle = function(title) {
-    var out = title[0];
-    var t = out.split(" ");
-    if (t.length > titleWordLength)
-      out = t.splice(0, titleWordLength).join(" ");
-    return out;
-  };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * make a date for overlay from europeana metadata return null if metadata
+     * missing.
+     */
+    var getDate = function(item) {
 
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  var makeProviderlist = function(provs) {
-    console.log('makeng provider list... ');
-    var providers = Object.keys(provs);
-    console.log(providers.length);
+      var out = "";
+      if ('edmTimespanLabel' in item && item.edmTimespanLabel !== "")
+        out += item.edmTimespanLabel[0].def + " ";
+      if ('edmTimespanBroaderTerm' in item && item.edmTimespanBroaderTerm)
+        out += item.edmTimespanBroaderTerm;
+      return out;
+    };
 
-    for (var i = 0,z = providers.length; i < z; i++) {
-      var t = $($("#provider-label-template label")[0]).clone();
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * NOT USED!!!
+     */
+    var getTitle = function(title) {
+      var out = title[0];
+      var t = out.split(" ");
+      if (t.length > titleWordLength)
+        out = t.splice(0, titleWordLength).join(" ");
+      return out;
+    };
 
-      var provider = providers[i];
-      $(t).attr('data-eu-provider-list', provider);
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var makeProviderlist = function(provs) {
+      console.log('makeng provider list... ');
+      var providers = Object.keys(provs);
+      console.log(providers.length);
 
-      $(t).find('input').val(provider);
-      $(t).append('<span class="provider">' + provider + '</span>');
+      for (var i = 0, z = providers.length; i < z; i++) {
+        var t = $($("#provider-label-template label")[0]).clone();
 
-      $("#provider-filter").append(t);
-    }
-  };
-  
-  /**
-   * @memberOf europeana_widget.doEuRelated 
-   * fill the grid with items
-   * called from ajax success
-   */
-  
-  var fillGrid = function(items, width, height, displayInfobox) {
-    console.log("fillGrid");
-    var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
-    for (var i = 0, z = items.length; i < z; i++) {
+        var provider = providers[i];
+        $(t).attr('data-eu-provider-list', provider);
 
-      var item = items[i];
-      var provider = item.dataProvider;
-      if (!(provider in providerlist))
-        providerlist[provider] = provider;
-      var t = $(template).clone();
-      if ('edmPreview' in item) {
-        item.thumb = item.edmPreview;
-      } else {
-        item.thumb = blank_image_100x100;
+        $(t).find('input').val(provider);
+        $(t).append('<span class="provider">' + provider + '</span>');
+
+        $("#provider-filter").append(t);
       }
-      // set the background image
-      var style = makeStyle(width, height,item.thumb);
-       
-   //   image_preloader(testpic,t);
-      $(t).attr('data-ure-uri', item.edmPreview);
-      $(t).attr('data-eu-provider', item.dataProvider);
-      $(t).attr('data-eu-id', item.id);
-      $(t).attr('data-eu-guid', item.guid);
-      $(t).attr('data-eu-link', item.edmIsShownAt);
-      $(t).attr('data-ure-image-url', item.edmPreview);
-      if ("dcSubjectLangAware" in item)
-        $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware.def);
-      $(t).attr('style', style);
-      $(t).find(".short_title").html(item.title);
-      $(t).find(".caption").html(item.dataProvider);
-      $(t).find(".date").html(getDate(item));
-      
-      $(t).addClass(hideInfodiv);
+    };
 
-      $(gridSel).append(t);
-    }
+    /**
+     * @memberOf europeana_widget.doEuRelated fill the grid with items called
+     *           from ajax success
+     */
 
-  }; // fillGrid
-  
-  /**
-   * add a filter to skip providers. 
-   * 
-   * @memberOf europeana_widget.doEuRelated
-   * remove items that are on the skiplist. 
-   */
-  var skiplist_filter = function(items) {
-    var skiplist_store = 'skiplist';
-    var skiplist = {};
-    var storage = $.localStorage;
-    var out = [];
-    // get providerBlacklist or start one if none
-    var doSkiplist = false;
-    if (storage.isSet(skiplist_store)) {
-      skiplist = storage.get(skiplist_store);
-      if (skiplist.data.length > 0)
-        doSkiplist = true;
-    }
-
-    if (doSkiplist === true) {
+    var fillGrid = function(items, width, height, displayInfobox) {
+      console.log("fillGrid");
+      var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0, z = items.length; i < z; i++) {
+
         var item = items[i];
-        if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
-          out.push(item);
-          console.log(item.dataProvider[0]);
+        var provider = item.dataProvider;
+        if (!(provider in providerlist))
+          providerlist[provider] = provider;
+        var t = $(template).clone();
+        if ('edmPreview' in item) {
+          item.thumb = item.edmPreview;
+        } else {
+          item.thumb = blank_image_100x100;
         }
-        else {
-          console.log("skipping "+ item.dataProvider[0])
-        }
+        // set the background image
+        var style = makeStyle(width, height, item.thumb);
+
+        // image_preloader(testpic,t);
+        $(t).attr('data-ure-uri', item.edmPreview);
+        $(t).attr('data-eu-provider', item.dataProvider);
+        $(t).attr('data-eu-id', item.id);
+        $(t).attr('data-eu-guid', item.guid);
+        $(t).attr('data-eu-link', item.edmIsShownAt);
+        $(t).attr('data-ure-image-url', item.edmPreview);
+        if ("dcSubjectLangAware" in item)
+          $(t).attr('data-ure-dcSubject', item.dcSubjectLangAware.def);
+        $(t).attr('style', style);
+        $(t).find(".short_title").html(item.title);
+        $(t).find(".caption").html(item.dataProvider);
+        $(t).find(".date").html(getDate(item));
+
+        $(t).addClass(hideInfodiv);
+
+        $(gridSel).append(t);
       }
-    } else {
-      out = items;
-    }
-    return out;
-  };
-  
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  var getSearchMode = function() {
-    return $.localStorage('search-mode');
-  };
 
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   */
-  var set_keywords_display = function(qs) {
-    $("#keywords-display").html(qs);
-  };
-  
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * display the query
-   */
-  var set_query_display = function(qs) {
-    $("#query-display").html(qs);
-  };
-  
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * control pagination display based on state of pagination data
-   */
-  
-  // --- update_pagination
-  
-  String.prototype.hexEncode = function(){
-    var hex, i;
+    }; // fillGrid
 
-    var result = "";
-    for (i=0, z = this.length; i<z; i++) {
+    /**
+     * add a filter to skip providers.
+     * 
+     * @memberOf europeana_widget.doEuRelated remove items that are on the
+     *           skiplist.
+     */
+    var skiplist_filter = function(items) {
+      var skiplist_store = 'skiplist';
+      var skiplist = {};
+      var storage = $.localStorage;
+      var out = [];
+      // get providerBlacklist or start one if none
+      var doSkiplist = false;
+      if (storage.isSet(skiplist_store)) {
+        skiplist = storage.get(skiplist_store);
+        if (skiplist.data.length > 0)
+          doSkiplist = true;
+      }
+
+      if (doSkiplist === true) {
+        for (var i = 0, z = items.length; i < z; i++) {
+          var item = items[i];
+          if (skiplist.data.indexOf(item.dataProvider[0]) > -1) {
+            out.push(item);
+            console.log(item.dataProvider[0]);
+          } else {
+            console.log("skipping " + item.dataProvider[0])
+          }
+        }
+      } else {
+        out = items;
+      }
+      return out;
+    };
+
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var getSearchMode = function() {
+      return $.localStorage('search-mode');
+    };
+
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var set_keywords_display = function(qs) {
+      $("#keywords-display").html(qs);
+    };
+
+    /**
+     * @memberOf europeana_widget.doEuRelated display the query
+     */
+    var set_query_display = function(qs) {
+      $("#query-display").html(qs);
+    };
+
+    /**
+     * @memberOf europeana_widget.doEuRelated control pagination display based
+     *           on state of pagination data
+     */
+
+    // --- update_pagination
+    String.prototype.hexEncode = function() {
+      var hex, i;
+
+      var result = "";
+      for (i = 0, z = this.length; i < z; i++) {
         hex = this.charCodeAt(i).toString(16);
-        result += ("000"+hex).slice(-4);
-    }
+        result += ("000" + hex).slice(-4);
+      }
 
-    return result
-}
-  String.prototype.hexDecode = function(){
-    var j;
-    var hexes = this.match(/.{1,4}/g) || [];
-    var back = "";
-    for(j = 0; j<hexes.length; j++) {
+      return result
+    }
+    String.prototype.hexDecode = function() {
+      var j;
+      var hexes = this.match(/.{1,4}/g) || [];
+      var back = "";
+      for (j = 0; j < hexes.length; j++) {
         back += String.fromCharCode(parseInt(hexes[j], 16));
+      }
+
+      return back;
     }
 
-    return back;
-}
-  
-  var grid_hash = {}
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * stash the grid
-   * return the id
-   */
-  
-  var stash_grid = function(gridSel,url){
-    console.log("stashing grid for " + url)
-    var stashId = 'eu-stash';
-    var stashSel = "#"+stashId;
-   
-    // id of this grid
-    var gridId = url.hexEncode(); 
-    if ((gridId in grid_hash))
-      // return without stashing
+    var grid_hash = {}
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * stash the grid return the id
+     */
+
+    var stash_grid = function(gridSel, url) {
+      console.log("stashing grid for " + url)
+      var stashId = 'eu-stash';
+      var stashSel = "#" + stashId;
+
+      // id of this grid
+      var gridId = url.hexEncode();
+      if ((gridId in grid_hash))
+        // return without stashing
+        return gridId;
+      // create the stash if it doesn't exist;
+      if ($(stashSel).length < 1) {
+        var stash_el = $('<div></div>')
+        $(stash_el).css({
+          display : 'none'
+        })
+        $(stash_el).attr('id', stashId);
+        $('body').append(stash_el);
+
+      }
+      // clone the grid
+      var el = $(gridSel).clone();
+      // create an element for the grid
+      var wrapper = $('<div></div>').attr('id', gridId);
+      wrapper.append(el);
+      $(stashSel).append(wrapper);
+      grid_hash[gridId] = 1;
       return gridId;
-    // create the stash if it doesn't exist;
-    if ($(stashSel).length < 1) {
-       var stash_el = $('<div></div>')
-       $(stash_el).css({display:'none'})
-       $(stash_el).attr('id',stashId);
-       $('body').append(stash_el);
-      
-    }
-    // clone the grid
-    var el = $(gridSel).clone();
-    // create an element for the grid
-    var wrapper = $('<div></div>').attr('id',gridId);
-    wrapper.append(el);
-    $(stashSel).append(wrapper);
-    grid_hash[gridId] = 1;
-    return gridId;
-    
-    
-  }; // stash_grid
-  // TODO -- need to keep a list of stashed grid in  localstorage. 
-  // for testing well just keep it in the DOM
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * return the stashed grid if found, else return null;
-   */
-  
-   var get_grid = function(url) {
-     console.log("getting grid for "+url);
-     var gridId = url.hexEncode(url);
- //    if (!(gridId in grid_hash))
-  //     console.log("no grid!!!");return null;
+
+    }; // stash_grid
+    // TODO -- need to keep a list of stashed grid in localstorage.
+    // for testing well just keep it in the DOM
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * return the stashed grid if found, else return null;
+     */
+
+    var get_grid = function(url) {
+      console.log("getting grid for " + url);
+      var gridId = url.hexEncode(url);
+      // if (!(gridId in grid_hash))
+      // console.log("no grid!!!");return null;
       var out;
       var stashId = 'eu-stash';
       var stashSel = "#" + stashId;
@@ -547,257 +557,247 @@ var image_preloader = function(url,sel) {
       if (out.length < 1) {
         console.log("no grid 2 !!!");
         console.log(out);
-        return null;//throw "cant find grid for " + url;
-        
+        return null;// throw "cant find grid for " + url;
+
       }
       console.log("FOUND A GRID");
       return out;
 
-  }; // get_grid
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   *
-   * Fill the grid, either from cache or from data
-   */
-  var doFillGrid = function(gridSel,query_url,items,width,height,displayInfobox) {
-  
-    var euWidgetSel = "#europeanaWidget"; // idselector of europeanaWidget
+    }; // get_grid
     /**
-     * grid cache
-     * is the cache object set?
-     * is data.query_url in cache? 
-     * Yes: get grid from cache  and put  in the gridSel
-     * No: serialise and store grid in cache
-     * -or- move the grid to a DOM stash.  
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * Fill the grid, either from cache or from data
      */
-   
-    /** clear the grid */
-    $(gridSel).html("");
-    
-    /** populate the grid with items 
-     * Check cache first.
-     */
-    var grid = get_grid(query_url);
-    if (grid !== null) {
-      $("#europeanaWidget").attr('data-didStash',1);
+    var doFillGrid = function(gridSel, query_url, items, width, height, displayInfobox) {
+
+      var euWidgetSel = "#europeanaWidget"; // idselector of europeanaWidget
+      /**
+       * grid cache is the cache object set? is data.query_url in cache? Yes:
+       * get grid from cache and put in the gridSel No: serialise and store grid
+       * in cache -or- move the grid to a DOM stash.
+       */
+
+      /** clear the grid */
+      $(gridSel).html("");
+
+      /**
+       * populate the grid with items Check cache first.
+       */
+      var grid = get_grid(query_url);
+      if (grid !== null) {
+        $("#europeanaWidget").attr('data-didStash', 1);
         $(gridSel).html($(grid).html());
-    }
-    else {
-      console.log("Filling grid from data...!");
-      fillGrid(items, width, height, displayInfobox);
-    }
-    
-    /** stash the new grid */
-      
-    stash_grid($(gridSel).html(),query_url);
-    
-  }; // doFillGrid
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * callback to run on  data returned by query.
-   * calls UI functions defined above as closures. 
-   */
-  
-  var success = function(data) {
- 
-    var width, height, displayInfobox, items;
-    width = data.width;
-    height = data.height;
-    displayInfobox = data.displayInfobox;
-    if (data && 'info' in data && 'items' in data.info)
-      try {
-        items = data.info.items;
-
-      } catch (e) {
-        items = [];
-        alert("can't load eu items!");
-      }
-      
-     /** alert success: message to display in flash message box */
-    alert("found " + data.info.totalResults + " europeana items");
-    
-    /** set the query display */
-    set_keywords_display(data.keywords.join(' '));
-    set_query_display(data.query_string);
-    
-    /** clear the grid */
- //   $(gridSel).html("");
-    // TODO exception no data
-
-    /** update the pagination */
-    
-    update_pagination(incrementCursor,data.info.itemsCount,data.info.totalResults);
-    
-    
-    /** filter out items on dataprovider skiplist */
-    // if mode = skiplist
-    if (getSearchMode === 'skiplist')
-      items = skiplist_filter(items);
-    /** fill the grid */
-    doFillGrid(gridSel,data.query_url,items,width,height,displayInfobox);
-    /** make controls */
-
-    makeProviderlist(providerlist);
-
-    /** run callbacks */
-    completed_callback.call(this);
-
-    /** send done signal */
-    var signal = "doEuRelated_complete";
-    var e = $.Event(signal);
-    $(window).trigger(e, {
-      id : "finished doEuRelated"
-    });
-  }; // success
-
- 
-  /**
-   * 
-   * refactor the callback to run on query data. 
-   * add step to rerun query if no items found by query. 
-   * no rerun if retaokeOnZero is false.. 
-   * 
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   */
-
-  var success_new = function(query_url, query_string) {
-    var min_items = 1;
-    return function(info) {
-      
-      console.log('success_new');
-      // quit function and rerun query with safe keywords if items.length ===
-      // 0
-      console.log("found " + info.items.length + "items");
-      
-      // redo search with default keywords if page keywords fail.
-      if (retakeOnZero === true && info.items.length < min_items && retake_count < retake_count_max) {
-        doEuRelated_retake(default_keywords);
-        return 1; 
-      }
-      var data = {};
-      // re-jig data to fit old model.
-      data.info = info; // the return object from EU
-      data.width = "100px";
-      data.height = "100px";
-      data.displayInfoboxOnHover = false;
-      data.keywords = doEuRelated_keywords;
-      data.query_url = query_url;
-      data.query_string = query_string;
-      return success(data);
-
-    };
-  };
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   */
-
-  var timeout_handler = function(xhr) {
-    console.log("timeout_handler");
-    alert("Europeana is not available at this time.");
-  };
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   * call if we get this far...
-   */
-
-  var default_handler = function(xhr) {
-
-    alert("a problem has occurred with your Europeana search");
-  };
-  /**
-   * @memberOf europeana_widget.doEuRelated
-   * 
-   */
-
-  var ajax_new = function() {
-    
-    var keywords = JSON.parse(data).keywords;
-    var startrec = JSON.parse(data).startrec;
-    //TODO quick fix
-    if (startrec === 0) { startrec = 1}
-    
-    var fail = function(xhr, status, err) {
-      console.log("fail: " + err);
-      console.log(xhr);
-      switch (status) {
-      case "timeout":
-        timeout_handler(xhr);
-        break;
-      default:
-        default_handler(xhr);
+      } else {
+        console.log("Filling grid from data...!");
+        fillGrid(items, width, height, displayInfobox);
       }
 
-    }; // fail
+      /** stash the new grid */
 
-    var complete = function() {
-      console.log("complete!");
-    };
-    // joins the keywords w/ and
-    var get_query = function(kw) {
-      // return kw.join("+AND+");
-      return kw.join("+");
-    };
-    var extras = "";
-    extras = get_search_extras();
+      stash_grid($(gridSel).html(), query_url);
 
-    // make query from keywords
-    var qs = get_query(keywords);
-    // TODO -- fix fails if there isn't a thumbnail
-    var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
-        + '&profile=standard' + extras;
-    var url_base = 'https://www.europeana.eu/api/v2/search.json?';
-    var url_new = url_base + query;
-    // add data to success and get new callback. 
-    var done = success_new(url_new, qs);
-   
-   
-    // set up query caching
-    var useQueryCache = true; //TODO move to top
-    var eucache = {};
-    var storage = $.localStorage; 
-    var eu_querycache_store = 'eu_querycache'; 
-    if (storage.isSet(eu_querycache_store))  {
-      eucache = storage.get(eu_querycache_store)
-    }
-    else {
-      storage.set(eu_querycache_store,{});
-    }
-   
+    }; // doFillGrid
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * callback to run on data returned by query. calls UI functions defined
+     * above as closures.
+     */
+
+    var success = function(data) {
+
+      var width, height, displayInfobox, items;
+      width = data.width;
+      height = data.height;
+      displayInfobox = data.displayInfobox;
+      if (data && 'info' in data && 'items' in data.info)
+        try {
+          items = data.info.items;
+
+        } catch (e) {
+          items = [];
+          alert("can't load eu items!");
+        }
+
+      /** alert success: message to display in flash message box */
+      alert("found " + data.info.totalResults + " europeana items");
+
+      /** set the query display */
+      set_keywords_display(data.keywords.join(' '));
+      set_query_display(data.query_string);
+
+      /** clear the grid */
+      // $(gridSel).html("");
+      // TODO exception no data
+      /** update the pagination */
+
+      update_pagination(incrementCursor, data.info.itemsCount, data.info.totalResults);
+
+      /** filter out items on dataprovider skiplist */
+      // if mode = skiplist
+      if (getSearchMode === 'skiplist')
+        items = skiplist_filter(items);
+      /** fill the grid */
+      doFillGrid(gridSel, data.query_url, items, width, height, displayInfobox);
+      /** make controls */
+
+      makeProviderlist(providerlist);
+
+      /** run callbacks */
+      completed_callback.call(this);
+
+      /** send done signal */
+      var signal = "doEuRelated_complete";
+      var e = $.Event(signal);
+      $(window).trigger(e, {
+        id : "finished doEuRelated"
+      });
+    }; // success
+
+    /**
+     * 
+     * refactor the callback to run on query data. add step to rerun query if no
+     * items found by query. no rerun if retaokeOnZero is false..
+     * 
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
+
+    var success_new = function(query_url, query_string) {
+      var min_items = 1;
+      return function(info) {
+
+        console.log('success_new');
+        // quit function and rerun query with safe keywords if items.length ===
+        // 0
+        console.log("found " + info.items.length + "items");
+
+        // redo search with default keywords if page keywords fail.
+        if (retakeOnZero === true && info.items.length < min_items && retake_count < retake_count_max) {
+          doEuRelated_retake(default_keywords);
+          return 1;
+        }
+        var data = {};
+        // re-jig data to fit old model.
+        data.info = info; // the return object from EU
+        data.width = "100px";
+        data.height = "100px";
+        data.displayInfoboxOnHover = false;
+        data.keywords = doEuRelated_keywords;
+        data.query_url = query_url;
+        data.query_string = query_string;
+        return success(data);
+
+      };
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
+
+    var timeout_handler = function(xhr) {
+      console.log("timeout_handler");
+      alert("Europeana is not available at this time.");
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     * call if we get this far...
+     */
+
+    var default_handler = function(xhr) {
+
+      alert("a problem has occurred with your Europeana search");
+    };
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
+
+    var ajax_new = function() {
+
+      var keywords = JSON.parse(data).keywords;
+      var startrec = JSON.parse(data).startrec;
+      // TODO quick fix
+      if (startrec === 0) {
+        startrec = 1
+      }
+
+      var fail = function(xhr, status, err) {
+        console.log("fail: " + err);
+        console.log(xhr);
+        switch (status) {
+        case "timeout":
+          timeout_handler(xhr);
+          break;
+        default:
+          default_handler(xhr);
+        }
+
+      }; // fail
+
+      var complete = function() {
+        console.log("complete!");
+      };
+      // joins the keywords w/ and
+      var get_query = function(kw) {
+        // return kw.join("+AND+");
+        return kw.join("+");
+      };
+      var extras = "";
+      extras = get_search_extras();
+
+      // make query from keywords
+      var qs = get_query(keywords);
+      // TODO -- fix fails if there isn't a thumbnail
+      var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
+          + '&profile=standard' + extras;
+      var url_base = 'https://www.europeana.eu/api/v2/search.json?';
+      var url_new = url_base + query;
+      // add data to success and get new callback.
+      var done = success_new(url_new, qs);
+
+      // set up query caching
+      var useQueryCache = true; // TODO move to top
+      var eucache = {};
+      var storage = $.localStorage;
+      var eu_querycache_store = 'eu_querycache';
+      if (storage.isSet(eu_querycache_store)) {
+        eucache = storage.get(eu_querycache_store)
+      } else {
+        storage.set(eu_querycache_store, {});
+      }
+
       // TODO parametrize
-     // cache switch goes here.
-    var cachehandler = function(){
-      
-       // cache switch goes here.
-       if (url_new in eucache  && useQueryCache === true) {
-         console.log("found a query cache!!")
-         console.log(eucache[url_new])
-         done(eucache[url_new]);
-       } 
-       else {
-         var newdone = function(data) {
-           console.log("NO CACHE!!")
-           console.log(url_new);
-           eucache[url_new] = data;
-           storage.set(eu_querycache_store,eucache);
-           done(data);
-         };
-         
-        $.ajax({
-                url : url_new,
-                dataType : "json",
-                type : "GET"
-            }).done(newdone).fail(fail).always(complete);
-        
-       }
-      
-        
+      // cache switch goes here.
+      var cachehandler = function() {
+
+        // cache switch goes here.
+        if (url_new in eucache && useQueryCache === true) {
+          console.log("found a query cache!!")
+          console.log(eucache[url_new])
+          done(eucache[url_new]);
+        } else {
+          var newdone = function(data) {
+            console.log("NO CACHE!!")
+            console.log(url_new);
+            eucache[url_new] = data;
+            storage.set(eu_querycache_store, eucache);
+            done(data);
+          };
+
+          $.ajax({
+            url : url_new,
+            dataType : "json",
+            type : "GET"
+          }).done(newdone).fail(fail).always(complete);
+
+        }
+
       }; // cachehandler
-      
-    cachehandler();
+
+      cachehandler();
     };
 
     ajax_new();
@@ -809,9 +809,9 @@ var image_preloader = function(url,sel) {
   /**
    * @memberOf europeana_widget
    */
-  
-  var format_freewall = function(gridid,options) {
-    console.log("format_freewall " +gridid)
+
+  var format_freewall = function(gridid, options) {
+    console.log("format_freewall " + gridid)
     var wall = new Freewall(gridid);
     wall.reset({
       selector : '.cell',
@@ -825,56 +825,53 @@ var image_preloader = function(url,sel) {
     });
     wall.fitWidth(options.wallWidth);
     window.wall = wall;
-    
+
   };
   /**
    * @memberOf europeana_widget
    */
-  
-  var format_bootstrap = function(gridid,options) { 
-    console.log("format_bootstrap " +gridid);
+
+  var format_bootstrap = function(gridid, options) {
+    console.log("format_bootstrap " + gridid);
     var cols_default = 9;
     var cols = options.cols || cols_default;
     var row = $('<div class="row"></div>');
     var cont = $('<div class="container-fluid"></div>');
-    
-    $(gridid + " .cell").each(function(i,v){
+
+    $(gridid + " .cell").each(function(i, v) {
       var cell = $(v).clone();
       row.append($(cell).addClass("col-md-2").addClass("col-sm-5").addClass("bs-cell"));
-     // every $cols add to row
-      if ((i + 1) % cols === 0 ) {
+      // every $cols add to row
+      if ((i + 1) % cols === 0) {
         cont.append(row);
         row = $('<div class="row"></div>');
-        
+
       }
     });
     // left-overs...
-    if (row.length > 0) 
+    if (row.length > 0)
       cont.append(row);
-    
-    
+
     $(gridid).html(cont);
-    
-    
+
   }
   /**
    * @memberOf europeana_widget
    */
-  
-  var formatGrid = function(gridid,options) {
+
+  var formatGrid = function(gridid, options) {
     var type = options.type;
-    switch(type) {
-    case "freewall": 
-      format_freewall(gridid,options);
+    switch (type) {
+    case "freewall":
+      format_freewall(gridid, options);
       break;
     case "bootstrap":
-      format_bootstrap(gridid,options);
+      format_bootstrap(gridid, options);
       break;
     }
-    
-    
-  }; //formatGrid
-  
+
+  }; // formatGrid
+
   /**
    * @memberOf europeana_widget
    * 
@@ -921,19 +918,24 @@ var image_preloader = function(url,sel) {
         }
 
       });
-    }  //if
+    } // if
 
     // Create a freewall grid from the cells
-    
-    var gridtype = "bootstrap"; 
-  //   var gridtype = "freewall"; 
-    var formatGrid_options = {type:gridtype,width:width,height:height,wallWidth:wallWidth};
+
+    var gridtype = "bootstrap";
+    // var gridtype = "freewall";
+    var formatGrid_options = {
+      type : gridtype,
+      width : width,
+      height : height,
+      wallWidth : wallWidth
+    };
     // need a better way of doing this!
-    if (window.matchMedia("(max-width: 488px)").matches === true) { 
+    if (window.matchMedia("(max-width: 488px)").matches === true) {
       formatGrid_options.cols = 2;
     }
-    formatGrid(gridid,formatGrid_options);
-  
+    formatGrid(gridid, formatGrid_options);
+
     // for scroll bar appear;
     $(window).trigger("resize");
 
@@ -947,8 +949,7 @@ var image_preloader = function(url,sel) {
       });
     }
     $(cellSelector).css("cursor", "pointer");
-    
-    
+
     /**
      * @memberOf europeana_widget.makeGrid
      */
@@ -976,7 +977,7 @@ var image_preloader = function(url,sel) {
       $("#add-item").data('eu_item', eu_item);
     };
     $(cellSelector).bind('click', overlayHandler);
-   
+
     window.overlayHandler = overlayHandler;
     // END makeGrid
   };
@@ -1026,14 +1027,12 @@ var image_preloader = function(url,sel) {
        * 
        * @memberOf europeana_widget.voteSetup.vote
        * 
-       * Handle an item voted irrelevant. 
-       * When a vote is cast for irrelevant. 
-       * -- add item provider to blacklist
+       * Handle an item voted irrelevant. When a vote is cast for irrelevant. --
+       * add item provider to blacklist
        * 
-       * when a vote is undone
-       * -- remove provider from blacklist
+       * when a vote is undone -- remove provider from blacklist
        * 
-       * when tagging is finished, rerun query. 
+       * when tagging is finished, rerun query.
        * 
        */
       voteHandler = function() {
@@ -1134,10 +1133,8 @@ var image_preloader = function(url,sel) {
 !function() {
 
   /**
-   * Set up data for input into europeana widget
-   *    -make_keywords
-   *    -make_eu_query_data
-   *    -makeEuRelatedItems 
+   * Set up data for input into europeana widget -make_keywords
+   * -make_eu_query_data -makeEuRelatedItems
    * 
    * 
    * @memberOf europeana_widget
@@ -1160,7 +1157,7 @@ var image_preloader = function(url,sel) {
       var fabric = ure_item.fabric;
       var title_kw = title.replace(/[^a-zA-Z\s]/g, "").replace(/\s+/g, " ").replace(/^\s+/g, "").replace(/\s$/g, "")
           .split(" ");
-      
+
       if (title.match(/red figure/)) {
         // kw.push('where:(red+figure)');
         kw.push('red')
@@ -1174,47 +1171,49 @@ var image_preloader = function(url,sel) {
             .replace(/\s$/g, "").split(" ")
         kw = kw.concat(fabric_kw);
       }
-      
-      // make a canonical form of the shape the kw if something in the  list matches. 
-      var get_shape_kw = function(shape,use_shapes) {
-     
+
+      // make a canonical form of the shape the kw if something in the list
+      // matches.
+      var get_shape_kw = function(shape, use_shapes) {
+
         var out = [];
         // can't use indexOf since it's sometimes just part of a string.
-        use_shapes.forEach(function(item){
+        use_shapes.forEach(function(item) {
           if (shape.toLowerCase().match(new RegExp(item))) {
-            out = [item];
-          } 
-          
-        });
-      return out;
-      };
-      
-      var canonical_shapes = ['lekythos','aryballos','skyphos','oinochoe','kylix','amphora','krater','pyxis','lekanis'];
+            out = [ item ];
+          }
 
-      kw = get_shape_kw(shape,canonical_shapes);
-      
+        });
+        return out;
+      };
+
+      var canonical_shapes = [ 'lekythos', 'aryballos', 'skyphos', 'oinochoe', 'kylix', 'amphora', 'krater', 'pyxis',
+          'lekanis' ];
+
+      kw = get_shape_kw(shape, canonical_shapes);
+
       // var keywords is the default qstring
       // var keywords = [ 'where(greece)+AND+black+AND+figure' ];
       var keywords = [ 'greece', 'black', 'figure' ];
-     // if kw has content use that
+      // if kw has content use that
       if (kw.length > 0) {
         keywords = kw;
       } else {
-      // if not, then if title has content, use that. 
+        // if not, then if title has content, use that.
         if (title_kw.length > 1) {
 
           keywords = title_kw;
         }
         // otherwise use the default.
       }
-      
+
       return keywords;
     };
 
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
-     * get the query data from the page. 
+     * get the query data from the page.
      */
     var make_eu_query_data = function() {
       /**
@@ -1228,13 +1227,13 @@ var image_preloader = function(url,sel) {
         }
 
         return out;
-      };  // get_startrec
+      }; // get_startrec
 
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
       var startrec = get_startrec();
-  
+
       var title = $('.ure-title').text();
       var fabric = $('.ure-fabric').text();
       var shape = $('.ure-shape').text();
@@ -1242,12 +1241,12 @@ var image_preloader = function(url,sel) {
       /**
        * @memberOf europeana_widget.init_euRelated.make_eu_query_data
        */
- 
+
       var kw_json = make_keywords({
         title : title,
         fabric : fabric,
-        shape: shape,
-        artist:artist
+        shape : shape,
+        artist : artist
       });
 
       /**
@@ -1271,26 +1270,26 @@ var image_preloader = function(url,sel) {
      * @memberOf europeana_widget.init_euRelated
      */
     var makeEuRelatedItems = function(incrementCursor) {
-      
+
       var templateSel = "#gridTemplate";
       var gridSel = "#" + gridid; // input parameter
-      
+
       var data = make_eu_query_data();
-      // use keywords if we're paginating or running a user query 
+      // use keywords if we're paginating or running a user query
       // set at keyword input
       // TODO -- this should be an object with a state flag!
-      if ('europeanaWidget_keywords' in window) { 
+      if ('europeanaWidget_keywords' in window) {
         data.keywords = window.europeanaWidget_keywords;
       }
 
       // set up grid and some other stuff
       // TODO has to be called at end of eu ajax, so we'll pass it in as a
-	// callback
-	
+      // callback
+
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
       };
-	
+
       // invoke the widget, with the callback
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
@@ -1298,45 +1297,44 @@ var image_preloader = function(url,sel) {
       europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
     }; // makeEuRelatedItems
     window.ure_makeEuRelatedItems = makeEuRelatedItems;
-    
-    // call the the setup when the window is ready. 
+
+    // call the the setup when the window is ready.
     $(document).ready(function() {
       makeEuRelatedItems(false);
     });
 
     /**
-     * @memberOf europeana_widget.init_euRelated
-     * redo the query on a signal.
+     * @memberOf europeana_widget.init_euRelated redo the query on a signal.
      */
-    
+
     var signal = "relevance_tag_complete";
     $(window).on(signal, function(e, data) {
-     
-        makeEuRelatedItems(false);
+
+      makeEuRelatedItems(false);
     });
-  
+
     /**
-     *  @memberOf europeana_widget.init_euRelated
-     * Set up prev/next buttons. Get more eu items
+     * @memberOf europeana_widget.init_euRelated Set up prev/next buttons. Get
+     *           more eu items
      */
     var set_next_page_button = function() {
       $(document).on('click', '.pagination-widget .eumore', function() {
         // get the next batch incrementing the cursor..
         makeEuRelatedItems(true);
-      
+
       });
     };
     set_next_page_button();
     /**
-     *  @memberOf europeana_widget.init_euRelated
-     * Set up prev/next buttons. Get more eu items
+     * @memberOf europeana_widget.init_euRelated Set up prev/next buttons. Get
+     *           more eu items
      */
     var set_prev_page_button = function() {
       $(document).on('click', '.pagination-widget .euless', function() {
         // get the last batch incrementing the cursor..
         window.europeanaWidget_decrementCursor = true;
         makeEuRelatedItems();
-      
+
       });
     };
     set_prev_page_button();
@@ -1353,22 +1351,22 @@ var image_preloader = function(url,sel) {
     });
   };
   /**
-   *  @memberOf europeana_widget.init_euRelated
-   *  init the eu_related grid if params are present.
+   * @memberOf europeana_widget.init_euRelated init the eu_related grid if
+   *           params are present.
    */
-  
-  var init_euRelated_listener = function(){
-    $(document).ready(function(){
-    var eumeta = $("#eu-widget-meta");
+
+  var init_euRelated_listener = function() {
+    $(document).ready(function() {
+      var eumeta = $("#eu-widget-meta");
       var accnum = $(eumeta).data('ure-accnum')
       var gridid = $(eumeta).data('grid-id')
       var width = $(eumeta).data('grid-width')
       var height = $(eumeta).data('grid-height');
-      var display_infobox = $(eumeta).data('display-infobox');      
-   //   if (! $("#europeanaWidget").attr('data-didStash'))
-        init_euRelated(accnum,gridid,width,height, display_infobox);   
-      });
-    
+      var display_infobox = $(eumeta).data('display-infobox');
+      // if (! $("#europeanaWidget").attr('data-didStash'))
+      init_euRelated(accnum, gridid, width, height, display_infobox);
+    });
+
   }
   init_euRelated_listener();
   window.init_euRelated = init_euRelated;
