@@ -92,9 +92,10 @@
     
     function _increment_cursor(n) {
       // increment cursor
-      if (n === 1)
-        n = 2
-      window.eu_cursor = (n - 1) * config.paginationSize;
+      var cursor = (n - 1) * config.paginationSize;
+      if (cursor < 1 ) 
+          cursor = 1;
+      window.eu_cursor = cursor;
     }
     
     // display chunk $n , run the new query, set chunk to $n
@@ -209,12 +210,7 @@
 var meta = '<div id="pager-meta">items: <span class="item-count-start"/>'
   + '-<span class="item-count-end"/>'
   + ' of <span class="total-results"/>'
-            $("span#query-display").after(
-                bebut 
-                + '<div id="chunkindex-container"></div>' 
-                + afbut 
-                + meta
-                + '<div id="current"></div>')
+            $("span#query-display").after('<div id="current"></div>')
        })
 
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {

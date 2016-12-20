@@ -10,15 +10,15 @@
 	<span id="query-retake-text" style="padding-left: 12px; text-decoration: underline; cursor: pointer;">custom eu search</span>
 	
 	<div class="pagination-widget" id="pagination-widget-top">
-		<span id="euless" class="euless incrementer">
-		<img src="${resource(dir:'images/ure',file:'west.gif') }"/>
-		</span>
-		<span class="itemsCount" ></span>
-		&nbsp;of&nbsp;
-		<span class="total-results" style="padding-left: 8px;"></span>
-		<span class="eumore" class="incrementer">
-		<img src="${resource(dir:'images/ure',file:'east.gif') }"/>
-		</span>
+		<button class="btn btn-xs btn-default" id="firstchunk">&lt;&lt;</button>
+		<button  class="btn btn-xs  btn-default"  id="prevchunk">&lt;</button>
+		<div id="chunkindex-container"></div>
+		<button class="btn btn-xs btn-default" id="nextchunk">&gt;</button>
+		<button  class="btn btn-xs  btn-default"  id="lastchunk">&gt;&gt;</button>
+		<div id="pager-meta">
+		<span class="item-count-start"></span>-<span class="item-count-end"></span> 
+		of <span class="total-results"></span>
+		</div>
 	</div>
 	
 	<div id="provider-filter" class="collapse controls span2"></div>

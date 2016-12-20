@@ -1718,7 +1718,9 @@ a#extlink:link {
 * 
 */
 
-
+#pager-meta {
+	display: inline-block;
+}
 .selected-chunk {
   color: red;
 }
