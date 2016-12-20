@@ -76,24 +76,27 @@
   /**
    * Refactor Content wrapper interface to expose fields for ure_pager
    * 
-   * wrapper to expose interface for pager component. 
+   * wrapper to expose interface for pager component.
    */
   function eu_content_wrapper() {
-    var config, chunk, chunks, current_chunk, chunks_length_val;
+    var config, chunk, chunks, current_chunk, chunks_length_val,total_results;
     current_chunk = 1;
     config = {
       paginationSize : 100,
 
-    }
+    };
+    
     function current() {
       return current_chunk;
     }
+    
     function _increment_cursor(n) {
       // increment cursor
       if (n === 1)
         n = 2
       window.eu_cursor = (n - 1) * config.paginationSize;
     }
+    
     // display chunk $n , run the new query, set chunk to $n
     function chunk(n) {
       // TODO this needs to come from cursor info
@@ -102,15 +105,28 @@
       set_current_chunk(n)
 
     }
+    
     function chunks_length() {
       return chunks_length;
     }
+    
     function set_current_chunk(n) {
-
       current_chunk = n;
     }
+    
     function set_chunks_length(n) {
       chunks_length = n;
+    }
+    
+    function set_total_results(n) {
+      total_results = n
+    }
+    function meta(){
+      return {
+        total: total_results,
+        chunkStart: (current_chunk * config.paginationSize),
+        chunkEnd: (current_chunk * config.paginationSize) + config.paginationSize -1
+      }
     }
 
     return {
@@ -119,7 +135,10 @@
       set_current_chunk : set_current_chunk,
       set_chunks_length : set_chunks_length,
       chunks_length : chunks_length,
-      paginationSize : config.paginationSize
+      paginationSize : config.paginationSize,
+      set_total_results:set_total_results,
+      totalResults: total_results,
+      meta: meta
 
     // pageWindow: paginationSize
     }
@@ -129,97 +148,121 @@
   var euwrap = new eu_content_wrapper();
   var pager;
   var counter = 1;
-  
-// test code for the pager
-  var test_code = function(totalResults, paginationSize) {
 
+  // test code for the pager
+  //  to put in existing pagination closure
+
+  var test_code = function(totalResults, paginationSize) {
+    
     var cursor = 1, current_chunk = 1;
     $(document).ready(function() {
-      
-      // st cursor to one if no cursor yet.
+
+      // set cursor to 1 if no cursor yet.
       if (!('eu_cursor' in window)) {
         cursor = 1
       } else {
         cursor = window.eu_cursor
       }
-
-      euwrap.set_chunks_length(Math.ceil(totalResults / paginationSize));
-
+     
+      // run only on init
       if (test_code_run === false) {
+        // calculate chunks_length and set. 
+        var chunks_length = Math.ceil(totalResults / paginationSize)
+        euwrap.set_chunks_length(chunks_length);
+        euwrap.set_total_results(totalResults);
+        // get a pager -- pass it the inited content interface instance
         pager = window.ure_pager(euwrap);
+        set_meta({total:totalResults,chunkStart: cursor, chunkEnd:cursor+paginationSize-1});
+        pager.set_meta(set_meta);
+        // don't run this again
         test_code_run = true;
         euwrap.set_current_chunk(current_chunk);
       }
-      console.log(euwrap);
-      console.log(euwrap.current())
+    
+      function set_meta(meta){
+        $("#pager-meta .item-count-start").html(meta.chunkStart);
+        $("#pager-meta .item-count-end").html(meta.chunkEnd);
+        $("#pager-meta .total-results").html(meta.total);
+      }
+
     });
 
   };
-// div for pager test
-  $(document).ready(function() {
-    var bebut = '<button class="btn btn-xs btn-default" id="firstchunk">\
+
+  // html for pager test -- this will go in file.
+  $(document)
+      .ready(
+          function() {
+            var bebut = '<button class="btn btn-xs btn-default" id="firstchunk">\
   << \
 </button>\
 <button  class="btn btn-xs  btn-default"  id="prevchunk">\
   <\
 </button>';
-    
-    var afbut = '<button class="btn btn-xs btn-default" id="nextchunk">\
+
+            var afbut = '<button class="btn btn-xs btn-default" id="nextchunk">\
       > \
     </button>\
     <button  class="btn btn-xs  btn-default"  id="lastchunk">\
       >>\
     </button>';
-    
-    $("span#query-display").after(bebut + '<div id="chunkindex-container"></div>'+afbut+'<div id="current"></div>')
-  })
-  
+var meta = '<div id="pager-meta">items: <span class="item-count-start"/>'
+  + '-<span class="item-count-end"/>'
+  + ' of <span class="total-results"/>'
+            $("span#query-display").after(
+                bebut 
+                + '<div id="chunkindex-container"></div>' 
+                + afbut 
+                + meta
+                + '<div id="current"></div>')
+       })
+
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
     paginationSize = 100;
-
     console.log("EUWRAP REFACTOR")
     test_code(totalResults, paginationSize);
     console.log("EUWRAP REFACTOR END -----")
-
-    $(".pagination-widget .eumore").show();
-    $(".pagination-widget .euless").show();
-    // increment the cursor if there is one.
-
-    if ('eu_cursor' in window) {
-      if (incrementCursor === true) {
-        window.eu_cursor += itemsCount;
-      } else if ('europeanaWidget_decrementCursor' in window && europeanaWidget_decrementCursor === true) {
-
-        window.eu_cursor -= itemsCount
-      }
-    } else {
-      window.eu_cursor = itemsCount;
-
-    }
-
-    $(".pagination-widget .itemsCount").html(window.eu_cursor);
-
-    $(".pagination-widget .total-results").html(totalResults);
-    // itemsCount = totalResults
-    // hide eumore
-    // if the cursor is at the end
-
-    if (window.eu_cursor === totalResults) {
-      console.log("pager.previous")
-      $(".pagination-widget .eumore").hide();
-      $(".pagination-widget .euless").show();
-
-    }
-    // if the cursor is beyond end of data
-    if (window.eu_cursor > totalResults) {
-      console.log("pager.next")
-      $(".pagination-widget .eumore").hide();
-      $(".pagination-widget .euless").show();
-      $(".pagination-widget .itemsCount").html(totalResults);
-    }
-    // if the batch is <= paginationSize or we are on the first batch..
-    if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)
-      $(".pagination-widget .euless").hide();
+    //
+    // $(".pagination-widget .eumore").show();
+    // $(".pagination-widget .euless").show();
+    // // increment the cursor if there is one.
+    //
+    // if ('eu_cursor' in window) {
+    // if (incrementCursor === true) {
+    // window.eu_cursor += itemsCount;
+    // } else if ('europeanaWidget_decrementCursor' in window &&
+    // europeanaWidget_decrementCursor === true) {
+    //
+    // window.eu_cursor -= itemsCount
+    // }
+    // } else {
+    // window.eu_cursor = itemsCount;
+    //
+    // }
+    //
+    // $(".pagination-widget .itemsCount").html(window.eu_cursor);
+    //
+    // $(".pagination-widget .total-results").html(totalResults);
+    // // itemsCount = totalResults
+    // // hide eumore
+    // // if the cursor is at the end
+    //
+    // if (window.eu_cursor === totalResults) {
+    // console.log("pager.previous")
+    // $(".pagination-widget .eumore").hide();
+    // $(".pagination-widget .euless").show();
+    //
+    // }
+    // // if the cursor is beyond end of data
+    // if (window.eu_cursor > totalResults) {
+    // console.log("pager.next")
+    // $(".pagination-widget .eumore").hide();
+    // $(".pagination-widget .euless").show();
+    // $(".pagination-widget .itemsCount").html(totalResults);
+    // }
+    // // if the batch is <= paginationSize or we are on the first batch..
+    // if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)
+    // $(".pagination-widget .euless").hide();
 
   }; // update_pagination.
   // TODO put this inside pager
