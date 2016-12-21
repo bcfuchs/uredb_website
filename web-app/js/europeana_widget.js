@@ -78,57 +78,72 @@
    * 
    * wrapper to expose interface for pager component.
    */
-  function eu_content_wrapper() {
-    var config, chunk, chunks, current_chunk, chunks_length_val,total_results;
+  function eu_content_wrapper(accnum) {
+    var config, chunk, chunks, current_chunk, chunks_length_val, total_results;
     current_chunk = 1;
     config = {
       paginationSize : 100,
+      accnum : accnum
 
     };
-    
+
     function current() {
       return current_chunk;
     }
-    
+
     function _increment_cursor(n) {
       // increment cursor
       var cursor = (n - 1) * config.paginationSize;
-      if (cursor < 1 ) 
-          cursor = 1;
+      if (cursor < 1)
+        cursor = 1;
       window.eu_cursor = cursor;
     }
+    /**
+     * init the comparanda when a new batch is loaded...
+     */
     
-    // display chunk $n , run the new query, set chunk to $n
+    function _init_comparanda() {
+      var signal = 'ure_eu_new_batch';
+      var e = $.Event(signal);
+     $(window).trigger(e, {
+       id : "new batch"
+     });
+    }
+    // display chunk $n , run the new query, init dnd for comparanda, set chunk to $n
     function chunk(n) {
       // TODO this needs to come from cursor info
       _increment_cursor(n);
-      
+
       // get the data, format it and display it
-      window.ure_makeEuRelatedItems(true)
+     ure_makeEuRelatedItems(false);
+     // useless -- needs to be called after 
+     window.ure_is_new_batch  = true;
+      
+     //    _init_comparanda() 
       set_current_chunk(n)
 
     }
-    
+
     function chunks_length() {
       return chunks_length;
     }
-    
+
     function set_current_chunk(n) {
       current_chunk = n;
     }
-    
+
     function set_chunks_length(n) {
       chunks_length = n;
     }
-    
+
     function set_total_results(n) {
       total_results = n
     }
-    function meta(){
+    function meta() {
       return {
-        total: total_results,
-        chunkStart: (current_chunk * config.paginationSize),
-        chunkEnd: (current_chunk * config.paginationSize) + config.paginationSize -1
+        total : total_results,
+        chunkStart : (current_chunk * config.paginationSize),
+        chunkEnd : (current_chunk * config.paginationSize) + config.paginationSize - 1
       }
     }
 
@@ -139,76 +154,80 @@
       set_chunks_length : set_chunks_length,
       chunks_length : chunks_length,
       paginationSize : config.paginationSize,
-      set_total_results:set_total_results,
-      totalResults: total_results,
-      meta: meta
+      set_total_results : set_total_results,
+      totalResults : total_results,
+      meta : meta
 
     // pageWindow: paginationSize
     }
   }
-  // test for wrapper
-  var test_code_run = false;
-  var euwrap = new eu_content_wrapper();
-  var pager;
-  var counter = 1;
+  // test code for pager -- to run in place of update_pagination
+  
+  var test_code = (function() {
+    var test_code_init = true;
+    var eumeta = $("#eu-widget-meta");
+    var accnum = $(eumeta).data('ure-accnum')
+    var euwrap = new eu_content_wrapper(accnum);
+    var pager;
+    var counter = 1;
 
-  // test code for the pager
-  //  to put in existing pagination closure
+    // test code for the pager
+    // to put in existing pagination closure
 
-  var test_code = function(totalResults, paginationSize) {
-    
-    var cursor = 1, current_chunk = 1;
-    $(document).ready(function() {
+    return function(totalResults, paginationSize) {
 
-      // set cursor to 1 if no cursor yet.
-      if (!('eu_cursor' in window)) {
-        cursor = 1
-      } else {
-        cursor = window.eu_cursor
-      }
-     
-      // run only on init
-      if (test_code_run === false) {
-        // calculate chunks_length and set. 
-        var chunks_length = Math.ceil(totalResults / paginationSize)
-        euwrap.set_chunks_length(chunks_length);
-        euwrap.set_total_results(totalResults);
-        // get a pager -- pass it the inited content interface instance
-        pager = window.ure_pager(euwrap);
-        set_meta({total:totalResults,chunkStart: cursor, chunkEnd:cursor+paginationSize-1});
-        pager.set_meta(set_meta);
-        // don't run this again
-        test_code_run = true;
-        euwrap.set_current_chunk(current_chunk);
-      }
-    
-      function set_meta(meta){
-        $("#pager-meta .item-count-start").html(meta.chunkStart);
-        $("#pager-meta .item-count-end").html(meta.chunkEnd);
-        $("#pager-meta .total-results").html(meta.total);
-      }
+      var cursor = 1, current_chunk = 1;
+      $(document).ready(function() {
 
-    });
+        // set cursor to 1 if no cursor yet.
+        if (!('eu_cursor' in window)) {
+          cursor = 1
+        } else {
+          cursor = window.eu_cursor
+        }
 
-  };
+        // run only on init
+        if (test_code_init === true) {
+          // calculate chunks_length and set.
+          var chunks_length = Math.ceil(totalResults / paginationSize)
+          euwrap.set_chunks_length(chunks_length);
+          euwrap.set_total_results(totalResults);
+          // get a pager -- pass it the inited content interface instance
+          pager = window.ure_pager(euwrap);
+          set_meta({
+            total : totalResults,
+            chunkStart : cursor,
+            chunkEnd : cursor + paginationSize - 1
+          });
+          pager.set_meta(set_meta);
+          // don't run this again
+          test_code_init = false;
+          euwrap.set_current_chunk(current_chunk);
+        }
 
+        function set_meta(meta) {
+          $("#pager-meta .item-count-start").html(meta.chunkStart);
+          $("#pager-meta .item-count-end").html(meta.chunkEnd);
+          $("#pager-meta .total-results").html(meta.total);
+        }
 
-  $(document)
-      .ready(
-          function() {
-      
-            $("span#query-display").after('<div id="current"></div>')
-       })
+      });
+
+    }
+  })();
+
+  $(document).ready(function() {
+
+    $("span#query-display").after('<div id="current"></div>')
+  })
 
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
     paginationSize = 100;
- 
+
     test_code(totalResults, paginationSize);
 
-    
+  };
 
-  }; 
-  
   // update_pagination.
   // TODO put this inside pager
 
@@ -230,6 +249,7 @@
 
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
     console.log("doEuRelated...");
+    
 
     doEuRelated_keywords = data.keywords;
     window.europeanaWidget_keywords = data.keywords;
@@ -1276,14 +1296,20 @@
 
       var eu_makegrid = function() {
         europeanaWidget_makeGrid("#" + gridid, width, height, displayInfobox, 1100, accnum);
+        // HACK
+        var cb = 'ure_content_widget_wrapper_cb'
+        if (cb in window) {
+            window[cb]();
+        }
       };
 
-      // invoke the widget, with the callback
+      // invoke the widget, with the callback eu_makegrid
       europeanaWidget_doEuRelated(templateSel, gridSel, data, incrementCursor, eu_makegrid);
 
       // set up the voting.
       europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
     }; // makeEuRelatedItems
+    
     window.ure_makeEuRelatedItems = makeEuRelatedItems;
 
     // call the the setup when the window is ready.

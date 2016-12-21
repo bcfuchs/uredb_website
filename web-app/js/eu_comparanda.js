@@ -166,6 +166,11 @@ window.ure_eu_comparanda = {}
 
     }// init
 
+    /**
+     * INIT switch
+     *    
+     *    - 
+     */
     // run the init routine if the google data has been read.
     // TODO or continue with local if anon user or timeout.
     var signal = 'ure_gapi_read_complete';
@@ -174,6 +179,21 @@ window.ure_eu_comparanda = {}
         init();
       }
     });
+    // init if new batch-- no need to re-init controls
+    var signal2 = 'ure_eu_new_batch';
+    $(window).on(signal2, function(e, d) {
+      
+      setComparandaDraggable();
+      setComparandaDroppable();
+      
+    });
+    if (window.ure_is_new_batch === true) {
+      init();
+//        init_tooltips();
+//        setComparandaDraggable();
+//    //    setComparandaDroppable();
+      window.ure_is_new_batch  = false;
+    }
 
     /**
      * 
