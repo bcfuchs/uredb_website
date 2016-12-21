@@ -102,6 +102,8 @@
     function chunk(n) {
       // TODO this needs to come from cursor info
       _increment_cursor(n);
+      
+      // get the data, format it and display it
       window.ure_makeEuRelatedItems(true)
       set_current_chunk(n)
 
@@ -190,77 +192,24 @@
 
   };
 
-  // html for pager test -- this will go in file.
+
   $(document)
       .ready(
           function() {
-            var bebut = '<button class="btn btn-xs btn-default" id="firstchunk">\
-  << \
-</button>\
-<button  class="btn btn-xs  btn-default"  id="prevchunk">\
-  <\
-</button>';
-
-            var afbut = '<button class="btn btn-xs btn-default" id="nextchunk">\
-      > \
-    </button>\
-    <button  class="btn btn-xs  btn-default"  id="lastchunk">\
-      >>\
-    </button>';
-var meta = '<div id="pager-meta">items: <span class="item-count-start"/>'
-  + '-<span class="item-count-end"/>'
-  + ' of <span class="total-results"/>'
+      
             $("span#query-display").after('<div id="current"></div>')
        })
 
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
     paginationSize = 100;
-    console.log("EUWRAP REFACTOR")
+ 
     test_code(totalResults, paginationSize);
-    console.log("EUWRAP REFACTOR END -----")
-    //
-    // $(".pagination-widget .eumore").show();
-    // $(".pagination-widget .euless").show();
-    // // increment the cursor if there is one.
-    //
-    // if ('eu_cursor' in window) {
-    // if (incrementCursor === true) {
-    // window.eu_cursor += itemsCount;
-    // } else if ('europeanaWidget_decrementCursor' in window &&
-    // europeanaWidget_decrementCursor === true) {
-    //
-    // window.eu_cursor -= itemsCount
-    // }
-    // } else {
-    // window.eu_cursor = itemsCount;
-    //
-    // }
-    //
-    // $(".pagination-widget .itemsCount").html(window.eu_cursor);
-    //
-    // $(".pagination-widget .total-results").html(totalResults);
-    // // itemsCount = totalResults
-    // // hide eumore
-    // // if the cursor is at the end
-    //
-    // if (window.eu_cursor === totalResults) {
-    // console.log("pager.previous")
-    // $(".pagination-widget .eumore").hide();
-    // $(".pagination-widget .euless").show();
-    //
-    // }
-    // // if the cursor is beyond end of data
-    // if (window.eu_cursor > totalResults) {
-    // console.log("pager.next")
-    // $(".pagination-widget .eumore").hide();
-    // $(".pagination-widget .euless").show();
-    // $(".pagination-widget .itemsCount").html(totalResults);
-    // }
-    // // if the batch is <= paginationSize or we are on the first batch..
-    // if (totalResults <= paginationSize || window.eu_cursor <= paginationSize)
-    // $(".pagination-widget .euless").hide();
 
-  }; // update_pagination.
+    
+
+  }; 
+  
+  // update_pagination.
   // TODO put this inside pager
 
   /**
