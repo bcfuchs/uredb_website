@@ -147,6 +147,7 @@ window.ure_eu_comparanda = {}
     var init = function() {
       
       $(document).ready(function() {
+      
         // docready
         // init the strip UI
         init_comp_buttons();
@@ -167,8 +168,10 @@ window.ure_eu_comparanda = {}
     }// init
     // init only on new data
     var init_new_data = function() {
-      
-      setComparandaDraggable({unset:true});
+      $(document).ready(function() {
+        console.log("init_new_data");
+        setComparandaDraggable({unset:true});
+      });
       
     }
     /**
@@ -204,7 +207,7 @@ window.ure_eu_comparanda = {}
      * @memberOf eu_comparanda.EuComparanda
      * @private
      */
-    var moveImage = function(e) {
+    function moveImage(e) {
 
       var url = $(this).attr('data-ure-image-url');
       // var style = "background-image: url('" + url + "')";
@@ -225,8 +228,8 @@ window.ure_eu_comparanda = {}
      */
     function setComparandaDraggable(opts) {
       // unset draggable first. 
-      if ('unset' in opts && opts.unset === true)
-        $(config.eu_draggable_sel).draggable( "destroy" )
+   //   if ('unset' in opts && opts.unset === true)
+       // $(config.eu_draggable_sel).draggable( "destroy" )
       $(config.eu_draggable_sel).draggable({
         snap : "#comparanda",
         // show target tooltip on start hide on finish
