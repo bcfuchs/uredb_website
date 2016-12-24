@@ -72,8 +72,12 @@
  * START doEuRelated
  */
 (function() {
+  /**
+   * 
+   */
 
   /**
+   * @memberOf @memberOf europeana_widget.content_wrapper
    * Refactor Content wrapper interface to expose fields for ure_pager
    * 
    * wrapper to expose interface for pager component.
@@ -86,11 +90,15 @@
       accnum : accnum
 
     };
-
+      /**
+       * @memberOf @memberOf europeana_widget.content_wrapper
+       */
     function current() {
       return current_chunk;
     }
-
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function _increment_cursor(n) {
       // increment cursor
       var cursor = (n - 1) * config.paginationSize;
@@ -99,6 +107,7 @@
       window.eu_cursor = cursor;
     }
     /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
      * init the comparanda when a new batch is loaded...
      */
     
@@ -109,7 +118,11 @@
        id : "new batch"
      });
     }
-    // display chunk $n , run the new query, init dnd for comparanda, set chunk to $n
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+    
+     * display chunk $n , run the new query, init dnd for comparanda, set chunk to $n  
+     */
     function chunk(n) {
       // TODO this needs to come from cursor info
       _increment_cursor(n);
@@ -123,22 +136,34 @@
       set_current_chunk(n)
 
     }
-
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function chunks_length() {
       return chunks_length;
     }
-
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function set_current_chunk(n) {
       current_chunk = n;
     }
-
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function set_chunks_length(n) {
       chunks_length = n;
     }
-
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function set_total_results(n) {
       total_results = n
     }
+    
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     */
     function meta() {
       return {
         total : total_results,
@@ -162,7 +187,9 @@
     }
   }
   // test code for pager -- to run in place of update_pagination
-  
+  /**
+   * @memberOf @memberOf europeana_widget.test_code_content_wrapper
+   */
   var test_code = (function() {
     var test_code_init = true;
     var eumeta = $("#eu-widget-meta");
@@ -192,6 +219,14 @@
           var chunks_length = Math.ceil(totalResults / paginationSize)
           euwrap.set_chunks_length(chunks_length);
           euwrap.set_total_results(totalResults);
+         
+          // set up callbacks for content widget
+          window.ure_eu_oncompleted = [ 
+               function(){
+                 $("#pagination-widget-top").show();
+               }
+            ]
+          
           // get a pager -- pass it the inited content interface instance
           pager = window.ure_pager(euwrap);
           set_meta({
@@ -217,7 +252,7 @@
   })();
 
   $(document).ready(function() {
-
+    // test html
     $("span#query-display").after('<div id="current"></div>')
   })
 
@@ -228,8 +263,6 @@
 
   };
 
-  // update_pagination.
-  // TODO put this inside pager
 
   /**
    * @memberOf europeana_widget.doEuRelated
@@ -654,6 +687,17 @@
 
       /** run callbacks */
       completed_callback.call(this);
+      /** run more callbacks */
+      // we could also do this with a queue
+      // might lead to circle refs
+      
+      if ('ure_eu_oncompleted' in window) {
+        for (cb in window.ure_eu_oncompleted) {
+          window.ure_eu_oncompleted[cb](this);
+          delete window.ure_eu_oncompleted[cb]
+          
+        }
+      }
 
       /** send done signal */
       var signal = "doEuRelated_complete";
