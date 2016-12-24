@@ -171,6 +171,23 @@
         chunkEnd : (current_chunk * config.paginationSize) + config.paginationSize - 1
       }
     }
+    
+    /**
+     * @memberOf @memberOf europeana_widget.content_wrapper
+     * 
+     * queue various callbacks
+     */
+    function queue(q,f) {
+  
+      if (!('ure_eu_oncompleted' in window)) {
+        window.ure_eu_oncompleted = []
+      }
+      if (q === 'done') {
+        window.ure_eu_oncompleted.push(f)
+      }
+      console.log( window.ure_eu_oncompleted)
+      
+    }
 
     return {
       chunk : chunk,
@@ -181,7 +198,8 @@
       paginationSize : config.paginationSize,
       set_total_results : set_total_results,
       totalResults : total_results,
-      meta : meta
+      meta : meta,
+      queue:queue
 
     // pageWindow: paginationSize
     }
@@ -221,12 +239,10 @@
           euwrap.set_total_results(totalResults);
          
           // set up callbacks for content widget
-          window.ure_eu_oncompleted = [ 
-               function(){
-                 $("#pagination-widget-top").show();
-               }
-            ]
-          
+          euwrap.queue('done',function(){
+            $("#pagination-widget-top").show();
+          })
+         
           // get a pager -- pass it the inited content interface instance
           pager = window.ure_pager(euwrap);
           set_meta({
