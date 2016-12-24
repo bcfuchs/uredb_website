@@ -239,12 +239,15 @@
           euwrap.set_total_results(totalResults);
          
           // set up callbacks for content widget
-          euwrap.queue('done',function(){
-            $("#pagination-widget-top").show();
-          })
-         
+         var pager_onCompleted = []
+         pager_onCompleted.push(function(){
+           $("#pagination-widget-top").show();
+         })
+          var pager_opts = {
+            onCompleted: pager_onCompleted
+          }
           // get a pager -- pass it the inited content interface instance
-          pager = window.ure_pager(euwrap);
+          pager = window.ure_pager(euwrap,pager_opts);
           set_meta({
             total : totalResults,
             chunkStart : cursor,

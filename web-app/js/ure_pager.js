@@ -2,10 +2,13 @@
 
   // widget for page navigation;
   // Note: in this set-up, chunk length is static.
-  function Pager(cw) {
+  function Pager(cw,opts) {
+    if (typeof(opts) === 'undefined')  
+      opts = {} 
+    var onCompleted = opts.onCompleted || []
     var n = cw.chunks_length() - 1;
-    var chunk = 1;
-    var count = 1;
+    var chunk = opts.firstChunk || 1;
+    var count = opts.count || 1;
     // override in config
     var chunk_link = function(i) {
       return '<span class="chunklink" data-chunk="' + i + '">' + i + '</span>';
@@ -28,14 +31,18 @@
       meta: function(){},
       chunk_link : chunk_link,
       selectedClass : "selected-chunk"
-
     }
     // TODO -- incompatible with config --need opts!!!
     init();
 
     // bind paging to buttons...
     function init() {
-
+      // register callbacks
+      for (var i = 0, z = onCompleted.length; i < z; i++) {
+        var cb = onCompleted[i]
+        cw.queue('done',cb) 
+      }
+      
       // chunkSelect(chunk)
       _indexify();
 
