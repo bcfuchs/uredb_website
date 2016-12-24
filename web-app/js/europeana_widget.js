@@ -77,7 +77,7 @@
    */
 
   /**
-   * @memberOf @memberOf europeana_widget.content_wrapper
+   * @memberOf europeana_widget.content_wrapper
    * Refactor Content wrapper interface to expose fields for ure_pager
    * 
    * wrapper to expose interface for pager component.
@@ -91,13 +91,13 @@
 
     };
       /**
-       * @memberOf @memberOf europeana_widget.content_wrapper
+       * @memberOf europeana_widget.content_wrapper
        */
     function current() {
       return current_chunk;
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function _increment_cursor(n) {
       // increment cursor
@@ -107,7 +107,7 @@
       window.eu_cursor = cursor;
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      * init the comparanda when a new batch is loaded...
      */
     
@@ -119,7 +119,7 @@
      });
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
     
      * display chunk $n , run the new query, init dnd for comparanda, set chunk to $n  
      */
@@ -137,32 +137,32 @@
 
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function chunks_length() {
       return chunks_length;
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function set_current_chunk(n) {
       current_chunk = n;
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function set_chunks_length(n) {
       chunks_length = n;
     }
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function set_total_results(n) {
       total_results = n
     }
     
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      */
     function meta() {
       return {
@@ -173,7 +173,7 @@
     }
     
     /**
-     * @memberOf @memberOf europeana_widget.content_wrapper
+     * @memberOf europeana_widget.content_wrapper
      * 
      * queue various callbacks
      */
@@ -206,7 +206,7 @@
   }
   // test code for pager -- to run in place of update_pagination
   /**
-   * @memberOf @memberOf europeana_widget.test_code_content_wrapper
+   * @memberOf europeana_widget.test_code_content_wrapper
    */
   var test_code = (function() {
     var test_code_init = true;
