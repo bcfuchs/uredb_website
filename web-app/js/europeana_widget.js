@@ -290,6 +290,8 @@
 
   /**
    * @memberOf europeana_widget.doEuRelated
+   * 
+   * Europeana content component 
    */
   var doEuRelated = function() {
   };
@@ -412,12 +414,14 @@
 
     /**
      * @memberOf europeana_widget.doEuRelated
+     * 
+     * fill template with list of providers
      */
     var makeProviderlist = function(provs) {
-      console.log('makeng provider list... ');
+     
       var providers = Object.keys(provs);
-      console.log(providers.length);
-
+     
+      // clone and fill template
       for (var i = 0, z = providers.length; i < z; i++) {
         var t = $($("#provider-label-template label")[0]).clone();
 
@@ -432,12 +436,16 @@
     };
 
     /**
-     * @memberOf europeana_widget.doEuRelated fill the grid with items called
-     *           from ajax success
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     *   
+     *    clone template and fill, using europeana results
+     *    add to grid
+     *    called  from ajax success
      */
 
     var fillGrid = function(items, width, height, displayInfobox) {
-      console.log("fillGrid");
+      console.log("europeana_widget.doEuRelated.fillGrid");
       var hideInfodiv = displayInfobox ? "hide-infodiv" : "showtheinfobox";
       for (var i = 0, z = items.length; i < z; i++) {
 
@@ -602,6 +610,8 @@
      * @memberOf europeana_widget.doEuRelated
      * 
      * return the stashed grid if found, else return null;
+     * 
+     * called from doFillGrid -- wrapper for fillGrid
      */
 
     var get_grid = function(url) {
@@ -658,6 +668,14 @@
       stash_grid($(gridSel).html(), query_url);
 
     }; // doFillGrid
+    
+    var send_done_signal =function(id){
+      var signal = "doEuRelated_complete";
+      var e = $.Event(signal);
+      $(window).trigger(e, {
+        id : id
+      });
+    }
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -687,9 +705,6 @@
       set_keywords_display(data.keywords.join(' '));
       set_query_display(data.query_string);
 
-      /** clear the grid */
-      // $(gridSel).html("");
-      // TODO exception no data
       /** update the pagination */
 
       update_pagination(incrementCursor, data.info.itemsCount, data.info.totalResults);
@@ -698,6 +713,7 @@
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
         items = skiplist_filter(items);
+      
       /** fill the grid */
       doFillGrid(gridSel, data.query_url, items, width, height, displayInfobox);
       /** make controls */
@@ -706,40 +722,42 @@
 
       /** run callbacks */
       completed_callback.call(this);
+      
       /** run more callbacks */
-      // we could also do this with a queue
-      // might lead to circle refs
+       
       
       if ('ure_eu_oncompleted' in window) {
         for (cb in window.ure_eu_oncompleted) {
-          window.ure_eu_oncompleted[cb](this);
+          window.ure_eu_oncompleted[cb].call(this);
           delete window.ure_eu_oncompleted[cb]
           
         }
       }
 
       /** send done signal */
-      var signal = "doEuRelated_complete";
-      var e = $.Event(signal);
-      $(window).trigger(e, {
-        id : "finished doEuRelated"
-      });
+      var signal_id  =  "finished doEuRelated"
+      send_done_signal( signal_id);
+      
     }; // success
 
     /**
+     * wrapper for success
      * 
-     * refactor the callback to run on query data. add step to rerun query if no
-     * items found by query. no rerun if retaokeOnZero is false..
+     * refactor the callback to run on query data. 
+     *  add step to rerun query if no items found by query. 
+     * no rerun if retaokeOnZero is false..
      * 
      * @memberOf europeana_widget.doEuRelated
      * 
      */
 
-    var success_new = function(query_url, query_string) {
+    var success_wrapper = function(query_url, query_string) {
+      
       var min_items = 1;
+      
       return function(info) {
 
-        console.log('success_new');
+        console.log('success_wrapper');
         // quit function and rerun query with safe keywords if items.length ===
         // 0
         console.log("found " + info.items.length + "items");
@@ -749,6 +767,7 @@
           doEuRelated_retake(default_keywords);
           return 1;
         }
+        
         var data = {};
         // re-jig data to fit old model.
         data.info = info; // the return object from EU
@@ -781,6 +800,7 @@
 
       alert("a problem has occurred with your Europeana search");
     };
+    
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -816,18 +836,19 @@
         // return kw.join("+AND+");
         return kw.join("+");
       };
+      
       var extras = "";
       extras = get_search_extras();
 
       // make query from keywords
       var qs = get_query(keywords);
       // TODO -- fix fails if there isn't a thumbnail
-      var query = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
+      var querystring = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
           + '&profile=standard' + extras;
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
-      var url_new = url_base + query;
+      var url_new = url_base + querystring;
       // add data to success and get new callback.
-      var done = success_new(url_new, qs);
+      var done = success_wrapper(url_new, qs);
 
       // set up query caching
       var useQueryCache = true; // TODO move to top
