@@ -292,6 +292,7 @@
    * @memberOf europeana_widget.doEuRelated
    * 
    * Europeana content component 
+   * called from init_euRelated.makeEuRelatedItems
    */
   var doEuRelated = function() {
   };
@@ -1411,31 +1412,7 @@
       makeEuRelatedItems(false);
     });
 
-    /**
-     * @memberOf europeana_widget.init_euRelated Set up prev/next buttons. Get
-     *           more eu items
-     */
-    var set_next_page_button = function() {
-      $(document).on('click', '.pagination-widget .eumore', function() {
-        // get the next batch incrementing the cursor..
-        makeEuRelatedItems(true);
-
-      });
-    };
-    set_next_page_button();
-    /**
-     * @memberOf europeana_widget.init_euRelated Set up prev/next buttons. Get
-     *           more eu items
-     */
-    var set_prev_page_button = function() {
-      $(document).on('click', '.pagination-widget .euless', function() {
-        // get the last batch incrementing the cursor..
-        window.europeanaWidget_decrementCursor = true;
-        makeEuRelatedItems();
-
-      });
-    };
-    set_prev_page_button();
+    
     /**
      * Museum filter pane toggle
      */
@@ -1448,6 +1425,8 @@
 
     });
   };
+  
+  
   /**
    * @memberOf europeana_widget.init_euRelated init the eu_related grid if
    *           params are present.
