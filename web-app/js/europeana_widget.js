@@ -77,8 +77,8 @@
    */
 
   /**
-   * @memberOf europeana_widget.content_wrapper
-   * Refactor Content wrapper interface to expose fields for ure_pager
+   * @memberOf europeana_widget.content_wrapper Refactor Content wrapper
+   *           interface to expose fields for ure_pager
    * 
    * wrapper to expose interface for pager component.
    */
@@ -90,9 +90,9 @@
       accnum : accnum
 
     };
-      /**
-       * @memberOf europeana_widget.content_wrapper
-       */
+    /**
+     * @memberOf europeana_widget.content_wrapper
+     */
     function current() {
       return current_chunk;
     }
@@ -107,32 +107,33 @@
       window.eu_cursor = cursor;
     }
     /**
-     * @memberOf europeana_widget.content_wrapper
-     * init the comparanda when a new batch is loaded...
+     * @memberOf europeana_widget.content_wrapper init the comparanda when a new
+     *           batch is loaded...
      */
-    
+
     function _init_comparanda() {
       var signal = 'ure_eu_new_batch';
       var e = $.Event(signal);
-     $(window).trigger(e, {
-       id : "new batch"
-     });
+      $(window).trigger(e, {
+        id : "new batch"
+      });
     }
     /**
      * @memberOf europeana_widget.content_wrapper
-    
-     * display chunk $n , run the new query, init dnd for comparanda, set chunk to $n  
+     * 
+     * display chunk $n , run the new query, init dnd for comparanda, set chunk
+     * to $n
      */
     function chunk(n) {
       // TODO this needs to come from cursor info
       _increment_cursor(n);
 
       // get the data, format it and display it
-     ure_makeEuRelatedItems(false);
-     // useless -- needs to be called after 
-     window.ure_is_new_batch  = true;
-      
-     //    _init_comparanda() 
+      ure_makeEuRelatedItems(false);
+      // useless -- needs to be called after
+      window.ure_is_new_batch = true;
+
+      // _init_comparanda()
       set_current_chunk(n)
 
     }
@@ -160,7 +161,7 @@
     function set_total_results(n) {
       total_results = n
     }
-    
+
     /**
      * @memberOf europeana_widget.content_wrapper
      */
@@ -171,22 +172,22 @@
         chunkEnd : (current_chunk * config.paginationSize) + config.paginationSize - 1
       }
     }
-    
+
     /**
      * @memberOf europeana_widget.content_wrapper
      * 
      * queue various callbacks
      */
-    function queue(q,f) {
-  
+    function queue(q, f) {
+
       if (!('ure_eu_oncompleted' in window)) {
         window.ure_eu_oncompleted = []
       }
       if (q === 'done') {
         window.ure_eu_oncompleted.push(f)
       }
-      console.log( window.ure_eu_oncompleted)
-      
+      console.log(window.ure_eu_oncompleted)
+
     }
 
     return {
@@ -199,7 +200,7 @@
       set_total_results : set_total_results,
       totalResults : total_results,
       meta : meta,
-      queue:queue
+      queue : queue
 
     // pageWindow: paginationSize
     }
@@ -237,17 +238,17 @@
           var chunks_length = Math.ceil(totalResults / paginationSize)
           euwrap.set_chunks_length(chunks_length);
           euwrap.set_total_results(totalResults);
-         
+
           // set up callbacks for content widget
-         var pager_onCompleted = []
-         pager_onCompleted.push(function(){
-           $("#pagination-widget-top").show();
-         })
+          var pager_onCompleted = []
+          pager_onCompleted.push(function() {
+            $("#pagination-widget-top").show();
+          })
           var pager_opts = {
-            onCompleted: pager_onCompleted
+            onCompleted : pager_onCompleted
           }
           // get a pager -- pass it the inited content interface instance
-          pager = window.ure_pager(euwrap,pager_opts);
+          pager = window.ure_pager(euwrap, pager_opts);
           set_meta({
             total : totalResults,
             chunkStart : cursor,
@@ -282,7 +283,6 @@
 
   };
 
-
   /**
    * @memberOf europeana_widget.doEuRelated
    */
@@ -291,8 +291,7 @@
   /**
    * @memberOf europeana_widget.doEuRelated
    * 
-   * Europeana content component 
-   * called from init_euRelated.makeEuRelatedItems
+   * Europeana content component called from init_euRelated.makeEuRelatedItems
    */
   var doEuRelated = function() {
   };
@@ -304,7 +303,6 @@
 
   doEuRelated = function(templateSel, gridSel, data, incrementCursor, completed_callback) {
     console.log("doEuRelated...");
-    
 
     doEuRelated_keywords = data.keywords;
     window.europeanaWidget_keywords = data.keywords;
@@ -419,9 +417,9 @@
      * fill template with list of providers
      */
     var makeProviderlist = function(provs) {
-     
+
       var providers = Object.keys(provs);
-     
+
       // clone and fill template
       for (var i = 0, z = providers.length; i < z; i++) {
         var t = $($("#provider-label-template label")[0]).clone();
@@ -439,10 +437,9 @@
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
-     *   
-     *    clone template and fill, using europeana results
-     *    add to grid
-     *    called  from ajax success
+     * 
+     * clone template and fill, using europeana results add to grid called from
+     * ajax success
      */
 
     var fillGrid = function(items, width, height, displayInfobox) {
@@ -669,8 +666,8 @@
       stash_grid($(gridSel).html(), query_url);
 
     }; // doFillGrid
-    
-    var send_done_signal =function(id){
+
+    var send_done_signal = function(id) {
       var signal = "doEuRelated_complete";
       var e = $.Event(signal);
       $(window).trigger(e, {
@@ -714,7 +711,7 @@
       // if mode = skiplist
       if (getSearchMode === 'skiplist')
         items = skiplist_filter(items);
-      
+
       /** fill the grid */
       doFillGrid(gridSel, data.query_url, items, width, height, displayInfobox);
       /** make controls */
@@ -723,39 +720,37 @@
 
       /** run callbacks */
       completed_callback.call(this);
-      
+
       /** run more callbacks */
-       
-      
+
       if ('ure_eu_oncompleted' in window) {
         for (cb in window.ure_eu_oncompleted) {
           window.ure_eu_oncompleted[cb].call(this);
           delete window.ure_eu_oncompleted[cb]
-          
+
         }
       }
 
       /** send done signal */
-      var signal_id  =  "finished doEuRelated"
-      send_done_signal( signal_id);
-      
+      var signal_id = "finished doEuRelated"
+      send_done_signal(signal_id);
+
     }; // success
 
     /**
      * wrapper for success
      * 
-     * refactor the callback to run on query data. 
-     *  add step to rerun query if no items found by query. 
-     * no rerun if retaokeOnZero is false..
+     * refactor the callback to run on query data. add step to rerun query if no
+     * items found by query. no rerun if retaokeOnZero is false..
      * 
      * @memberOf europeana_widget.doEuRelated
      * 
      */
 
     var success_wrapper = function(query_url, query_string) {
-      
+
       var min_items = 1;
-      
+
       return function(info) {
 
         console.log('success_wrapper');
@@ -768,7 +763,7 @@
           doEuRelated_retake(default_keywords);
           return 1;
         }
-        
+
         var data = {};
         // re-jig data to fit old model.
         data.info = info; // the return object from EU
@@ -801,7 +796,7 @@
 
       alert("a problem has occurred with your Europeana search");
     };
-    
+
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -837,7 +832,7 @@
         // return kw.join("+AND+");
         return kw.join("+");
       };
-      
+
       var extras = "";
       extras = get_search_extras();
 
@@ -1384,7 +1379,7 @@
         // HACK
         var cb = 'ure_content_widget_wrapper_cb'
         if (cb in window) {
-            window[cb]();
+          window[cb]();
         }
       };
 
@@ -1394,39 +1389,45 @@
       // set up the voting.
       europeanaWidget_voteSetup("#" + gridid + " .cell", '#relevance-vote', accnum);
     }; // makeEuRelatedItems
-    
+
     window.ure_makeEuRelatedItems = makeEuRelatedItems;
-
-    // call the the setup when the window is ready.
-    $(document).ready(function() {
-      makeEuRelatedItems(false);
-    });
+    /**
+     * @memberOf europeana_widget.init_euRelated
+     * 
+     *  call the the setup when the window is ready.
+     */
+    var run = (function() {
+      $(document).ready(function() {
+        makeEuRelatedItems(false);
+      });
+    })()
 
     /**
-     * @memberOf europeana_widget.init_euRelated redo the query on a signal.
+     * @memberOf europeana_widget.init_euRelated
+     * 
+     * redo the query on a signal.
      */
+    var set_redo_signal_listener = (function() {
+      var signal = "relevance_tag_complete";
+      $(window).on(signal, function(e, data) {
+        makeEuRelatedItems(false);
+      });
+    })();
 
-    var signal = "relevance_tag_complete";
-    $(window).on(signal, function(e, data) {
-
-      makeEuRelatedItems(false);
-    });
-
-    
     /**
-     * Museum filter pane toggle
+     * @memberOf europeana_widget.init_euRelated
+     * 
+     * set up the click for Museum filter pane toggle
      */
-    $(document).on('click', '.cb-eu', function() {
-      console.log(this);
-      console.log($(this).val());
-      var mus = $(this).val();
-      $('[data-eu-provider="' + mus + '"]').toggle();
-      $(window).trigger("resize");
+    var set_museum_filter_panel = (function() {
+      $(document).on('click', '.cb-eu', function() {
+        var mus = $(this).val();
+        $('[data-eu-provider="' + mus + '"]').toggle();
+      });
+    })();
 
-    });
   };
-  
-  
+
   /**
    * @memberOf europeana_widget.init_euRelated init the eu_related grid if
    *           params are present.
