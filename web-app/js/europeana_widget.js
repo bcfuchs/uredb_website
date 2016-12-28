@@ -245,11 +245,17 @@
           }
           // get a pager -- pass it the inited content interface instance
           pager = window.ure_pager(euwrap, pager_opts);
-          
+          var chunkEnd = (function(){
+            // cursor 1
+            // paginationSize 100
+            // totalResults 34
+            return totalResults < paginationSize ?
+                totalResults :( cursor + paginationSize - 1)
+          })()
           set_meta({
             total : totalResults,
             chunkStart : cursor,
-            chunkEnd : cursor + paginationSize - 1
+            chunkEnd : chunkEnd
           });
           pager.set_meta(set_meta);
           // don't run this again

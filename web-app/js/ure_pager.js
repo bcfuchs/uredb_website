@@ -146,7 +146,7 @@
       // get start, end
       var end = (this_window * config.pageWindow) + 1;
       if (end > totalHatches) {
-        end = totalHatches;
+        end = totalHatches + 1;
         
       }
       var start = end - config.pageWindow;
@@ -178,7 +178,7 @@
         }
 
       }
-      if (config.lastChunkHatch === true && end !== chunk_length)
+      if (config.lastChunkHatch === true && !( end >= chunk_length))
         out.push(link(chunk_length - 1))
 
       return out;
