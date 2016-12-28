@@ -9,6 +9,9 @@
     var n = cw.chunks_length() - 1;
     var chunk = opts.firstChunk || 1;
     var count = opts.count || 1;
+    var totalHatches = 0;  // total possible hatches, given content. 
+  
+    var meta = opts.meta || function(){}
     // override in config
     var chunk_link = function(i) {
       return '<span class="chunklink" data-chunk="' + i + '">' + i + '</span>';
@@ -28,7 +31,7 @@
       indexOverlap : 1,
       lastChunkHatch : true,
       debug : false,
-      meta: function(){},
+      meta: meta,
       chunk_link : chunk_link,
       selectedClass : "selected-chunk"
     }
@@ -42,6 +45,15 @@
         var cb = onCompleted[i]
         cw.queue('done',cb) 
       }
+      // determine total Hatches 
+      totalHatches = Math.ceil(cw.totalResults() / cw.paginationSize )
+      if (config.pageWindow > totalHatches) {
+        config.pageWindow = totalHatches
+        config.indexOverlap = 0;
+        
+      }
+      
+        
       // set debug to true if dev
       if ( window.location.href.match("ure.local") )
         config.debug = true
@@ -124,6 +136,8 @@
     function set_meta(m) {
       config.meta = m
     }
+    
+  
     function get_index_window() {
 
       // what window is the current chunk in?
@@ -131,7 +145,12 @@
 
       // get start, end
       var end = (this_window * config.pageWindow) + 1;
+      if (end > totalHatches) {
+        end = totalHatches;
+        
+      }
       var start = end - config.pageWindow;
+      
       if (start === 0)
         start = 1
       return [ start, end, this_window ];

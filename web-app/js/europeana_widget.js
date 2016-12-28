@@ -148,7 +148,13 @@
      * @memberOf europeana_widget.content_wrapper
      */
     function set_total_results(n) {
-      total_results = n
+      total_results = n;
+    }
+    /**
+     * @memberOf europeana_widget.content_wrapper
+     */
+    function totalResults() {
+      return total_results;
     }
 
     /**
@@ -187,7 +193,7 @@
       chunks_length : chunks_length,
       paginationSize : config.paginationSize,
       set_total_results : set_total_results,
-      totalResults : total_results,
+      totalResults   : totalResults,
       meta : meta,
       queue : queue
 
@@ -235,9 +241,11 @@
           })
           var pager_opts = {
             onCompleted : pager_onCompleted
+            
           }
           // get a pager -- pass it the inited content interface instance
           pager = window.ure_pager(euwrap, pager_opts);
+          
           set_meta({
             total : totalResults,
             chunkStart : cursor,
@@ -267,7 +275,7 @@
 
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
     paginationSize = 100;
-
+    
     test_code(totalResults, paginationSize);
 
   };
