@@ -1855,6 +1855,10 @@ a#extlink:link {
 }
 // hide the gplus welcome back pop-up
 
+iframe[src^="https://apis.google.com/u/0/_/widget/oauthflow/toast"]  {
+	  display: none;
+	
+}
 iframe[src^="https://apis.google.com"] {
   display: none;
 }

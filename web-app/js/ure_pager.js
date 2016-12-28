@@ -27,7 +27,7 @@
       hatchFactor : 2,
       indexOverlap : 1,
       lastChunkHatch : true,
-      debug : true,
+      debug : false,
       meta: function(){},
       chunk_link : chunk_link,
       selectedClass : "selected-chunk"
@@ -42,7 +42,9 @@
         var cb = onCompleted[i]
         cw.queue('done',cb) 
       }
-      
+      // set debug to true if dev
+      if ( window.location.href.match("ure.local") )
+        config.debug = true
       // chunkSelect(chunk)
       _indexify();
 

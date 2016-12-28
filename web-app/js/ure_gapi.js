@@ -40,7 +40,7 @@
     }
 
     function onSignIn() {
-      alert("Signed in!");
+      
       auth2 = gapi.auth2.getAuthInstance();
       user = auth2.currentUser.get();
     
@@ -71,7 +71,7 @@
 
       $(document).ready(function() {
         $(config.nameSelector).html(name);
-        alert(name);
+        
       });
     }
     // TODO--show nothing on init

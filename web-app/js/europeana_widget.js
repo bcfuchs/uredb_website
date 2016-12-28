@@ -15,38 +15,27 @@
  * 
  */
 /** START */
+
 !function() {
   'use strict';
   // reset the cache
-  var eu_querycache_store = 'eu_querycache';
-  if ($.localStorage.isSet(eu_querycache_store)) {
-    $.localStorage.set(eu_querycache_store, {});
-  }
-
   /**
-   * @memberOf europeana_widget.init_euRelated
+   * @memberOf europeana_widget.pre_init_euRelated
    */
-  var get_search_extras = function() {
-    var out = "";
-    if ($(window).data("search_prefs") !== undefined) {
-      var prefs = $(window).data("search_prefs");
-      var mode = prefs.mode;
-      if (mode === "whitelist") {
-        var provs = prefs.data.whitelist.data;
-        var f = get_whitelist_providers_facet(provs);
-        out += f;
-      }
+  var reset_querycache = (function() {
+    var eu_querycache_store = 'eu_querycache';
+    if ($.localStorage.isSet(eu_querycache_store)) {
+      $.localStorage.set(eu_querycache_store, {});
     }
-    return out;
+  })();
 
-  };
-
-  window.get_search_extras = get_search_extras;
   /**
-   * @memberOf europeana_widget.init_euRelated
+   * @memberOf europeana_widget.pre_init_euRelated
+   *  
    */
   var get_whitelist_providers_facet = function(providers) {
-
+    console.log("get_whitelist_providers_facet AAAAA")
+    console.log(this)
     var provs = [];
     // qf prov1 & qf prov2 is interpreted as an "AND" query
     // so use +OR+
@@ -632,6 +621,25 @@
       return out;
 
     }; // get_grid
+
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     */
+    var get_search_extras = function() {
+      console.log("get_search_extras");
+      var out = "";
+      if ($(window).data("search_prefs") !== undefined) {
+        var prefs = $(window).data("search_prefs");
+        var mode = prefs.mode;
+        if (mode === "whitelist") {
+          var provs = prefs.data.whitelist.data;
+          var f = get_whitelist_providers_facet(provs);
+          out += f;
+        }
+      }
+      return out;
+    };
+
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
@@ -1394,7 +1402,7 @@
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
-     *  call the the setup when the window is ready.
+     * call the the setup when the window is ready.
      */
     var run = (function() {
       $(document).ready(function() {
