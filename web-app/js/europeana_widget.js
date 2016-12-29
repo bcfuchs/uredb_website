@@ -210,6 +210,7 @@
     var accnum = $(eumeta).data('ure-accnum')
     var euwrap = new eu_content_wrapper(accnum);
     var pager;
+    var current_totalResults = 0;
     var counter = 1;
 
     // test code for the pager
@@ -226,9 +227,12 @@
         } else {
           cursor = window.eu_cursor
         }
-
+        if (current_totalResults !== totalResults && current_totalResults > 0)
+          test_code_init = true
+        
         // run only on init
         if (test_code_init === true) {
+          current_totalResults = totalResults;  
           // calculate chunks_length and set.
           var chunks_length = Math.ceil(totalResults / paginationSize)
           euwrap.set_chunks_length(chunks_length);
@@ -259,6 +263,7 @@
           });
           pager.set_meta(set_meta);
           // don't run this again
+          
           test_code_init = false;
           euwrap.set_current_chunk(current_chunk);
         }
@@ -281,7 +286,7 @@
 
   var update_pagination = function(incrementCursor, itemsCount, totalResults, paginationSize) {
     paginationSize = 100;
-    
+    // if this is a retake, then pager needs to be re-initialised. 
     test_code(totalResults, paginationSize);
 
   };
