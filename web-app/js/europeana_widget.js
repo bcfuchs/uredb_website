@@ -327,7 +327,7 @@
      * 
      */
     doEuRelated_retake = function(keywords) {
-
+      window.ure_is_new_batch = true; // causes EuComparanda to re-init the DnD only
       window.europeanaWidget_keywords = keywords;
       var d = JSON.parse(data); // original data
       d.keywords = keywords;
