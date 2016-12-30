@@ -267,7 +267,7 @@
           test_code_init = false;
           euwrap.set_current_chunk(current_chunk);
         }
-
+        // callback for displaying metadata 
         function set_meta(meta) {
           $("#pager-meta .item-count-start").html(meta.chunkStart);
           $("#pager-meta .item-count-end").html(meta.chunkEnd);
@@ -329,7 +329,6 @@
     doEuRelated_retake = function(keywords) {
 
       window.europeanaWidget_keywords = keywords;
-
       var d = JSON.parse(data); // original data
       d.keywords = keywords;
       d.startrec = 1;
@@ -760,6 +759,8 @@
 
       /** send done signal */
       var signal_id = "finished doEuRelated"
+      // sends do euRelated_complete signal , received in record.js
+      // fires EuComparanda to set up comparanda component. 
       send_done_signal(signal_id);
 
     }; // success

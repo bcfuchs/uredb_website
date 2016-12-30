@@ -12,6 +12,10 @@ window.ure_eu_comparanda = {}
 
   /**
    * @memberOf eu_comparanda load / save /collect europeana items for $accnum
+   * 
+   * called in record.js, when signal doEuRelated_complete is received. 
+   * This signal is sent at the end of doEuRelated.success, after contant has been loaded. 
+   * 
    */
 
   var EuComparanda = function(accnum) {
