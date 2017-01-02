@@ -34,8 +34,7 @@
    *  
    */
   var get_whitelist_providers_facet = function(providers) {
-    console.log("get_whitelist_providers_facet AAAAA")
-    console.log(this)
+
     var provs = [];
     // qf prov1 & qf prov2 is interpreted as an "AND" query
     // so use +OR+
