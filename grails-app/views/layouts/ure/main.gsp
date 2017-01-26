@@ -1,3 +1,4 @@
+
 <!DOCTYPE html><%@ page import="java.util.Properties"%>
 <html lang="en">
 <!-- main.tmpl -->
@@ -116,10 +117,15 @@ window.ure.isAnonUser = false;  // set to false in ure_gapi if user logs in.
 		<div id="template-comp-dropdown" class="dropdown"></div>
 	</div>
 	<%  
-		def ga_script = System.getenv("GA_SCRIPT").toBoolean();
+		def ga_script = System.getenv("GA_SCRIPT")
 		if (ga_script == null) {
-		    ga_script = System.getProperty("GA_SCRIPT").toBoolean();
+        	// tomcat needs properties
+		    ga_script = System.getProperty("GA_SCRIPT");
+        	if (ga_script == null) {
+        		ga_script = 'false'
+        	}
 		}
+        ga_script = ga_script.toBoolean();
 	%>
 	<g:if test="${ga_script == true }">
 		<g:render template="/ure/ga"></g:render>
