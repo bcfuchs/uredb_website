@@ -24,7 +24,11 @@
 	crossorigin="anonymous"></script>
 <g:layoutHead />
 <% def uredb_wskey = System.getenv("WSKEY");if (uredb_wskey == null) { uredb_wskey = System.getProperty("WSKEY");}%>
-<% def gapi_client_id = System.getenv("GAPI_CLIENT_ID");if (gapi_client_id == null) {gapi_client_id = System.getProperty("GAPI_CLIENT_ID");}%>
+<% def gapi_client_id = System.getenv("GAPI_CLIENT_ID");if (gapi_client_id == null) {
+    gapi_client_id = System.getProperty("GAPI_CLIENT_ID");
+    if (gapi_client_id == null)
+    	gapi_client_id = '';
+    }%>
 <script>
 var uredb_wskey = "${uredb_wskey}";
 var gapi_client_id = "${gapi_client_id}";
