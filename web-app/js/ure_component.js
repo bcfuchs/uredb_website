@@ -25,12 +25,12 @@
    
     
     $(dragSel).draggable({
-         cursor : this.defaults.cursor,
-         snapTolerance : this.defaults.snapTolerance,
-         scroll:this.defaults.scroll,
-         revert: false,
-         scope : scope,
-         helper : helper
+        cursor : this.defaults.cursor,
+        snapTolerance : this.defaults.snapTolerance,
+        scroll: this.defaults.scroll,
+        revert: false,
+        scope : scope,
+        helper : helper
        });
     
     $(dropSel).droppable({
