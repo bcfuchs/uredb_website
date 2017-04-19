@@ -170,10 +170,10 @@ class UrlMappings {
             action= [GET:"accnum2thumb"];
         }
         // get all thumbs for a record
-        "/api/thumbs/$acc?"(controller:"api"){
-            action= [GET:"thumblist"];
+        "/api/thumb/$acc?"(controller:"api"){
+            action= [GET:"thumblistPerRecord"];
         }
-
+        // get all thumbs LEGACY
         "/api/thumbs"(controller:"api"){
             action= [GET:"thumblist"];
         }
@@ -181,8 +181,18 @@ class UrlMappings {
         "/api/uremeta/accession_number/$acc?"(controller:"api"){
             action= [GET:"getAccnum"];
         }
+        
+        // get 1 rec
+        "/api/record/$acc?"(controller:"api"){
+            action= [GET:"getAccnum"];
+        }
         // get all recs
         "/api/uremeta/accession_number"(controller:"api"){
+            action= [GET:"getAccnums"];
+        }
+        // get all recs
+       
+        "/api/records"(controller:"api"){
             action= [GET:"getAccnums"];
         }
 

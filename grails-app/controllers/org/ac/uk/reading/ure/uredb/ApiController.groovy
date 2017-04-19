@@ -24,7 +24,37 @@ class ApiController {
         }
         render out  as JSON;
     }
-  
+    def thumblistPerRecord() {
+        def out = ['error':'could not find ' + params.acc]
+        def rec = [];
+        def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
+        def excludes = ['class','media','acquisition','uri_local','uri','dir','resource_id'];
+        if (u && u.media) {
+            for (item in u.media) {
+                
+            def thisrec = [:]
+            item.properties.sort().each {k,v->
+                // TODO init property list
+              
+             if (! (k in excludes)) {
+                    thisrec[k] = v
+             }
+                
+                
+            }
+            thisrec['image_thumb'] = item['uri_local'] + 'thumb/' + item['uri'];
+            thisrec['image_small'] = item['uri_local'] + 'sm/' + item['uri'];
+            thisrec['image_large'] = item['uri_local'] + 'xlarge/' + item['uri'];
+            thisrec['accession_number'] = item['resource_id'];
+            thisrec['record_uri'] = "/api/record/" + item['resource_id']
+            
+            rec << thisrec;
+            }
+            out = rec;
+        }
+      
+        render out  as JSON;
+    }
     def accnum2thumb() {
         def out = [:];
         def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
@@ -62,7 +92,8 @@ class ApiController {
         def out = ['error':'could not find ' + params.acc]
         def rec = [:];
         def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
-        def excludes = ['class','media','acquisition'];
+        def excludes = ['class','media','acquisition',"daterange_type","date_edited_cal","daterange_start","daterange_end"];
+      
         if (u) {
             u.properties.sort().each {k,v->
                 // TODO init property list
