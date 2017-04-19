@@ -152,6 +152,10 @@ class UrlMappings {
         /*************
          * API
          */
+        // get available commands
+        "/api"(controller:"api"){
+            action= [GET:"availableCommands"];
+        }
         // get related objects from europeana
         "/api/related"(controller:"api"){
             action= [GET:"europeanaRelatedSearch",POST:"europeanaRelatedSearch"]
@@ -169,8 +173,8 @@ class UrlMappings {
         "/api/accnum2thumb/$acc"(controller:"api"){
             action= [GET:"accnum2thumb"];
         }
-        // get all thumbs for a record
-        "/api/thumb/$acc?"(controller:"api"){
+        // get all images for a record
+        "/api/images/$acc?"(controller:"api"){
             action= [GET:"thumblistPerRecord"];
         }
         // get all thumbs LEGACY
@@ -195,6 +199,8 @@ class UrlMappings {
         "/api/records"(controller:"api"){
             action= [GET:"getAccnums"];
         }
+        
+       
 
         /*********
          * Experimental

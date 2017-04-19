@@ -10,7 +10,13 @@ import org.springframework.context.ApplicationContext
 class ApiController {
     def RecordService;
     def Uremeta;
-
+    def availableCommands() {
+        def commands = ['GET /api/records':'list all records by accession number',
+                        'GET /api/record/$accession_number':'get a record by $accession_number',
+                        'GET /api/images/$accession_number':'get images associated with a record by $accesson_number']
+        def out = ["available commands": commands];
+        render out  as JSON;
+    }
     def thumblist() {
         def out = [:];
         def recs =  org.ac.uk.reading.ure.uredb.Uremeta.list()
