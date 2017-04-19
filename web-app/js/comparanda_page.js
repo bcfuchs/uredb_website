@@ -128,7 +128,8 @@
 
     }
     function zeroDrag() {
-      component.zeroDrag("comp")
+	component.zeroDrag("comp")
+
     }
     function setDrag() {
       component.setDrag(config.compDraggableSelector, config.compDroppableSelector, "comp", moveComp,

@@ -1,5 +1,5 @@
 describe(
-    'comparanda_page  functional  tests',
+    'comparanda_page functional tests---',
 
     function() {
 	var comp = comparanda_page;
@@ -63,12 +63,18 @@ describe(
             grid.load();
 	});
 
-	it('grid.load', function() {
+	it('grid.load..', function() {
 
             expect($("#comparanda-list div").length).toEqual(640);
 
 	})
 
+	it('grid.zeroDrag'), function(){
+
+	    expect(grid.zeroDrag()).toBeTruthy();
+
+	}
+	
 	it('project_strip', function() {
 
             comp.project_strip.load();

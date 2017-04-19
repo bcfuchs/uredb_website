@@ -58,7 +58,14 @@ class ApiController {
         def accs  = org.ac.uk.reading.ure.uredb.Uremeta.executeQuery('select u.accession_number from Uremeta u');
         render accs as JSON;
     }
-    
+    def getAccnum() {
+        def out = ['could not find ' + params.accnum]
+        def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
+        if (u) {
+            out = u
+        }
+        render out  as JSON;
+    }
     
     def saveRelatedPreferences() {
      

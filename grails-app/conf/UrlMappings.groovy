@@ -173,7 +173,11 @@ class UrlMappings {
         "/api/thumbs"(controller:"api"){
             action= [GET:"thumblist"];
         }
-
+        
+        "/api/uremeta/accession_number/$acc?"(controller:"api"){
+            action= [GET:"getAccnum"];
+        }
+        
         "/api/uremeta/accession_number"(controller:"api"){
             action= [GET:"getAccnums"];
         }
