@@ -165,19 +165,23 @@ class UrlMappings {
         "/api/media2record/$uri"(controller:"api"){
             action= [GET:"getRecordsForImage"];
         }
-
+        // get 1 thumb for a record
         "/api/accnum2thumb/$acc"(controller:"api"){
             action= [GET:"accnum2thumb"];
+        }
+        // get all thumbs for a record
+        "/api/thumbs/$acc?"(controller:"api"){
+            action= [GET:"thumblist"];
         }
 
         "/api/thumbs"(controller:"api"){
             action= [GET:"thumblist"];
         }
-        
+        // get 1 rec
         "/api/uremeta/accession_number/$acc?"(controller:"api"){
             action= [GET:"getAccnum"];
         }
-        
+        // get all recs
         "/api/uremeta/accession_number"(controller:"api"){
             action= [GET:"getAccnums"];
         }

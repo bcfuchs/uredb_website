@@ -59,11 +59,22 @@ class ApiController {
         render accs as JSON;
     }
     def getAccnum() {
-        def out = ['could not find ' + params.accnum]
+        def out = ['error':'could not find ' + params.acc]
+        def rec = [:];
         def u =  org.ac.uk.reading.ure.uredb.Uremeta.findByAccession_number(params.acc);
+        def excludes = ['class','media','acquisition'];
         if (u) {
-            out = u
+            u.properties.sort().each {k,v->
+                // TODO init property list
+                if (! (k in excludes)) {
+                    
+                    rec[k] = v
+                }
+                
+            }
+            out = rec;
         }
+      
         render out  as JSON;
     }
     
