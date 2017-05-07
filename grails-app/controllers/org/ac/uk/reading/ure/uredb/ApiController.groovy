@@ -48,9 +48,9 @@ class ApiController {
                 
                 
             }
-            thisrec['image_thumb'] = item['uri_local'] + 'thumb/' + item['uri'];
-            thisrec['image_small'] = item['uri_local'] + 'sm/' + item['uri'];
-            thisrec['image_large'] = item['uri_local'] + 'xlarge/' + item['uri'];
+            thisrec['image_thumb'] = item['uri_local'] + '/thumb/' + item['uri'];
+            thisrec['image_small'] = item['uri_local'] + '/sm/' + item['uri'];
+            thisrec['image_large'] = item['uri_local'] + '/xlarge/' + item['uri'];
             thisrec['accession_number'] = item['resource_id'];
             thisrec['record_uri'] = "/api/record/" + item['resource_id']
             

@@ -37,7 +37,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a id="navbar-search" href="/search">Search</a></li>
 					<li><a id="navbar-browse" href="/fieldlist">Browse</a></li>
-					<li><a id="navbar-search" href="/comparanda">Projects</a></li>
+					<li><a id="navbar-comparanda" href="/comparanda">Projects</a></li>
 					<li><a id="navbar-permissions" href="/permissions">Permissions</a></li>
 					<li><a href="http://www.reading.ac.uk/Ure/collection/index.php">About</a></li>
 					<li><a id="navbar-urehome" href="http://www.reading.ac.uk/Ure/index.php">Ure Museum Home</a></li>

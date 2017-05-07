@@ -49,7 +49,7 @@ flash.searchUrl = 	"/searchable/?" + request.getQueryString();
     <g:form useToken="true" url='[controller: "searchable", action: "index"]' id="searchableForm" name="searchableForm" method="get" style="color:black;">
         <g:textField name="q" value="${params.q}" size="50"/> 
         <input type="hidden" name="max" value="100" id="max" />
-        <button id="qs-search" type="submit" name="submit" value="go"></button>
+        <button class="qs-search" type="submit" name="submit" value="go"></button>
     </g:form>
     </div>
      
