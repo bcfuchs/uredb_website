@@ -33,13 +33,13 @@ var thumb_image_map_url = "${resource(dir:'html',file:'thumb_image_map.html  ')}
 		 -->
 		<div class="container">
 			<div class="row">
-				<div id="left-content" class="col-md-10">
+				<div id="left-content" class="col-md-11">
 			
 					<g:render template="/taglibTemplates/searchbar2"/>
 					<div id="big-grid0"></div>
 					<div id="mobile-grid0"></div>
 				</div>
-				<div class="col-md-2"></div>
+				<div class="col-md-1"></div>
 			</div>
 		</div>
 	</div>

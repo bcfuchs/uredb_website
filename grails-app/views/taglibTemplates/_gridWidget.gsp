@@ -67,6 +67,8 @@
 }
 </style>
 
+<script>
+</script>
 
 <div id="${gridid}" class="ure-grid ${klass }">
 	<%   def hideInfodiv = (displayInfobox.toBoolean())?"hide-infodiv":"showtheinfobox" %>

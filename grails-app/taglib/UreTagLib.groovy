@@ -207,6 +207,7 @@ class UreTagLib {
         }
 
         model['info'] =   info
+     
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
         model['addCellClick'] = (attrs.addCellClick) ? attrs.addCellClick : true;
 

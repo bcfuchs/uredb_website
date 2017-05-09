@@ -35,7 +35,7 @@
 	</div>
 </div>
 <script id="europeana_widget_js" src="${resource(dir:'js',file:'ure_pager.js?v=2')}"></script>
-<script id="europeana_widget_js" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
+<script id="europeana_widget_js2" src="${resource(dir:'js',file:'europeana_widget.js?v=2')}"></script>
 
 <div id="gridTemplate" style="display: none;">
 	<div class="cell gridlist-cell" data-ure-uri>
