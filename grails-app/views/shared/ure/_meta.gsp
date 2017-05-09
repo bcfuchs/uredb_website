@@ -72,8 +72,9 @@ if (t.label =~ /(?i)lastUpdated/ ) {
 		def s = t.content as String;
         
 		 if (t.content && t.content) {
-			 s = s.replaceAll(/\\n/,'<br/>');
+             s = s.replaceAll(/\\n/,'<br/>');
 			 s = s.replaceAll(/\\(.)/,'$1');
+             
 
 		 }
 		 else {

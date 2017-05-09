@@ -125,8 +125,12 @@
 		<div class="container">
 				<div class="row">
 					<div class="col-md-10">
-						<ure:gridWidgetForSearchResults gridid="testgridw" klass="testwidget" results="${searchResult?.results}"
-							displayInfobox="false" height="125px" width="125px" addCellClick="true">
+						<ure:gridWidgetForSearchResults gridid="eu-grid" klass="eu-grid" results="${searchResult?.results}"
+							displayInfobox="false" 
+							height="125px" 
+							width="125px" 
+							addCellClick="true" 
+							type="bootstrap">
 						</ure:gridWidgetForSearchResults>
 						<div class="paging">
 							<g:if test="${haveResults}">

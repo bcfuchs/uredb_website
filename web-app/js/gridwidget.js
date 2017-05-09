@@ -1,6 +1,9 @@
 !function() {
-  var gridWidget = function(gridid, width, height, displayInfobox, addCellClick) {
+  var gridWidget = function(gridid, width, height, displayInfobox, addCellClick,type) {
     console.log("gridWidget " + gridid)
+    if (type === undefined) {
+      type = 'freewall'
+    }
     if (addCellClick === undefined) {
       addCellClick = true;
     }
@@ -71,7 +74,7 @@
  
 
     }; // formatGrid
-    formatGrid(gridid,{type:"bootstrap"})
+    formatGrid(gridid,{type:type})
     // click on image pops to record
     // TODO should be a callback
     if (addCellClick === true) {

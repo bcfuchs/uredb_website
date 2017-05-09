@@ -13,7 +13,7 @@
     // ${addCellClick}
   	    $("#${gridid}").hide();
   	    $("#${gridid}").delay(1000).show();
-        gridWidget("#${gridid}","${width}","${height}",${displayInfobox},${addCellClick})
+        gridWidget("#${gridid}","${width}","${height}",${displayInfobox},${addCellClick},"${type}")
    
   
     

@@ -1,4 +1,5 @@
 
+
 <%
 def fields = [:];
 record.each {
@@ -61,7 +62,8 @@ Dimensions:
 		klass="recordImageWidget" 
 		uris="${images}" 
 		displayInfobox="true" height="100px" width="100px" 
-		addCellClick="false">
+		addCellClick="false"
+		type="freewall">
 	</ure:gridWidgetForImageUris>
 	<script src="${resource(dir:'js',file:'meta2.js?v=2')}"></script>
   	
