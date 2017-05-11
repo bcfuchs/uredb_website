@@ -54,7 +54,10 @@ class Uremeta {
 //        
 //        description: spellCheck 'include'
 //    }
-    static searchable = true;
+    static searchable = {
+        short_title boost: 2.0
+     
+    };
     
    // static searchable = [only: ['comments']]
     

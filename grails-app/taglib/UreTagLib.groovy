@@ -240,7 +240,7 @@ class UreTagLib {
         def width = (attrs.width) ? attrs.width : '248px'
         def height = (attrs.height) ? attrs.height : '248px'
         def addCellClick = (attrs.addCellClick) ? attrs.addCellClick : true;
-
+        def type = (attrs.type) ? attrs.type : 'freewall'
 
         model['info'] =   recordService.getImageInfos(uris)
         model['displayInfobox'] = (attrs.displayInfobox) ? attrs.displayInfobox : true;
@@ -248,6 +248,7 @@ class UreTagLib {
         model['gridid'] = gridid;
         model['width'] = width;
         model['height'] = height;
+        model['type'] = type;
         model['addCellClick'] =addCellClick;
         //log.warn model
         // in here do all the munging

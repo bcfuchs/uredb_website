@@ -4,7 +4,7 @@ class UrlMappings {
     static mappings = {
         
         /********************
-         * Legacy urls
+         * Legacy urls from uredb.cgi
          * 
          */
 

@@ -125,7 +125,7 @@
 		<div class="container">
 				<div class="row">
 					<div class="col-md-10">
-						<ure:gridWidgetForSearchResults gridid="eu-grid" klass="eu-grid" results="${searchResult?.results}"
+						<ure:gridWidgetForSearchResults gridid="eu-grid" klass="eu-grid bootstrap-grid" results="${searchResult?.results}"
 							displayInfobox="false" 
 							height="125px" 
 							width="125px" 

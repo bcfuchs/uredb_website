@@ -10,31 +10,7 @@ record.each {
         
 }
  %>
-<!-- 
 
-Title:
-Attic Black-Figure Neck Amphora
-
-Artist/Maker(s):
-Attributed to Affecter (Greek (Attic), about 540 - 520 B.C.)
-
-Affecter (Greek (Attic), about 540 - 520 B.C.)
-
-Culture:
-Greek (Attic)
-
-Place(s):
-Athens, Greece (Place created)
-
-Date:
-about 530 B.C.
-
-Medium:
-Terracotta
-
-Dimensions:
-38.7 x 25.7 cm (15 1/4 x 10 1/8 in.)
- -->
 
 <div class="container" id="meta2">
 	<!--  images -->

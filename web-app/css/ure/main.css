@@ -1809,6 +1809,13 @@ a#extlink:link {
 	display: none;
 }
 
+.bootstrap-grid .cell:hover {
+    color: black;
+    opacity: 0.8;
+    background: black;
+    cursor: pointer;
+}
+
 .fieldlist-img {
 	height: 40px;
 }
