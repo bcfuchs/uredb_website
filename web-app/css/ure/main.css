@@ -894,6 +894,7 @@ div:hover.left_nav1 a.left1 {
 	padding-right: 10px;
 }
 
+</s
 //
 make sure the search page background stays there . 
 #searchpage-center {
@@ -934,6 +935,8 @@ button#qs-search-old {
 		#FAFAFA;
 	border: 0;
 }
+// search page search bar
+
 
 #results .cell {
 	text-shadow: none !important;

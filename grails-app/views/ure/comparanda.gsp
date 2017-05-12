@@ -6,6 +6,7 @@
 <script src="${resource(dir:'js',file:'image-modal.js')}"></script>
 </head>
 <body>
+	<h2 class="toggler">Projects</h2>
 	<div id="project-strip-container" style="display: none">
 		<div id="project-strip"></div>
 	</div>
@@ -15,21 +16,25 @@
 		<g:render template="/ure/projects_widget"></g:render>
 	</div>
 	<div id="comparanda-page-wrapper">
-		<div id="comparanda-main" class="comp-toggle">
-			<h2 class="toggler">Projects</h2>
+		<h2 id="comparanda_spinner">Loading...</h2>
+		<div id="comparanda-main" class="comp-toggle" style="display:none;">
 			<g:render template="/ure/project_title_display_widget">
 			</g:render>
 			<div id="project-controls">
 				<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 				<span id="save-project-edits" class="hand">save</span>
 			</div>
-			<div id="comparanda-list"></div>
+			
+			<div id="comparanda-list"> </div>
 		</div>
+	<!-- 
 		<div id="projects-main" class="comp-toggle">
 			<h2 class="toggler">Projects</h2>
 			<a id="back-button" class="btn btn-sm" onclick="window.history.back()">&larr;back</a>
 			<div id="projects-list"></div>
 		</div>
+		-->
+		
 	</div>
 	<script>
     $(document).ready(function() {
@@ -51,12 +56,17 @@
 			<div class="project-box-item-caption"></div>
 		</div>
 	</div>
+	<div id="documentation" style="display: none">
+	<ul>
+	<li>Drag an image up/down to move it to another object area </li>
+	<li>The black band 
+	<li>Click on the black band to switch to another project </li>
+	<li>To remove a project, drag it out of the black band.</li>
+	<li>To change a project title, etc. </li>
+	</ul>
+	</div>
 	<script src="${resource(dir:'js',file:'eu_comparanda.js')}?v=2	"></script>
 	<script src="${resource(dir:'js',file:'comparanda_page.js')}?v=2"></script>
-	<script>
-    $(document).ready(function() {
-
-    })
-  </script>
+	
 </body>
 </html>

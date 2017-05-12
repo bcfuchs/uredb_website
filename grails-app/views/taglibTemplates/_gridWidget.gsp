@@ -9,11 +9,14 @@
 <script>
 ! function() {
   $(document).ready(function(){
-    // export from js/gridwidget.js 2
+    // export from js/gridwidget.js 3
     // ${addCellClick}
   	    $("#${gridid}").hide();
   	    $("#${gridid}").delay(1000).show();
-        gridWidget("#${gridid}","${width}","${height}",${displayInfobox},${addCellClick},"${type}")
+        gridWidget("#${gridid}","${width}","${height}",
+        ${displayInfobox},
+        ${addCellClick},
+        "${type}");
    
   
     

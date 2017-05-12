@@ -18,7 +18,8 @@
   var grid_component = (function() {
 
     var config = {
-      component_selector : "#comparanda",
+      component_selector : "#comparanda-main",
+      component_spinner: "#comparanda_spinner",
       compDraggableSelector : ".comp-draggable",
       compDroppableSelector : ".comp-droppable",
       gridSelector : "#comparanda-list",
@@ -35,10 +36,11 @@
      */
 
     function build_grid(gridsel) {
-      var grid_sel = config.component_selector;
-      $(grid_sel).hide();
+     
+      
       var eu = ure_eu_items.get_all();
       
+      $(config.component_spinner).show();
       // TEST eu is undefined or length 0
       for ( var k in eu) {
         var div = document.createElement('div');
@@ -74,6 +76,8 @@
         }
 
       }
+     $(config.component_spinner).hide();
+     $(config.component_selector).show(); 
     }
     // toggle the save switch. 
     // check if no edits
@@ -88,7 +92,7 @@
     }
     // save edits if they've changed. 
     function save_edits() {
-      alert("saving edits....");
+    //  alert("saving edits....");
     }
     /***************************************************************************
      * 

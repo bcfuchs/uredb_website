@@ -1,7 +1,7 @@
 <style>
 .searchbar-col {
-width: 40%;
-margin-left: 17%;
+	width: 40%;
+	margin-left: 8%;
 }
 </style>
 	
