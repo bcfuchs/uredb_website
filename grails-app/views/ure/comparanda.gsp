@@ -7,6 +7,7 @@
 </head>
 <body>
 	<h2 class="toggler">Projects</h2>
+	
 	<div id="project-strip-container" style="display: none">
 		<div id="project-strip"></div>
 	</div>
