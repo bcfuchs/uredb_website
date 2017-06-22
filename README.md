@@ -12,7 +12,14 @@ Running the demo
 First, install Docker from https://www.docker.com/ if you don't have it. 
 
 
-Then  build an image from the root directory of this project
+Clone this project
+
+```
+git clone https://github.com/bcfuchs/uredb_website.git
+cd uredb_website
+```
+
+Then build an image from the root directory of this project
 
 ```
 docker build -t ure/uredb_base . 
