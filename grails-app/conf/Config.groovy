@@ -87,6 +87,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/uremeta/**':['ROLE_CURATOR'],
 	'/auth/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/record/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/html/selector/**':['ROLE_EDITOR'],
    	'/**':['IS_AUTHENTICATED_ANONYMOUSLY']
 	];
 grails.app.context = "/"

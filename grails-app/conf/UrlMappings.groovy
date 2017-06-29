@@ -146,6 +146,7 @@ class UrlMappings {
         "/admin/picassoc2"(view:"/admin/picassoc")
         "/admin/createRecord"(view:"/admin/createRecord") // custom page for creating records.
         "/admin/createRevise"(view:"/admin/createRevise");
+        // "/admin/select_thumb"(view:"/")
 
         "/admin/options"(view:"/admin/options")
 
@@ -165,6 +166,11 @@ class UrlMappings {
 
             action = [POST:"saveRelatedPreferences",GET:"saveRelatedPreferences"]
 
+        }
+        "/api/selected_thumb"(controller:"api"){
+            
+            action = [POST:"saveSelectedThumb"]
+            
         }
         "/api/media2record/$uri"(controller:"api"){
             action= [GET:"getRecordsForImage"];

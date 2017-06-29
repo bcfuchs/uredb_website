@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext
  */
 class ApiController {
     def RecordService;
+    def SpringSecurityService;
     def Uremeta;
     def availableCommands() {
         def commands = ['GET /api/records':'list all records by accession number',
@@ -128,7 +129,24 @@ class ApiController {
        def out = [1:session['token'],2:prefs];
        render out as JSON; 
     }
+    def saveSelectedThumb() {
+        System.err.println "save selected thumb"
+        def principal = springSecurityService.principal
+        String username = getPrincipal()
+        def selected = request.JSON;
+        def selstr = groovy.json.JsonOutput.toJson(selected)
+        
+        System.err.println selected.getClass();
+        System.err.println selstr.length();;
+        System.err.println username
+        
+        def t = new org.ac.uk.reading.ure.uredb.Thumbnail(user:username,choices:selstr)
+        t.save();
+        // if 
+        
+       
     
+    }
     //	def index = { }
     
     def europeanaRelatedSearch() {

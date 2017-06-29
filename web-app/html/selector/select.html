@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script src="js/jquery.js"></script>
+    <script src="js/FileSaver.min.js"></script>
+    <script src="js/select.js?v=2"></script>
+    <!--   select an item from a bag in a series of bags, save choices, and send-->
+    <link rel="stylesheet" href="css/select.css" />    
+  </head>
+  <body>
+    <h1>Choose!</h1>
+    <div id="wrapper">
+      <h3 id="guide-toggle">Guide</h3>
+      <div id="instructions">
+* Best is a colour photograph that clearly shows the profile of object and its primary or most interesting imagery.
+<br>
+* There are some cases where a profile isn't the most representative image, e.g. in the case of a plate or saucer with a decorated tondo, where a top view showing the tondo and/or handles would be preferable.
+<br>
+* Choose a picture that shows the single object.
+<br>
+* While colour is good prioritize crisp b/w pictures over blurry colour.
+<br>
+* Please email amy (a.c.smith@reading.ac.uk) about any objects that seem to be allocated to the wrong object.
+
+      </div>
+      <div id="save2file">get choices as text file</div>
+      <div id="page-links"></div>
+      <div id="choice-frame"></div>
+    </div>
+    <div id="templates" style="display:none">
+      <div id="form-template">
+	
+	<div class="item">
+	  <div class="meta">
+	    <span class="title"></span>
+	    <a class="item-link"></a>
+
+	       
+	  </div>
+	  <div class="innerItem">
+	    <img></br>
+	    <h3 class="thumb-title"></h3>
+	    <input class="thumb-select" type="radio">
+	  </div>
+	 
+	</div>
+      </div>
+      
+    </div>
+  </body>
+</html>
