@@ -167,9 +167,10 @@ class UrlMappings {
             action = [POST:"saveRelatedPreferences",GET:"saveRelatedPreferences"]
 
         }
+        // io from thumb selector js
         "/api/selected_thumb"(controller:"api"){
             
-            action = [POST:"saveSelectedThumb"]
+            action = [POST:"saveSelectedThumb",GET:"getSelectedThumb"]
             
         }
         "/api/media2record/$uri"(controller:"api"){

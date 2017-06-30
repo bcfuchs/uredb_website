@@ -129,19 +129,37 @@ class ApiController {
        def out = [1:session['token'],2:prefs];
        render out as JSON; 
     }
+    
+    def getSelectedThumb() {
+        def thumbs = Thumbnail.getAll();
+        def out = [:]
+        thumbs.each {
+            
+            out[it.accnum] = it.pic_id;
+        }
+        render out as JSON;
+        
+        
+    }
     def saveSelectedThumb() {
-        System.err.println "save selected thumb"
-        def principal = springSecurityService.principal
-        String username = getPrincipal()
+       
         def selected = request.JSON;
-        def selstr = groovy.json.JsonOutput.toJson(selected)
+     
+        def accnum = selected.item;
+        def pic_id = selected.choice;
+        // check if user has a row
         
-        System.err.println selected.getClass();
-        System.err.println selstr.length();;
-        System.err.println username
-        
-        def t = new org.ac.uk.reading.ure.uredb.Thumbnail(user:username,choices:selstr)
-        t.save();
+        def thumbInstance = Thumbnail.findByAccnum(accnum);
+        if (! thumbInstance) {
+            thumbInstance= new org.ac.uk.reading.ure.uredb.Thumbnail(accnum:accnum,pic_id:pic_id)
+            
+        } 
+        else {
+            
+            thumbInstance.pic_id = pic_id;
+        }
+             
+        thumbInstance.save();
         // if 
         
        

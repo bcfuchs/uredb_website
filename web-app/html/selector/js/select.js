@@ -9,7 +9,11 @@
 	var total = 0;
 	var this_data;
 	var config = {
+	    syncFromRemoteOnInit: true, // sync server to localstorage on start up
+	    //	    seljson:  "data/choices.json", // where to get the data.
 	    seljson:  "data/choices.json", // where to get the data.
+	    get_endpoint: "/api/selected_thumb", // endpoint to load choices when sync on init is true
+	    endpoint: "/api/selected_thumb",  // endpoint to send json from a choice to
 	    templateSel : "#form-template",
 	    frameSel: "#choice-frame",
 	    radioSel: ".thumb-select",
@@ -19,8 +23,7 @@
 	    linkdivSel: "#page-links",
 	    itemsPerPage: 100, // items to display per page
 	    innerSel: ".innerItem",
-	    localStoreName : "thumb_select",
-	    endpoint : "" // where to post the data. 
+	    localStoreName : "thumb_select"
 	    
 	};
 
@@ -169,6 +172,17 @@
 	    
 
 	}
+
+	function readremote() {
+
+
+	    
+
+	}
+	function save2local_bulk(data) {
+	    var name = config.localStoreName;
+	    localStorage.setItem(name,JSON.stringify(choices));
+	}
 	function save2local(resource_id,accnum) {
 	    console.log("changed thumb for " + accnum + " to " + resource_id);
 	    console.log(" 2 changed thumb for " + resource_id + " to " + accnum);
@@ -177,13 +191,27 @@
 
 	    choices[accnum] = resource_id
 	    localStorage.setItem(name, JSON.stringify(choices));
-	    save2remote();
+	    // TODO option in config. 
+	    //	    save2remote();
+	    // Only report current change to remote.
+	    save1change2remote(resource_id,accnum);
 	}
+	
+	function save1change2remote(inner_id,item_id) {
+	    $.ajax({
+		contentType : "application/json; charset=utf-8",
+		url : config.endpoint,
+		dataType : "json",
+		type : "POST",
+		data : JSON.stringify({item:item_id,choice:inner_id})
+	    });
+    
 
+	}
 	function save2remote() {
 	    $.ajax({
 		contentType : "application/json; charset=utf-8",
-		url : "/api/selected_thumb",
+		url : config.endpoint,
 		dataType : "json",
 		type : "POST",
 		data : JSON.stringify(choices)
@@ -245,9 +273,19 @@
 
 	}
 	function init() {
-
-	    $.getJSON(config.seljson,build_grid);
-	}
+	    if (config.syncFromRemoteOnInit === true) {
+		$.getJSON(config.get_endpoint,function(data) {
+		    // load choices first
+		    choices = data;
+		    save2local_bulk(data);
+		    //  build
+		    $.getJSON(config.seljson,build_grid);
+		})
+	    }
+	    else {
+		$.getJSON(config.seljson,build_grid);
+	    }
+	    }
 	return {
 	    init: init,
 	    build_grid:build_grid,
