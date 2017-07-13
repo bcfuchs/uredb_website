@@ -389,6 +389,12 @@ ul#topNav li a:hover {
 	color: white !important;
 	opacity: 1;
 }
+
+#topnav a.navbar-item-onpage {
+	color: white !important;
+	opacity: 1;
+}
+
 /*BREADCRUMBS BAR */
 #breadcrumb-nav {
 	color: #333;

@@ -14,7 +14,25 @@
 		<a name="top"></a>
 		<a href="#main" class="skip">[ Skip main navigation menu ]</a>
 	</div>
-	
+	<script>
+	/**
+	hightlight menu  
+	*/
+	! function() {
+	$(document).ready(function(){
+
+		function hightlight_menu_item_on_page(active_class) {
+	  		$(".navbar-nav a").removeClass(active_class);
+			var path = window.location.pathname;
+			$(".navbar-nav a[href='"+path+"']").addClass(active_class)
+		}
+		var active_class = "navbar-item-onpage"
+		hightlight_menu_item_on_page(active_class)
+	})
+		
+
+	}()
+	</script>
 	<div id="top2_nav">
 		<h1>Ure Museum Database</h1>
 	</div>

@@ -13,7 +13,7 @@
 		</span>
 	</sec:ifLoggedIn>
 
-	<% //application.test1 = "heyo" %>
+	
 	<ul id="topNav" class="nav2 ">
 		<sec:ifLoggedIn>
 			<li><sec:ifAnyGranted roles="ROLE_ADMIN">
