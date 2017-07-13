@@ -63,7 +63,7 @@ $(document).ready(function(){
 	</span>
 	<div id="list-toggler" class="container">
 		<span class="list-toggler list-toggler-item" data-toggler-target="#wordlistwidget-container">word list</span>
-		<span class="list-toggler list-toggler-item" data-toggler-target="#wormapwidget-container">chart</span>
+		<span class="list-toggler list-toggler-item" data-toggler-target="#wormapwidget-container">frequency chart</span>
 	</div>
 	<div id="wordlistwidget-container">
 		<ure:wordlistWidget klass="wordlist-widget" words="${rlist.words}" wordcount="${rlist.wc}"  f="${rlist.f }" thumbs="${rlist.thumbs}"></ure:wordlistWidget>

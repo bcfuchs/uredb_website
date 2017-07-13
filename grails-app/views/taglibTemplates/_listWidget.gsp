@@ -24,7 +24,7 @@ cursor: pointer;
 }
 </style>
 
-<script src="${resource(dir:'js',file:'listWidget.js')}"></script>
+<script src="${resource(dir:'js',file:'listwidget.js')}"></script>
 <span id="kw-span" style="display:none">${word}</span>
 <span id="field-span" style="display:none">${field}</span>
 
