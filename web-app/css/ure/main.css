@@ -1144,6 +1144,15 @@ span.glyphicon.ure-control-btn:hover {
 ._________________________ Comparanda Page_________________________ {
 	
 }
+.project-selected {
+	width: 50%;
+	margin: 0 auto;
+	font-size: 30px;
+	padding-left: 20%; 
+	
+	
+}
+ 
 .comparanda-container {
 		display: inline-block;
 		width: 20%;
@@ -1206,7 +1215,8 @@ span.glyphicon.ure-control-btn:hover {
 }
 
 .project-box-items {
-	
+	height: 60%;
+	overflow: hidden;
 }
 
 .project-box-item {
@@ -1219,6 +1229,8 @@ span.glyphicon.ure-control-btn:hover {
 .project-box-item-caption {
 	color: white;
 	font-size: 8px;
+	height:60%;
+	display:none;
 }
 
 .project-box-item-image-container  img {
@@ -1229,8 +1241,10 @@ span.glyphicon.ure-control-btn:hover {
 
 .project-box-selected {
 	
-    border: 2px dotted #2088e1;
+	border:2px dotted #03c603;
     border-radius: 5px;
+    color: black;
+    background: #026002;
 }
 
 
