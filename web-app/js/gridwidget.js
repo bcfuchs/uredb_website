@@ -1,7 +1,7 @@
 !function() {
   var gridWidget = function(gridid, width, height, displayInfobox, addCellClick,type) {
     console.log("gridWidget " + gridid)
-    if (type === undefined) {
+    if (type === undefined || type === "") {
       type = 'freewall'
     }
     if (addCellClick === undefined) {

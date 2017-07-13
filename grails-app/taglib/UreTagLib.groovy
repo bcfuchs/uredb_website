@@ -169,7 +169,7 @@ class UreTagLib {
 
 
         def klass  = attrs.klass
-        def  accs = attrs.accs
+        def accs = attrs.accs
         def gridid = attrs.gridid;
 
         def model =[:];
