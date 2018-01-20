@@ -1257,6 +1257,11 @@
 
   var init_euRelated = function(accnum, gridid, width, height, displayInfobox) {
 
+    
+    var config = {
+       euObjectSelector:".cb-eu",
+       euObjectFadedClass:"eu-object-faded"
+    }
     /**
      * @memberOf europeana_widget.init_euRelated
      * 
@@ -1447,9 +1452,9 @@
      * set up the click for Museum filter pane toggle
      */
     var set_museum_filter_panel = (function() {
-      $(document).on('click', '.cb-eu', function() {
+      $(document).on('click', config.euObjectSelector, function() {
         var mus = $(this).val();
-        $('[data-eu-provider="' + mus + '"]').toggleClass('eu-object-faded');
+        $('[data-eu-provider="' + mus + '"]').toggleClass(config.euObjectFadedClass);
       });
     })();
 
