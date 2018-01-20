@@ -1449,7 +1449,7 @@
     var set_museum_filter_panel = (function() {
       $(document).on('click', '.cb-eu', function() {
         var mus = $(this).val();
-        $('[data-eu-provider="' + mus + '"]').toggle();
+        $('[data-eu-provider="' + mus + '"]').toggleClass('eu-object-faded');
       });
     })();
 
