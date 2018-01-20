@@ -513,7 +513,7 @@
             out.push(item);
             console.log(item.dataProvider[0]);
           } else {
-            console.log("skipping " + item.dataProvider[0])
+            console.log("skipping " + item.dataProvider[0]);
           }
         }
       } else {
@@ -579,7 +579,7 @@
      */
 
     var stash_grid = function(gridSel, url) {
-      console.log("stashing grid for " + url)
+      console.log("stashing grid for " + url);
       var stashId = 'eu-stash';
       var stashSel = "#" + stashId;
 
@@ -706,7 +706,7 @@
      * above as closures.
      */
 
-    var success = function(data) {
+    var onData = function(data) {
 
       var width, height, displayInfobox, items;
       width = data.width;
@@ -774,13 +774,13 @@
      * 
      */
 
-    var success_wrapper = function(query_url, query_string) {
+    var onData_impl = function(query_url, query_string) {
 
       var min_items = 1;
 
       return function(info) {
 
-        console.log('success_wrapper');
+        console.log('onData_impl');
         // quit function and rerun query with safe keywords if items.length ===
         // 0
         console.log("found " + info.items.length + "items");
@@ -800,7 +800,7 @@
         data.keywords = doEuRelated_keywords;
         data.query_url = query_url;
         data.query_string = query_string;
-        return success(data);
+        return onData(data);
 
       };
     };
@@ -823,12 +823,33 @@
 
       alert("a problem has occurred with your Europeana search");
     };
-
+ 
     /**
      * @memberOf europeana_widget.doEuRelated
      * 
      */
-
+    
+    var get_querystring = function(uredb_wskey,qs,startrec,extras) {
+      var rows= 100;
+      var profile = 'standard'
+      return  'wskey=' 
+      + uredb_wskey 
+      + '&query=' 
+      + qs 
+      + '&thumbnail=true'
+      + '&rows='
+      + rows 
+      + '&start=' 
+      + startrec
+      + '&profile='
+      + profile
+      + extras;
+    };
+    
+    /**
+     * @memberOf europeana_widget.doEuRelated
+     * 
+     */
     var ajax_new = function() {
 
       var keywords = JSON.parse(data).keywords;
@@ -840,7 +861,7 @@
 
       var fail = function(xhr, status, err) {
         console.log("fail: " + err);
-        console.log(xhr);
+        
         switch (status) {
         case "timeout":
           timeout_handler(xhr);
@@ -854,6 +875,7 @@
       var complete = function() {
         console.log("complete!");
       };
+      
       // joins the keywords w/ and
       var get_query = function(kw) {
         // return kw.join("+AND+");
@@ -865,13 +887,13 @@
 
       // make query from keywords
       var qs = get_query(keywords);
-      // TODO -- fix fails if there isn't a thumbnail
-      var querystring = 'wskey=' + uredb_wskey + '&query=' + qs + '&thumbnail=true&rows=100&start=' + startrec
-          + '&profile=standard' + extras;
+      
+      var querystring = get_querystring(uredb_wskey,qs,startrec,extras);
+      
       var url_base = 'https://www.europeana.eu/api/v2/search.json?';
       var url_new = url_base + querystring;
       // add data to success and get new callback.
-      var done = success_wrapper(url_new, qs);
+      var done = onData_impl(url_new, qs);
 
       // set up query caching
       var useQueryCache = true; // TODO move to top
