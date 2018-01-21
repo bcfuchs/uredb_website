@@ -52,7 +52,20 @@
 
     return provider_facet;
   };
+  
   window.make_whitelist_providers_query = get_whitelist_providers_facet;
+  
+  var  eu_widget_pre_init_funcs = {
+      get_whitelist_providers_facet : get_whitelist_providers_facet,
+      reset_querycache : reset_querycache
+    
+    }
+  // funcs for test
+    for ( var i in eu_widget_pre_init_funcs) {
+      window.eu_widget_pre_init_funcs[i] = eu_widget_pre_init_funcs[i];
+    }
+  
+  
 }();
 
 /**
@@ -1009,13 +1022,14 @@
 
       }
     });
+    
     // left-overs...
     if (row.length > 0)
       cont.append(row);
 
     $(gridid).html(cont);
 
-  }
+  };
   /**
    * @memberOf europeana_widget
    */
