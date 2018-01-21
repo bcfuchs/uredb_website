@@ -60,6 +60,7 @@
       reset_querycache : reset_querycache
     
     }
+  window.eu_widget_pre_init_funcs ={}
   // funcs for test
     for ( var i in eu_widget_pre_init_funcs) {
       window.eu_widget_pre_init_funcs[i] = eu_widget_pre_init_funcs[i];
