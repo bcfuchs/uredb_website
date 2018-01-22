@@ -615,7 +615,7 @@
 
     var stash_grid = function(gridSel, url) {
       console.log("stashing grid for " + url);
-      var stashId = config.stashId
+      var stashId = config.stashId;
       var stashSel = config.stashSel;
 
       // id of this grid
