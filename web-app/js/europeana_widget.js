@@ -740,7 +740,7 @@
      * above as closures.
      */
 
-    var process_data = function(data) {
+    var processData = function(data) {
 
       var width, height, displayInfobox, items;
       width = data.width;

@@ -1,7 +1,7 @@
 describe('europeana_widget tests',function(){
   
   var pre_init = window.eu_widget_pre_init_funcs;
-  
+ 
 
     it('test get_whitelist_providers_facet',function(){
     
