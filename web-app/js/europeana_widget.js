@@ -336,6 +336,7 @@
         height: '100px',
         euWidgetSel: "#europeanaWidget" ,
         stashSel: '#eu-stash',
+        stashId: 'eu-stash',
         queryDisplaySel:"#query-display",
         keywordsDisplaySel: "#keywords-display",
         spinnerUrl:'/static/images/giphy.gif',
@@ -614,7 +615,7 @@
 
     var stash_grid = function(gridSel, url) {
       console.log("stashing grid for " + url);
-     
+      var stashId = config.stashId
       var stashSel = config.stashSel;
 
       // id of this grid
