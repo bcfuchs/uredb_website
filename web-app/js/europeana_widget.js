@@ -978,8 +978,14 @@
 /** the only thing we do here! */
     eu_xhr();
 
+      window.doEuRelated_funcs ={
+	  eu_xhr:eu_xhr
+      }
+  // funcs for test
+    }
   }; // END doEuRelated
 
+    
   window.europeanaWidget_doEuRelated = doEuRelated;
 
   /**
