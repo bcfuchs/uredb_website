@@ -1,4 +1,3 @@
-
 <!DOCTYPE html><%@ page import="java.util.Properties"%>
 <html lang="en">
 <!-- main.tmpl -->

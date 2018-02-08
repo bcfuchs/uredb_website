@@ -1,0 +1,25 @@
+	.page_title_1 {
+			margin: 0 0 20px 20px;
+		}
+		#list-toggler {
+			margin: 0 0 20px -10px
+		}
+		.list-toggler-item {
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		
+		.list-toggler-item-on {
+			color: white;
+			text-decoration:underline;
+		}
+		
+		.list-toggler-item-off {
+		
+			color: white;
+		}
+		
+		.flash_message {
+			display:none;
+		}
+		
