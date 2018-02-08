@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -8,8 +7,8 @@
 <script src="${resource(dir:'bootstrap/js',file:'bootstrap-typeahead.js')}"></script>
 <script src="${resource(dir:'js',file:'stops.js')}"></script>
 <script src="${resource(dir:'js',file:'toggler.js')}"></script>
-
 <script>
+/** quickfix for db conversion error */
 $(document).ready(function(){
   
    $(".wordcellhead[data-ure-field='munsell_color'] a").each(function(){
@@ -19,36 +18,8 @@ $(document).ready(function(){
   });
 
 });
-
-
 </script>
-<style>
-		.page_title_1 {
-			margin: 0 0 20px 20px;
-		}
-		#list-toggler {
-			margin: 0 0 20px -10px
-		}
-		.list-toggler-item {
-			padding-left: 5px;
-			padding-right: 5px;
-		}
-		
-		.list-toggler-item-on {
-			color: white;
-			text-decoration:underline;
-		}
-		
-		.list-toggler-item-off {
-		
-			color: white;
-		}
-		
-		.flash_message {
-			display:none;
-		}
-		
-</style>	
+<link href="/css/ure/fieldlist.css" rel="stylesheet">
 
 </head>
 <body>
