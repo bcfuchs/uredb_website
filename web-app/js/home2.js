@@ -26,17 +26,18 @@ var doMap = function() {
 // make the search bar draggable
 var draggableSearchbar = function() {
     $("#searchbar_container").mouseenter(function(){
-        $("#searchbar_container").prepend('<div id="sc-overlay">&nbps;</div>');
+//        $("#searchbar_container").prepend('<div id="sc-overlay" class="sc-overlay">&nbsp;</div>');
       });
     $("#searchbar_container").click(function(){
-      $("#sc-overlay").remove();
+  //    $(".sc-overlay").remove();
     });
     $("#searchbar_container").mouseup(function(){
-      $("#sc-overlay").remove();
+    //  $(".sc-overlay").remove();
       });
     
     $("#searchbar_container").draggable();
 }
+
 draggableSearchbar();
   
 });
