@@ -1,4 +1,4 @@
-
+	
 
 <%
 def fields = [:];
@@ -118,6 +118,7 @@ record.each {
 					${fields.fabric.content}
 				</div>
 			</div>
+			<!-- 
 			<div class="row">
 				<div class="col-md-4 ure-record-col-left">
 					${fields.diameters.label}
@@ -142,6 +143,8 @@ record.each {
 					${fields.handle_height.content}
 				</div>
 			</div>
+			-->
+			
 		</div>
 	</div>
 	<!--  Description -->
@@ -296,6 +299,35 @@ record.each {
 								</div>
 							</div>
 						</div>
+						<div class="container ure-diameters">
+							<div class="row">
+								<div class="col-md-4 ure-record-col-left">
+									${fields.diameters.label}
+								</div>
+								<div class="col-md-8 ure-diameters">
+									${fields.diameters.content}
+								</div>
+							</div>
+							<!-- 
+							<div class="row">
+								<div class="col-md-4 ure-record-col-left">
+									${fields.height.label}
+								</div>
+								<div class="col-md-8 ure-height">
+									${fields.height.content}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4 ure-record-col-left">
+									${fields.handle_height.label}
+								</div>
+								<div class="col-md-8 ure-handle-height">
+									${fields.handle_height.content}
+								</div>
+							</div>
+							-->
+						</div>
+						
 					</div>
 				</div>
 			</div>
