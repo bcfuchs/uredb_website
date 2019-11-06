@@ -48,7 +48,7 @@ record.each {
 	</div>
 	<!--  technical details -->
 	<div class="row ure-technical-details repair">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<div class="row">
 				<div class="col-md-4 ure-record-col-left">Title</div>
 				<div class="col-md-8  ure-title">
@@ -86,6 +86,10 @@ record.each {
 					${fields.date.content}
 				</div>
 			</div>
+			
+			</div>
+			<!--  1 row 2 cols      end column -->
+			<div class="col-md-6">
 			<div class="row">
 				<div class="col-md-4 ure-record-col-left">
 					${fields.technique.label}
@@ -279,6 +283,11 @@ record.each {
 								</div>
 							</div>
 						</div>
+						
+						
+						
+						
+						
 						<div class="container ure-dating_details">
 							<div class="row">
 								<div class="col-md-4 ure-record-col-left">
