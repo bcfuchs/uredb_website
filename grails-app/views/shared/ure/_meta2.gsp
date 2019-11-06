@@ -53,6 +53,7 @@ record.each {
 				<div class="col-md-4 ure-record-col-left">Title</div>
 				<div class="col-md-8  ure-title">
 					${fields.short_title.content}
+					
 				</div>
 			</div>
 			<div class="row">
