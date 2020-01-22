@@ -45,9 +45,18 @@ class UrlMappings {
 
             action= [GET:"getRecordByAccNum",POST:"getRecordByAccNum"];
         }
-
         // default to home page if no accnum
         "/record/?"(view:"/home2")
+        
+        "/archive/$acc"(controller:"record"){
+            
+            
+                        action= [GET:"getArchiveByAccNum",POST:"getArchiveByAccNum"];
+                    }
+
+
+        // default to home page if no accnum
+        "/archive/?"(view:"/home2")
 
 
         // browse records by fields
