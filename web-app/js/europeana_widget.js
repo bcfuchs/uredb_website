@@ -982,7 +982,6 @@
 	  eu_xhr:eu_xhr
       }
   // funcs for test
-    }
   }; // END doEuRelated
 
     

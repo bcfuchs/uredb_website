@@ -70,6 +70,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.8.3"
         compile ":export:1.5"
         compile ":searchable:0.6.9"
+        compile ':scaffolding:1.0.0'
         compile ':cookie:1.2'
         build ":jetty:2.0.3"
         runtime ":database-migration:1.3.8"

@@ -85,6 +85,7 @@ grails.plugins.springsecurity.roleHierarchy = '''
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/admin/**':['ROLE_CURATOR'],
     '/uremeta/**':['ROLE_CURATOR'],
+    '/archive/**':['ROLE_CURATOR'],
 	'/auth/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/record/**':['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/html/selector/**':['ROLE_EDITOR'],
