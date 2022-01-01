@@ -57,7 +57,6 @@ environments {
             username = System.getenv('UREDEMO_DB_USER')
             password = System.getenv('UREDEMO_DB_PWD')
 
-
         }
         searchable {
             // disable bulk index on startup

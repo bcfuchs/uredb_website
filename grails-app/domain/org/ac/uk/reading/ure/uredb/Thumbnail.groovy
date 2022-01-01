@@ -8,6 +8,7 @@ class Thumbnail {
 	// caption - image association should happen at another level.
 	
     static constraints = {
-		accnum(blank:true)				pic_id(blank:true)	
+		accnum(blank:true)
+		pic_id(blank:true)	
     }
 }
