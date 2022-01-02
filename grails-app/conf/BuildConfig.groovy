@@ -34,14 +34,15 @@ grails.project.dependency.resolution = {
         mavenCentral()
         //  mavenRepo "http://snapshots.repository.codehaus.org"
         //  mavenRepo "http://repository.codehaus.org"
-        mavenRepo "http://download.java.net/maven/2/"
-        mavenRepo "http://repository.jboss.com/maven2/"
-        mavenRepo "http://maven.objectweb.org/maven2"
-        mavenRepo "http://people.apache.org/repo/m2-snapshot-repository"
-        mavenRepo "http://download.osgeo.org/webdav/geotools"
-        mavenRepo "http://www.hibernatespatial.org/repository"
-        mavenRepo "http://repo.grails.org/grails/core"
-        mavenRepo "http://repo.grails.org/grails/plugins"
+	mavenRepo "https://repo1.maven.org/maven2/"
+//	mavenRepo "https://download.java.net/maven/2/"
+        mavenRepo "https://repository.jboss.com/maven2/"
+ //       mavenRepo "https://maven.objectweb.org/maven2"
+  //      mavenRepo "https://people.apache.org/repo/m2-snapshot-repository"
+  //      mavenRepo "https://download.osgeo.org/webdav/geotools"
+  //      mavenRepo "https://www.hibernatespatial.org/repository"
+        mavenRepo "https://repo.grails.org/ui/native/core"
+        mavenRepo "https://repo.grails.org/grails/plugins"
 
     }
     dependencies {

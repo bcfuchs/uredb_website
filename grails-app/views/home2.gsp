@@ -13,7 +13,7 @@
 <body>
 	
 	<div id="thumb-data" style="display: none;"></div>
-	<img id="thumbmap" usemap="#thumbs_new2" src="http://uredb.reading.ac.uk/ure/pixdir/thumbs_fit.jpg" style="border: 0;"
+	<img id="thumbmap" usemap="#thumbs_new2" src="https://uredb.s3.eu-west-2.amazonaws.com/ure/pixdir/thumbs_fit.jpg" style="border: 0;"
 		alt="Image map" />
 	<div id="home2">
 		<content tag="header"> </content>
