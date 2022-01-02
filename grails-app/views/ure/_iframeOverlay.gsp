@@ -51,6 +51,7 @@ width: 5% !important;
 
 #iframeOverlay img {
 height: 40px;
+margin: 3px 3px 3px 3px;
 
 }
 #iframeOverlay-infostrip {
