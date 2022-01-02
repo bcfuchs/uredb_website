@@ -37,7 +37,9 @@ record.each {
 		gridid="record-images" 
 		klass="recordImageWidget" 
 		uris="${images}" 
-		displayInfobox="true" height="100px" width="100px" 
+		displayInfobox="true"
+		height="120px"
+		width="120px" 
 		addCellClick="false"
 		type="freewall">
 	</ure:gridWidgetForImageUris>

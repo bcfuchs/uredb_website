@@ -1014,7 +1014,7 @@
 
   var format_bootstrap = function(gridid, options) {
     console.log("format_bootstrap " + gridid);
-    var cols_default = 9;
+    var cols_default = 10;
     var cols = options.cols || cols_default;
     var row = $('<div class="row"></div>');
     var cont = $('<div class="container-fluid"></div>');

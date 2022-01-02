@@ -97,7 +97,7 @@
 
 		%>
 		<g:if test="${rec}">
-			<div class="cell gridlist-cell draggable" 
+			<div class="cell gridlist-cell image-cell draggable" 
 			data-ure-uri="${media.uri}" 
 			data-ure-image-url="${ure_image_url}" 
 			data-ure-accnum="${rec.accession_number}" 
