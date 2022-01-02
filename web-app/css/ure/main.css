@@ -960,6 +960,12 @@ button#qs-search-old {
 	
 }
 /** GRID widget styles */
+.image-cell {
+
+    width: 140px !important;
+    height: 140px !important;
+}
+
 
 /** reclist2.gsp */
 #tokenlist-grid {
@@ -1844,8 +1850,8 @@ a#extlink:link {
 }
 
 #euwidget .cell {
-	height: 100px;
-	width: 100px;
+	height: 140px;
+	width: 140px;
 }
 
 .eu-object-faded {
