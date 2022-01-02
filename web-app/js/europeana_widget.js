@@ -1137,7 +1137,8 @@
      */
     // click on image pops to overlay
     var overlayHandler = function() {
-      var url = $(this).attr("data-eu-link");
+	var url = $(this).attr("data-eu-link").replace('http:','https:');
+
       $("#externalsite-iframe").attr('src', url);
 
       $("#iframeOverlay").slideDown(1000);
