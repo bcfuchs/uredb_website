@@ -15,7 +15,7 @@
  -->
 <script src="//cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
 <script src="//code.jquery.com/jquery-1.11.3.js"></script>
-<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js" integrity="sha256-0vBSIAi/8FxkNOSKyPEfdGQzFDak1dlqFKBYqBp1yC4="
+<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js" integrity="sha256-0vBSIAi/8FxkNOSKyPEfdGQzFDak1dlqFKBYqBp1yC4="
 	crossorigin="anonymous"></script>
 <script src="//cdn.bootcss.com/camanjs/4.1.2/caman.full.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
