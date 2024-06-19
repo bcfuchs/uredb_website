@@ -61,8 +61,8 @@ window.ure.isAnonUser = false;  // set to false in ure_gapi if user logs in.
 <body onload="${pageProperty(name:'body.onload')}">
 	<div id="beta-warning">
 		This is a beta trial version of the UreDB. Go to
-		<a href="http://uredb.reading.ac.uk/db">http://uredb.reading.ac.uk/db</a>
-		for the real thing.
+		<a href="http://uredb.reading.ac.uk/db">https://uremusuem.org</a>
+		for the current ure db.
 	</div>
 	<sec:ifLoggedIn>
 		<g:render template="/shared/ure/topnav"></g:render>
